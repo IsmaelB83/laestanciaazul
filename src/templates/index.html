@@ -6,5 +6,11 @@
 </head>
 <body>
 <h1>{{ title }} is working</h1>
+{% for post in posts %}
+<a href='{{ post.get_absolute_url }}'>{{ post.title }}</a><br>
+{{ post.content }}<br>
+{{ post.updated }}<br>
+{{ post.timestamp }}<br>
+{% endfor %}
 </body>
 </html>

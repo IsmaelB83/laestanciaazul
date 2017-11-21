@@ -9,7 +9,15 @@ def posts_detail(request):
     return HttpResponse("<h1>RETRIEVE (ONE)</h1")
 
 def posts_list(request):
-    return HttpResponse("<h1>RETRIEVE (LIST)</h1")
+    if request.user.is_authenticated():
+        context = {
+            "title": "My User List",
+        }
+    else:
+        context = {
+            "title": "List",
+        }
+    return render(request, "index.html", context)
 
 def posts_update(request):
     return HttpResponse("<h1>UPDATE</h1")

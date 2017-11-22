@@ -121,4 +121,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# this is the local folder for statics
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+
+# this simulates the server where statics are stored
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
+
 DEBUG = 'true'

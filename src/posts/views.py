@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Post
 from .forms import PostForm
@@ -9,15 +9,23 @@ from .forms import PostForm
 def posts_create(request):
     form = PostForm(request.POST or None)
     if form.is_valid():
-        post = form.save(commit=False)
-        post.save()
-        messages.success(request, "Successfully created", extra_tags="some-tag success")
-        return HttpResponseRedirect(post.get_absolute_url())
+        if request.user.is_authenticated:
+            post = form.save(commit=False)
+            post.save()
+            messages.success(request, "Successfully created")
+        else:
+            messages.error(request, "Not authenticated")
+        return redirect("posts:list")
 
-    context = {
-        "form": form,
-    }
-    return render(request, "post_form.html", context)
+    if request.user.is_authenticated:
+        context = {
+            "form": form,
+            "title": "Create new post"
+        }
+        return render(request, "post_form.html", context)
+    else:
+        messages.error(request, "Not authenticated")
+        return redirect("posts:list")
 
 
 def posts_detail(request, id):
@@ -35,24 +43,38 @@ def posts_list(request):
         "title": "List",
         "posts": posts
     }
-    return render(request, "index.html", context)
+    return render(request, "post_list.html", context)
 
 
 def posts_update(request, id):
     post = get_object_or_404(Post, id=id)
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
-        post = form.save(commit=False)
-        post.save()
-        messages.success(request, "<a href=''>Item saved</a>", extra_tags="html_seguro")
-        return HttpResponseRedirect(post.get_absolute_url())
+        if request.user.is_authenticated:
+            post = form.save(commit=False)
+            post.save()
+            messages.success(request, "<a href=''>Item saved</a>", extra_tags="html_seguro")
+        else:
+            messages.error(request, "Not authenticated")
+        return redirect("posts:list")
 
-    context = {
-        "title": post.title,
-        "post": post,
-        "form": form,
-    }
-    return render(request, "post_form.html", context)
+    if request.user.is_authenticated:
+        context = {
+            "title": "Edit post: " + post.title,
+            "post": post,
+            "form": form,
+        }
+        return render(request, "post_form.html", context)
+    else:
+        messages.error(request, "Not authenticated")
+        return redirect("posts:list")
 
-def posts_delete(request):
-    return HttpResponse("<h1>DELETE</h1")
+
+def posts_delete(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.user.is_authenticated:
+        post.delete()
+        messages.success(request, "Successfully deleted")
+    else:
+        messages.error(request, "Not authenticated")
+    return redirect("posts:list")

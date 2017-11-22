@@ -6,8 +6,8 @@ from . import views
 urlpatterns = [
     url(r'^create/$', views.posts_create),
     url(r'^(?P<id>\d+)/$', views.posts_detail, name='detail'),
-    url(r'^list/$', views.posts_list),
-    url(r'^(?P<id>\d+)/edit/$', views.posts_update),
-    url(r'^delete/$', views.posts_delete),
+    url(r'^list/$', views.posts_list, name='list'),
+    url(r'^(?P<id>\d+)/edit/$', views.posts_update, name='update'),
+    url(r'^(?P<id>\d+)/delete/$', views.posts_delete, name='delete'),
 ]
 

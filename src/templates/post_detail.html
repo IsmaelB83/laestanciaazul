@@ -1,30 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post Detail</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li
-    {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-    {% if "html_seguro" in message.tags %}
-    {{ message|safe }}
-    {% else %}
-    {{ message }}
-    {% endif %}
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% block head %}
+{{ post.title }} | {{ block.super}}
+{% endblock head%}
 
-<h1>{{ title }}</h1>
+
+{% block content %}
+<h2>{{ title }}</h2>
 {{ post.title }}<br>
-{{ post.content }}<br>
-{{ post.updated }}<br>
+{{ post.content|safe }}<br>
 {{ post.timestamp }}<br>
-</body>
-</html>
+{{ post.updated }}<br>
+{{ post.id}}<br>
+
+{% endblock content%}

@@ -6,11 +6,23 @@
 
 
 {% block content %}
-<h2>{{ title }}</h2>
-{{ post.title }}<br>
-{{ post.content|safe }}<br>
-{{ post.timestamp }}<br>
-{{ post.updated }}<br>
-{{ post.id}}<br>
+
+<div class="col-sm-8 col-sm-offset-3">
+    <div class="row">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="{{ post.get_lists_url }}">Back to List</a></li>
+                <li class="page-item"><a class="page-link" href="edit">Edit </a></li>
+                <li class="page-item"><a class="page-link" href="delete">Delete</a></li>
+            </ul>
+        </nav>
+    </div>
+    <h1 class="blog-post-title">{{ post.title }}</h1>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="img-fluid"/>
+    {% endif %}
+    <p class="blog-post-meta">{{ post.timestamp }}<a href="{{ post.get_absolute_url }}">{{ post.author }}</a></p>
+    {{ post.content|safe }}
+</div>
 
 {% endblock content%}

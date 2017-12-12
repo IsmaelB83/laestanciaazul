@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+Blog - Home
+{% endblock head%}
+
+{% block main_content %}
+
+<!-- Container de bootstrap (centrar contenido en pantalla -->
+<div class="container _bgColor0">
+    <!-- Row Carousel (sólo visible en "sm" en adelante-->
+    <section class="row">
+        <!-- Una columna completa -->
+        <div class="hidden-xs col-sm-12">
+            {% include "includes/carousel.html" %}
+        </div>
+    </section>
+    <!-- Row principal por debajo del carousel -->
+    <section class="row">
+        <!-- Posts en portada  (main)-->
+        <div class="col-xs-12 _mt-20 col-md-8 pull-left _pr-0 _pl-0">
+            <div class="col-xs-12">
+                <h2 class="_titleSection">RECENT POSTS</h2>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <aside>
+                    {% include "includes/post_card.html" %}
+                </aside>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <aside>
+                    {% include "includes/post_card.html" %}
+                </aside>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <aside>
+                    {% include "includes/post_card.html" %}
+                </aside>
+            </div>
+            <div class="col-xs-12 _mt-30">
+                <h2 class="_titleSection">OTHER</h2>
+            </div>
+            <div class="col-xs-12 _mt-10">
+                {% include "includes/post_preview.html"%}
+            </div>
+            <div class="col-xs-12">
+                {% include "includes/pagination.html" with paginator=page_obj request=page_request_var %}
+            </div>
+        </div>
+        <!-- Sidebar derecha-->
+        <div class="col-xs-12 col-md-4 pull-right _pl-0 _pr-0">
+            <!-- Categorias-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_categorias.html" %}
+            </div>
+            <!-- Popular posts-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_popular_posts.html" %}
+            </div>
+            <!-- Last comments-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_recent_comments.html" %}
+            </div>
+            <!-- Last pictures -->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_recent_images.html" %}
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock main_content %}

@@ -1,0 +1,18 @@
+{% load staticfiles %}
+
+<h3>Dejar comentario</h3>
+<form action="">
+    <div class="form-group">
+        <input class="form-control" type="text" name="name" id="name" placeholder="Your name here" required maxlength="30">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" name="email" id="email" placeholder="Your email here" required maxlength="40" is-invalid>
+    </div>
+    <div class="form-group _mb-5">
+        <textarea class="form-control _aboutMessage" name="message" id="message" placeholder="Enter your message..." required maxlength=400></textarea>
+        <small class="form-text text-muted">Max. 400 characters</small>
+    </div>
+    <div class="form-group pull-right _mt-0">
+        <button type="button" class="btn _btnColor1 submit"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send Comment</button>
+    </div>
+</form>

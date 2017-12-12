@@ -1,0 +1,31 @@
+{% load staticfiles %}
+
+<!-- Preview de un post tipo card -->
+<div class="_preview">
+    <div class="_preview-title _bgColor0">
+        <div class="_preview-title_img">
+            <figure><img src='{% static "img/thumbnail.jpg" %}' class="img-responsive" width="100%"></figure>
+        </div>
+        <h4><a class="_ftColor1 _ftHColor3" href="#">Lorem ipsum dolor sit amet ipsum dolor</a></h4>
+    </div>
+    <div class="_preview-footer _bgColor1">
+        <img class="_bgColor0" src='{% static "img/developer.png" %}'>
+        <span><a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="left" title="Author">Isma</a></span>
+        <span class="pull-right">
+            <a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="left" title="Comments"><i class="fa fa-comments"></i> 30</a>
+            <a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="right" title="Loved"><i class="fa fa-heart"></i> 20</a>
+        </span>
+        <div class="_preview-user _bgColor1">
+            <img src='{% static "img/developer.png" %}' class="img-responsive">
+            <h3 class="_ftColor0">Isma</h3>
+            <p class="_ftColor0">Developer and Geek</p>
+            <div class="_preview-user-sn">
+                <a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="bottom" title="Facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="bottom" title="Twitter"></i></a>
+                <a href="#"><i class="fa fa-google-plus" data-toggle="tooltip" data-placement="bottom" title="Google Plus"></i></a>
+                <a href="#"><i class="fa fa-youtube" data-toggle="tooltip" data-placement="bottom" title="Youtube"></i></a>
+                <a href="#"><i class="fa fa-github" data-toggle="tooltip" data-placement="bottom" title="Github"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

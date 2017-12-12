@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 def upload_location(instance, filename):
     return "%s/%i/%s" % (instance.author, instance.id, filename)
 
+
 class Post(models.Model):
     title = models.CharField(null=False, blank=False, max_length=120)
     content = models.TextField(null=False, blank=False)
@@ -29,10 +30,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("posts:detail", kwargs={"id": self.id})
-
-    def get_lists_url(self):
-        return reverse("posts:list")
+        return reverse("blog:detail", kwargs={"id": self.id})
 
     class Meta:
         ordering = ["-timestamp", "-updated"]

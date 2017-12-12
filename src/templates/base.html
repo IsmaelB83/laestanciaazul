@@ -1,56 +1,320 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
+<!-- Head -->
 {% load staticfiles %}
 <head>
-    <title>{% block head %}Try Django 1.9{% endblock head%}</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
-            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-            crossorigin="anonymous"></script>
-
-    <link rel='stylesheet' href='{% static "css/base.css" %}'/>
-    <link rel='stylesheet' href='{% static "css/blog.css" %}'/>
+    <!-- Metas -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootsrap 3.3.0 -->
+    <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-3.3.0.css" %}'/>
+    <link rel="stylesheet" type="text/css" href='{% static "css/font-awesome.css" %}'/>
+    <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-social.css" %}'/>
+    <!-- My styles -->
+    <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    <!-- Blog title-->
+    <title>{% block head %} {% endblock head %}</title>
 </head>
 
-<body>
+<!-- Body -->
+<body class="_bgColor0">
 
-<header>
-    <div class="blog-masthead">
-        <div class="container">
-            <nav class="nav">
-                <a class="nav-link" href="#">Home</a>
-                <a class="nav-link active" href="#">Blog</a>
-                <a class="nav-link" href="#">Favorites</a>
-                <a class="nav-link" href="#">About</a>
-            </nav>
+<!-- Head -->
+<header class="_bgColor1 _ftColor3">
+    <!-- Contenedor para centrar la cabecera -->
+    <div class="container">
+        <!-- Barra superior con brand y usuario -->
+        <div class="row">
+            <div class="hidden-xs col-xs-12 pull-left">
+                <img class="_logoHeader" src='{% static "img/django_header.png" %}'/>
+                <h1>My first Django Web</h1>
+            </div>
         </div>
-    </div>
-
-    <div class="blog-header">
-        <div class="container">
-            <h1 class="blog-title">Django Blog v1</h1>
-            <p class="lead blog-description">My first application with Django</p>
+        <!-- Barra de navegación inicial -->
+        <div class="row">
+            <nav class="navbar navbar-inverse _bgColor1" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="buton" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" aria-controls="navbar" aria-expanded="false" aria-label="Menú de Navegación">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-sm hidden-md hidden-lg hidden-xl" href="#"><img src='{% static "img/brand_xs.png" %}' width="200"></a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <!-- Menú izquierda: navegación por la web-->
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="active"><a class="_ftColor1" href="{% url 'blog:index' %}">Home</a></li>
+                        <li><a href="{% url 'blog:contact' %}">About</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Categories<span class="caret"></span></a>
+                            <ul class="dropdown-menu _bgColor1" role="menu">
+                                <li><a class="_btnColor4" href="{% url 'blog:category' id='prog' %}">Programming</a></li>
+                                <li><a class="_btnColor4" href="{% url 'blog:category' id='rpi' %}">Raspberry PI</a></li>
+                                <li><a class="_btnColor4" href="{% url 'blog:category' id='linux' %}">Linux</a></li>
+                                <li><a class="_btnColor4" href="{% url 'blog:category' id='sap' %}">SAP</a></li>
+                                <li><a class="_btnColor4" href="{% url 'blog:category' id='other' %}">Otros</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{% url 'blog:archive' %}">Archive</a></li>
+                    </ul>
+                    <!-- Menú derecha: búsqueda y inicio/cierre sesión-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="input-group form-group-sm">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Search">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm _btnColor3" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user"></span>
+                                <span> Isma</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu _bgColor0">
+                                <li>
+                                    <div class="navbar-login col-xs-12 _pt-15 _pb-15">
+                                        <div class="col-xs-12 _pt-10 _pb-10">
+                                            <div class="col-xs-4 _pd-0 ">
+                                                <img src='{% static "img/developer.png" %}' class="_bgColor0 img-responsive img-rounded" width="100%">
+                                            </div>
+                                            <div class="col-xs-8 ">
+                                                <p class="text-left"><strong>Isma Developer</strong></p>
+                                                <p class="text-left small">ismaelbernal83@gmail.com</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 _pd-0">
+                                            <button class="btn btn-success btn-block btn-sm" href="#connectModal" data-toggle="modal" data-target="#connectModal">
+                                                <span class="glyphicon glyphicon-log-in"></span> Login
+                                            </button>
+                                            <button class="btn btn btn-primary btn-block btn-sm" href="#disconnectModal" data-toggle="modal" data-target="#disconnectModal">
+                                                <span class="glyphicon glyphicon-log-out"></span> Logout
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- Ventana modal iniciar sesion -->
+                    <div class="modal fade" id="connectModal">
+                        <div class="modal-dialog ">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h2>Iniciar sesión</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="username" id="user" placeholder="Username" autofocus required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="password" name="password" id="pass" placeholder="Password" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="#forgotPasswordModal" data-toggle="modal" data-target="#forgotPasswordModal" class="btn btn-info btn-block">Forgot password?</a>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="remember" id="remember">Remember me</label>
+                                        </div>
+                                        <div class="form-group form-group-inline" style="text-align: right;">
+                                            <button class="btn btn-success" type="submit">Login</button>
+                                            <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ventana modal cerrar sesion -->
+                    <div class="modal fade" id="disconnectModal">
+                        <div class="modal-dialog ">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h2>Cerrar sesión</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <p>¿Está seguro de que desea desconectar la sesión?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-success" type="submit">Desconectar</button>
+                                    <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ventana modal recordar password -->
+                    <div class="modal fade" id="forgotPasswordModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h2>Resetear password</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="mailaddress" id="mailaddress" placeholder="Your email address..." autofocus required>
+                                            <input name="_csrf" id="token" type="hidden" value="aKcseI6i-FGe6_EmdBd2h-p2T3Wfol-Mrpd4">
+                                            <span class="help-block"><small>Enter the email address you used to sign-up.</small></span>
+                                        </div>
+                                        <div class="form-group" style="text-align: right;">
+                                            <button class="btn btn-success" type="submit">Reset Password</button>
+                                            <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
 </header>
 
-<div class='container'>
-    {% block content %}
-    {% endblock content %}
-</div>
+<!-- Bloque principal -->
+<main>
+    {% block main_content %}
+    {% endblock main_content %}
+</main>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
-        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
-        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-        crossorigin="anonymous"></script>
+<!-- Footer -->
+<footer class="_bgColor1 _ftColor0T">
+    <!-- Barra superior y de share - Solo visible con varnab completa -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-lg-5 right-border _pr-sm-20">
+                <div class="footer-about">
+                    <div class="col-xs-12 _pl-0 _pr-0">
+                        <h2 class="footer-title">About Me</h2>
+                        <p class="_textJustify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit.</p>
+                    </div>
+                    <div class="single col-xs-12 _pl-0 _pr-0 _mt-5">
+                        <h6>Desarrollado por:
+                            <p class="_ml-10 _mt-5">
+                                <i class="fa fa-envelope"></i>
+                                <a href="#" title="">Ismael</a> - info@example.com
+                            </p>
+                        </h6>
+                    </div>
+                    <div class="single col-xs-12 col-sm-5 _pl-0 _pr-0 _mt-5">
+                        <h6>Follow:</h6>
+                        <ul class="list-inline _mt-5">
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-twitter" href="http://www.twitter.com"><span class="fa fa-twitter"></span></a></li>
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-github" href="http://www.github.com"><span class="fa fa-github"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="single col-xs-12 col-sm-7 _pl-0 _pr-0 _mt-5">
+                        <h6>Share:</h6>
+                        <ul class="list-inline _mt-5">
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-twitter" href="http://www.twitter.com"><span class="fa fa-twitter"></span></a></li>
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-facebook" href="http://www.facebook.com"><span class="fa fa-facebook"></span></a></li>
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-linkedin" href="http://www.linkedin.com"><span class="fa fa-linkedin"></span></a></li>
+                            <li class="list-inline-item"><a class="btn btn-social-icon btn-lg btn-instagram" href="http://www.linkedin.com"><span class="fa fa-instagram"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-3 right-border _pl-sm-20 _pr-sm-20">
+                <div class="footer-about">
+                    <div class="col-xs-12 _pl-0 _pr-0">
+                        <h2 class="footer-title">Powered By</h2>
+                        <div id="powered" class="footer-powered">
+                            <img src='{% static "img/HTML5.png" %}' class="img-rounded" alt="powered_by">
+                            <img src='{% static "img/css3.png" %}' class="img-rounded" alt="powered_by">
+                            <img src='{% static "img/bootstrap3.png" %}' class="img-rounded" alt="powered_by">
+                            <img src='{% static "img/python.jpg" %}' class="img-rounded" alt="powered_by">
+                            <img src='{% static "img/django.png" %}' class="img-rounded" alt="powered_by">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 _pl-0 _pr-0">
+                        <div class="navigation">
+                            <h2 class="footer-title">Navigation</h2>
+                            <ul class="list-unstyled">
+                                <li><a href="{% url 'blog:index' %}" title="">Home</a></li>
+                                <li><a href="{% url 'blog:contact' %}" title="">Contact</a></li>
+                                <li><a href="{% url 'blog:category' id='all' %}"
+                                       title="">Categories
+                                </a></li>
+                                <li><a href="{% url 'blog:archive' %}" title="">Archive</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-4 _pl-sm-20">
+                <div class="footer-about">
+                    <div class="col-xs-12 _pb-20 _pl-0 _pr-0">
+                        <h2 class="footer-title">Newsletter</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit..</p>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                            <input id="email" type="text" class="form-control" name="email" placeholder="Email">
+                        </div>
+                        <button type="button" class="btn _btnColor3 _mt-15 _noRadious">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JQuery y Bootstrap -->
+<script src='{% static "js/jquery-1.11.1.js" %}'></script>
+<script src='{% static "js/bootstrap-3.3.0.js" %}'></script>
+<!-- My scripts -->
+<script>
+		jQuery(window).resize(function() {
+   			var divWidth = $('#powered').width();
+    		$('#powered').css('height', divWidth/6);
+		});
+
+		$('.carousel-indicators  li').on('mouseover',function() {
+			$(this).trigger('click');
+		})
+
+		jQuery(document).ready(function() {
+
+			var divWidth = $('#powered').width();
+    		$('#powered').css('height', divWidth/6);
+
+			function close_accordion_section() {
+				jQuery('.accordion').removeClass('active');
+			}
+
+			jQuery('.accordion').click(function(e) {
+				// Grab current anchor value
+				var currentAttrValue = jQuery(this).attr('href');
+
+				if(jQuery(e.target).is('.active')) {
+					close_accordion_section();
+				}else {
+					close_accordion_section();
+					// Add active class to section title
+					jQuery(this).addClass('active');
+				}
+				e.preventDefault();
+			});
+		});
+
+</script>
 </body>
 
 </html>

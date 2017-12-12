@@ -1,13 +1,19 @@
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic.base import RedirectView
+
 
 from . import views
 
 urlpatterns = [
-    url(r'^create/$', views.posts_create),
-    url(r'^(?P<id>\d+)/$', views.posts_detail, name='detail'),
-    url(r'^list/$', views.posts_list, name='list'),
-    url(r'^(?P<id>\d+)/edit/$', views.posts_update, name='update'),
-    url(r'^(?P<id>\d+)/delete/$', views.posts_delete, name='delete'),
+    url(r'^$', views.index, name='index'),
+    url(r'^contact/$', views.contact, name='contact'),
+    url(r'^archive/$', views.archive, name='archive'),
+    url(r'^category/(?P<id>all|prog|rpi|linux|sap|other)/$', views.category, name='category'),
+    url(r'^post/(?P<id>\d+)/$', views.posts_detail, name='post'),
 ]
 
+#   url(r'^post/(?P<id>\d+)/$', views.posts_detail, name='detail'),
+#   url(r'^list/$', views.posts_list, name='list'),
+#   url(r'^(?P<id>\d+)/edit/$', views.posts_update, name='update'),
+#   url(r'^(?P<id>\d+)/delete/$', views.posts_delete, name='delete'),

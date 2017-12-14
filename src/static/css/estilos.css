@@ -468,12 +468,20 @@ button.categories:after {
 button._noRadious {
 	border-radius: 0px;
 }
+/*<== ACCORDION */
+
+/*==> PAGINATION */
+.pagination > li > a, .pagination > li > span {
+    border: none;
+    background-color: transparent;
+}
 
 button._pagination {
 	cursor: pointer;
 	transition: 0.4s;
 }
-/*<== ACCORDION */
+
+/*<== PAGINATION */
 
 /*==> PANEL GROUP */
 .panel {

@@ -1,0 +1,41 @@
+{% load staticfiles %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination _postPagination">
+
+        <li>
+            {% if paginator.has_previous %}
+            <a href="?{{ request }}={{ paginator.previous_page_number }}">
+                <button class="btn _btnColor1 _pagination" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button>
+            </a>
+            {% else %}
+            <a>
+                <button class="btn _btnColor1 _pagination disabled" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button>
+            </a>
+            {% endif %}
+        </li>
+
+        {% for i in paginator.paginator.page_range %}
+        <li><a href="?{{ request }}={{ i }}">
+            {% if paginator.number == i %}
+            <button class="btn _btnColor1 _pagination active">{{ i }}</button>
+            {% else %}
+            <button class="btn _btnColor1 _pagination">{{ i }}</button>
+            {% endif %}
+        </a></li>
+        {% endfor %}
+
+        <li>
+            {% if paginator.has_next %}
+            <a href="?{{ request }}={{ paginator.next_page_number }}">
+                <button class="btn _btnColor1 _pagination" aria-label="Next"><span aria-hidden="true">&raquo;</span></button>
+            </a>
+            {% else %}
+            <a>
+                <button class="btn _btnColor1 _pagination disabled" aria-label="Next"><span aria-hidden="true">&raquo;</span></button>
+            </a>
+            {% endif %}
+        </li>
+
+    </ul>
+</nav>

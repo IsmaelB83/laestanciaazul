@@ -4,7 +4,11 @@
 
 {% block head %}
 Blog - Home
-{% endblock head%}
+{% endblock %}
+
+{% block activo_home %}
+active
+{% endblock %}
 
 {% block main_content %}
 
@@ -21,9 +25,6 @@ Blog - Home
     <section class="row">
         <!-- Posts en portada  (main)-->
         <div class="col-xs-12 _mt-20 col-md-8 pull-left _pr-0 _pl-0">
-            <div class="col-xs-12">
-                <h2 class="_titleSection">RECENT POSTS</h2>
-            </div>
             <div class="col-xs-12 col-sm-4">
                 <aside>
                     {% include "includes/post_card.html" %}
@@ -40,13 +41,15 @@ Blog - Home
                 </aside>
             </div>
             <div class="col-xs-12 _mt-30">
-                <h2 class="_titleSection">OTHER</h2>
+                <h2 class="_titleSection">RECENT POSTS</h2>
             </div>
+            {% for post in posts %}
             <div class="col-xs-12 _mt-10">
-                {% include "includes/post_preview.html"%}
+                {% include "includes/post_preview.html" with post=post post_categories=post_categories%}
             </div>
+            {% endfor %}
             <div class="col-xs-12">
-                {% include "includes/pagination.html" with paginator=page_obj request=page_request_var %}
+                {% include "includes/pagination.html" with paginator=posts request=page_request %}
             </div>
         </div>
         <!-- Sidebar derecha-->
@@ -71,4 +74,4 @@ Blog - Home
     </section>
 </div>
 
-{% endblock main_content %}
+{% endblock %}

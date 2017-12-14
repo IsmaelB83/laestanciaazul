@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+Blog - Archivo
+{% endblock %}
+
+{% block activo_archive %}
+active
+{% endblock %}
+
+{% block main_content %}
+
+<!-- Bloque principal -->
+<div class="container _bgColor0">
+    <div class="row">
+        <!-- Listado de POSTs de la selección izquierda -->
+        <div class="col-xs-12 col-md-8 _mt-20 pull-left">
+            <h2 class="_titleSection">ARCHIVO</h2>
+            {% for post in posts %}
+            {% include "includes/post_preview_sm.html" with post=post post_categories=post_categories%}
+            {% endfor %}
+            {% include "includes/pagination.html" with paginator=posts request=page_request %}
+        </div>
+        <!-- Barra de la derecha -->
+        <div class="col-xs-12 col-md-4 _pl-0 pull-right">
+            <!-- Busqueda archivo -->
+            <div class="col-xs-12 _pr-0 _mt-20">
+                {% include "includes/side_archivo.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

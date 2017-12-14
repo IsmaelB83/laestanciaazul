@@ -3,24 +3,20 @@
 <!-- Preview de un post -->
 <div class="_previewXL">
     <div class="_previewXL-Title">
-        <h3><a href='{% url "blog:post" id=2 %}'>Making it look like readable English. Many desktop packages and web page</a></h3>
-        <span>By Isma- 2 hours ago<a href=""><span class="_previewXL-comments">8
-            Comments</span></a></span>
+        <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
+        <span>By {{ post.author }} - {{ post.timestamp }}<a href="">
+            <span class="_previewXL-comments">{{ post.num_comments }} Comments</span></a>
+        </span>
     </div>
     <div class="_previewXL-Body">
-        <a href=""><img src='{% static "img/python.jpg" %}' class="img-rounded" width="200px"></a>
-        <p>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',
-            making it look like readable English. Many desktop publishing packages and web page editorsLorem Ipsum is that it
-            has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like
-            readable English. Many desktop publishing packages and web page editors. Lorem ipsum dolor sit amet, consectetur adipisicing
-            elit. Nobis odio harum vero maxime, tempore, beatae nemo illo velit natus magnam quisquam laudantium unde placeat inventore
-            accusantium quia ipsam iure veritatis. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente ipsum optio provident
-            itaque autem sed accusantium culpa aspernatur reprehenderit, dolor cupiditate quod aperiam rerum veritatis ea at recusandae,
-            veniam facere! <span><a href=""> leer mas...</a></span></p>
+        <a href=""><img src='{% static post.image %}' class="img-rounded" width="200px"></a>
+        <p>{{ post.content|safe|linebreaks|truncatechars:500 }}<span><a href='{{ post.get_absolute_url }}'> leer mas...</a></span></p>
     </div>
     <div class="_previewXL-Footer">
-        <span class="label label-info">programming</span>
-        <span class="label label-primary">linux</span>
-        <span class="label label-success">raspberry pi</span>
+        {% for post_category in post_categories %}
+        {% if post_category.post == post %}
+        <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
+        {% endif %}
+        {% endfor %}
     </div>
 </div>

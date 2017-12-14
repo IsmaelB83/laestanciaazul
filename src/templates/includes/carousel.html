@@ -1,0 +1,53 @@
+{% load staticfiles %}
+
+<!-- Carousel -->
+<div class="carousel slide" id="IdCarousel" data-ride="carousel">
+    <!-- Items -->
+    <ol class="carousel-indicators">
+        <li data-target="#IdCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#IdCarousel" data-slide-to="1"></li>
+        <li data-target="#IdCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- Cuerpo del carousel -->
+    <div class="carousel-inner" role="listbox">
+        <!-- Item 1 -->
+        <div class="item active">
+            <img src='{% static "img/carousel1.jpg" %}' width="100%" height="100%">
+            <div class="container">
+                <div class="carousel-caption d-block">
+                    <h3>Wild nature</h3>
+                    <p>Nature is always so much fun!</p>
+                </div>
+            </div>
+        </div>
+        <!-- Item 2 -->
+        <div class="item">
+            <img src='{% static "img/carousel2.jpg" %}' alt="imagen_1">
+            <div class="container">
+                <div class="carousel-caption d-block">
+                    <h3>Big cities</h3>
+                    <p>Get Lost in the skyline</p>
+                </div>
+            </div>
+        </div>
+        <!-- Item 3 -->
+        <div class="item">
+            <img src='{% static "img/carousel3.jpg" %}' alt="imagen_1">
+            <div class="container">
+                <div class="carousel-caption d-block">
+                    <h3 class="text-dark">Sanfrancisco</h3>
+                    <p class="text-dark">Welcome to the city of love!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Flechas de navegación -->
+    <a class="left carousel-control" href="#IdCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#IdCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>

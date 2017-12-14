@@ -16,7 +16,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
     <!-- Blog title-->
-    <title>{% block head %} {% endblock head %}</title>
+    <title>{% block head %} {% endblock %}</title>
 </head>
 
 <!-- Body -->
@@ -50,19 +50,17 @@
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <!-- Menú izquierda: navegación por la web-->
                     <ul class="nav navbar-nav navbar-left">
-                        <li class="active"><a class="_ftColor1" href="{% url 'blog:index' %}">Home</a></li>
-                        <li><a href="{% url 'blog:contact' %}">About</a></li>
-                        <li class="dropdown">
+                        <li class="{% block activo_home %} {% endblock %}"><a class="_ftColor1" href="{% url 'blog:index' %}">Home</a></li>
+                        <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'blog:contact' %}">About</a></li>
+                        <li class="{% block activo_category %} {% endblock %} dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">Categories<span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
-                                <li><a class="_btnColor4" href="{% url 'blog:category' id='prog' %}">Programming</a></li>
-                                <li><a class="_btnColor4" href="{% url 'blog:category' id='rpi' %}">Raspberry PI</a></li>
-                                <li><a class="_btnColor4" href="{% url 'blog:category' id='linux' %}">Linux</a></li>
-                                <li><a class="_btnColor4" href="{% url 'blog:category' id='sap' %}">SAP</a></li>
-                                <li><a class="_btnColor4" href="{% url 'blog:category' id='other' %}">Otros</a></li>
+                                {% for category in categories %}
+                                <li><a class="_btnColor4" href='{{ category.get_absolute_url }}'>{{ category.category }}</a></li>
+                                {% endfor %}
                             </ul>
                         </li>
-                        <li><a href="{% url 'blog:archive' %}">Archive</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' %}">Archive</a></li>
                     </ul>
                     <!-- Menú derecha: búsqueda y inicio/cierre sesión-->
                     <ul class="nav navbar-nav navbar-right">
@@ -189,7 +187,7 @@
 <!-- Bloque principal -->
 <main>
     {% block main_content %}
-    {% endblock main_content %}
+    {% endblock %}
 </main>
 
 <!-- Footer -->
@@ -250,9 +248,7 @@
                             <ul class="list-unstyled">
                                 <li><a href="{% url 'blog:index' %}" title="">Home</a></li>
                                 <li><a href="{% url 'blog:contact' %}" title="">Contact</a></li>
-                                <li><a href="{% url 'blog:category' id='all' %}"
-                                       title="">Categories
-                                </a></li>
+                                <li><a href="{% url 'blog:category' id='all' %}" title="">Categories</a></li>
                                 <li><a href="{% url 'blog:archive' %}" title="">Archive</a></li>
                             </ul>
                         </div>

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+Blog - Post
+{% endblock %}
+
+{% block main_content %}
+<div class="container _bgColor0">
+    <div class="row">
+        <!-- Contenido del post -->
+        <div class="col-xs-12 col-md-8 _mt-20 pull-left">
+            <article class="_previewXL">
+                <!-- .entry-header -->
+                <div class="_previewXL-Title">
+                    <h3>{{ post.title }}</h3>
+                    <span>{{ post.author }}
+                        <a href="#comentarios">
+                            <span class="_previewXL-comments">{{ post.num_comments }} Comments</span>
+                        </a>
+                    </span>
+                    <img class="img-responsive _mt-10" width="100%" src="{{ post.image.url }}">
+                </div>
+                <!-- .entry-content -->
+                <div class="_previewXL-Body">
+                    {{ post.content|safe }}
+                </div>
+                <!-- .entry-footer -->
+                <div class="_previewXL-Footer">
+                    <span>{{ post.author }} <small> posted on {{ post.timestamp }}</small></span>
+                    <div class="_mt-5">
+                        <span class="label label-info">programming</span>
+                        <span class="label label-primary">linux</span>
+                        <span class="label label-success">raspberry pi</span>
+                    </div>
+                </div>
+                <div class="dejarcomentario col-xs-12 _pl-0 _pr-0 _mt-10">
+                    {% include "includes/form_comments.html" %}
+                </div>
+                {% include "includes/comments.html" %}
+            </article>
+        </div>
+        <!-- Sidebar derecha-->
+        <div class="col-xs-12 col-md-4 _pl-sm-30 pull-right">
+            <!-- Categorias-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_categorias.html" %}
+            </div>
+            <!-- Popular posts-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_popular_posts.html" %}
+            </div>
+            <!-- Last pictures -->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_recent_images.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

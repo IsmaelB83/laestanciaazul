@@ -1,0 +1,12 @@
+{% load staticfiles %}
+
+<h2 class="_titleSection">CATEGORÍAS</h2>
+<div class="panel-group" id="accordion">
+    {% for category in categories %}
+    <div class="panel">
+        <a href='{{ category.get_absolute_url }}'>
+            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15">{{ category.category }}</button>
+        </a>
+    </div>
+    {% endfor %}
+</div>

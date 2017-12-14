@@ -9,8 +9,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^contact/$', views.contact, name='contact'),
     url(r'^archive/$', views.archive, name='archive'),
-    url(r'^category/(?P<id>all|prog|rpi|linux|sap|other)/$', views.category, name='category'),
-    url(r'^post/(?P<id>\d+)/$', views.posts_detail, name='post'),
+    url(r'^category/(?P<id>all|prog|rpi|linux|sap|other)/$', views.category, name='category'), url(r'^post/(?P<id>\d+)/$', views.post, name='post'),
 ]
 
 #   url(r'^post/(?P<id>\d+)/$', views.posts_detail, name='detail'),

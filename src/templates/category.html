@@ -16,25 +16,29 @@ active
     <div class="row">
         <!-- Listado de POSTs -->
         <div class="col-xs-12 col-md-8 _mt-20 pull-left">
-            <h2 class="_titleSection">{{ category.category }}</h2>
+            <h2 class="_titleSection">{{ category.category|upper }}</h2>
             {% for post in posts %}
             {% include "includes/post_preview.html" with post=post %}
             {% endfor %}
             {% include "includes/pagination.html" with paginator=posts request=page_request %}
         </div>
         <!-- Sidebar derecha-->
-        <div class="col-xs-12 col-md-4 pull-right">
+        <div class="col-xs-12 col-md-4 _pl-0 _pl-sm-20 pull-right">
+            <!-- Categorias-->
+            <div class="col-xs-12 _mt-20">
+                {% include "includes/side_categories.html" with category_actual=category %}
+            </div>
             <!-- Popular posts-->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_popular_posts.html" %}
+                {% include "includes/side_popular_posts.html" with posts_popular=posts_popular %}
             </div>
             <!-- Last comments-->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_recent_comments.html" %}
+                {% include "includes/side_recent_comments.html" with comments_recent=comments_recent %}
             </div>
             <!-- Last pictures -->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_recent_images.html" %}
+                {% include "includes/side_recent_images.html" with pictures_recent=pictures_recent %}
             </div>
         </div>
     </div>

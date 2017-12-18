@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'posts',
-
+    'posts', 'django_wysiwyg', 'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -132,3 +130,11 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
 DEBUG = 'true'
+
+LOGIN_REDIRECT_URL = '/'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = 'false'
+
+SESSION_COOKIE_AGE = 60 * 60  # 60 minutos
+
+DJANGO_WYSIWYG_FLAVOR = "ckeditor"

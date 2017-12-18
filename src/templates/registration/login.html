@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block activo_login %}
+active
+{% endblock %}
+
+{% block main_content %}
+
+<!-- Container de bootstrap (centrar contenido en pantalla -->
+<div class="container _bgColor0">
+    <!-- Row-->
+    <section class="row">
+        <!-- Una columna completa -->
+        <div class="col-sm-12">
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control" type="text" name="username" id="user" placeholder="Username" autofocus required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" id="pass" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <a href="{% url 'password_reset' %}" class="btn btn-warning btn-block" type="submit">Remember password</a>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="remember" name="remember_me" id="remember_me">Remember me</label>
+                </div>
+                <div class="form-group form-group-inline" style="text-align: right;">
+                    <button class="btn btn-success" type="submit">Login</button>
+                    <a href="{% url 'blog:index' %}" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

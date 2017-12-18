@@ -4,22 +4,22 @@
 <div class="_previewXL">
     <div class="_previewXL-Title">
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
-        <span>{{ post.author }} - {{ post.timestamp }}
-            <a href='{{ post.get_absolute_url }}'>
-                <span class="_previewXL-comments">{{ post.num_comments }} Comments</span></a>
+        <span>By <strong>{{ post.author.user.first_name }}</strong> <small> {{ post.timestamp|date:"M d, Y" }} ago</small>
+            <a href='{{ post.get_absolute_url }}#form_comments'>
+                <span class="_previewXL-comments">{{ post.postcomment_set.all.count }} Comments</span></a>
             </a>
         </span>
     </div>
     <div class="_previewXL-Body">
         <p>
-            {{ post.content|safe|linebreaks|truncatechars:200}}
+            {{ post.content|safe|striptags|linebreaksbr|truncatewords_html:50 }}
             <span>
                 <a href='{{ post.get_absolute_url }}'> leer mas...</a>
             </span>
         </p>
     </div>
     <div class="_previewXL-Footer">
-        {% for post_category in post_categories %}
+        {% for post_category in post.postcategory_set.all %}
         {% if post_category.post == post %}
         <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
         {% endif %}

@@ -1,54 +1,37 @@
 {% load staticfiles %}
 
-<span id="comentarios" class="_previewXL-comments">3 Comments</span>
-<div class="media col-xs-12 _pl-0 _pr-0">
-    <div class="col-xs-1 _pl-0 _pr-0">
-        <img src='{% static "img/python.jpg" %}' width="100%" class="img-responsive img-rounded"
-             alt="">
+{% if post.postcomment_set.all.count > 0 %}
+<div id="comments" class="col-xs-12 _pl-0 _pr-0 _previewXL-comments">
+    <span>
+        <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
+        <i class="fa fa-heart _ml-10"></i> {{ post.num_likes }} likes
+    </span>
+
+    {% for comment in post.postcomment_set.all %}
+    <div class="media col-xs-12 _pl-0 _pr-0">
+        <div class="col-xs-1 _pl-0 _pr-0">
+            {% if comment.author %}
+            <a href="{{ comment.author.get_absolute_url }}">
+                <img src='{{ comment.author.image.url }}' width="100%" class="img-responsive img-rounded" alt="">
+            </a>
+            {% else %}
+            <img src='{% static "img/anonymous.jpeg" %}' width="100%" class="img-responsive img-rounded" alt="">
+            {% endif %}
+        </div>
+        <div class="media-body col-xs-11 _pr-0">
+            <p class="nombre">
+                {% if comment.author %}
+                <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.user.first_name }}</a>
+                {% else %}
+                {{ comment.anonymous_name }}
+                {% endif %}
+                <span><small> {{ comment.timestamp|timesince }} ago</span></small>
+            </p>
+            <p class="comentario">
+                {{ comment.comment }}
+            </p>
+        </div>
     </div>
-    <div class="media-body col-xs-11 _pr-0">
-        <p class="nombre">Jhon Doe <span>7:51pm, Hoy</span></p>
-        <p class="comentario">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-    </div>
+    {% endfor %}
 </div>
-<div class="media col-xs-12 _pl-0 _pr-0">
-    <div class="col-xs-1 _pl-0 _pr-0">
-        <img src='{% static "img/python.jpg" %}' width="100%" class="img-responsive img-rounded"
-             alt="">
-    </div>
-    <div class="media-body col-xs-11 _pr-0">
-        <p class="nombre">Pepiño <span>8:51pm, Hoy</span></p>
-        <p class="comentario">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-    </div>
-</div>
-<div class="media col-xs-12 _pl-0 _pr-0">
-    <div class="col-xs-1 _pl-0 _pr-0">
-        <img src='{% static "img/python.jpg" %}' width="100%" class="img-responsive img-rounded"
-             alt="">
-    </div>
-    <div class="media-body col-xs-11 _pr-0">
-        <p class="nombre">Alex <span>9:21pm, Hoy</span></p>
-        <p class="comentario">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-    </div>
-</div>
+{% endif %}

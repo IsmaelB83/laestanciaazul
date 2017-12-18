@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootsrap 3.3.0 -->
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-3.3.0.css" %}'/>
+    <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-datetimepicker-4.17.47.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/font-awesome.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-social.css" %}'/>
     <!-- My styles -->
@@ -17,6 +18,11 @@
     <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
     <!-- Blog title-->
     <title>{% block head %} {% endblock %}</title>
+    <!-- Javascript files-->
+    <script src='{% static "js/jquery-1.11.1.js" %}'></script>
+    <script src='{% static "js/moment-2.9.0.js" %}'></script>
+    <script src='{% static "js/bootstrap-3.3.0.js" %}'></script>
+    <script src='{% static "js/bootstrap-datetimepicker-4.14.30.js" %}'></script>
 </head>
 
 <!-- Body -->
@@ -53,7 +59,7 @@
                         <li class="{% block activo_home %} {% endblock %}"><a class="_ftColor1" href="{% url 'blog:index' %}">Home</a></li>
                         <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'blog:contact' %}">About</a></li>
                         <li class="{% block activo_category %} {% endblock %} dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">Categories<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
                                 {% for category in categories %}
                                 <li><a class="_btnColor4" href='{{ category.get_absolute_url }}'>{{ category.category }}</a></li>
@@ -61,6 +67,15 @@
                             </ul>
                         </li>
                         <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' %}">Archive</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="{% block activo_author %} {% endblock %} dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Author <span class="caret"></span></a>
+                            <ul class="dropdown-menu _bgColor1" role="menu">
+                                <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Create Post</a></li>
+                                <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Edit Post</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
                     </ul>
                     <!-- Menú derecha: búsqueda y inicio/cierre sesión-->
                     <ul class="nav navbar-nav navbar-right">
@@ -74,10 +89,11 @@
                                 </div>
                             </form>
                         </li>
+                        {% if user.is_authenticated %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span>
-                                <span> Isma</span>
+                                <span class="glyphicon glyphicon-lock"></span>
+                                <span> {{ user.first_name }}</span>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu _bgColor0">
@@ -85,57 +101,47 @@
                                     <div class="navbar-login col-xs-12 _pt-15 _pb-15">
                                         <div class="col-xs-12 _pt-10 _pb-10">
                                             <div class="col-xs-4 _pd-0 ">
-                                                <img src='{% static "img/developer.png" %}' class="_bgColor0 img-responsive img-rounded" width="100%">
+                                                <img src='{{ user.author.image.url }}' class="_bgColor0 img-responsive img-rounded" width="100%">
                                             </div>
                                             <div class="col-xs-8 ">
-                                                <p class="text-left"><strong>Isma Developer</strong></p>
-                                                <p class="text-left small">ismaelbernal83@gmail.com</p>
+                                                <p class="text-left">
+                                                    <strong>{{ user.first_name }}</strong><br>
+                                                    <small>{{ user.email }}</small>
+                                                    <br><br>
+                                                    <small>{{ user.author.description }}</small>
+                                                    <br>
+                                                    <small>{{ user.author.location }}</small>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="col-xs-12 _pd-0">
-                                            <button class="btn btn-success btn-block btn-sm" href="#connectModal" data-toggle="modal" data-target="#connectModal">
-                                                <span class="glyphicon glyphicon-log-in"></span> Login
-                                            </button>
+                                            {% if user.is_authenticated %}
+                                            {% if user.is_superuser %}
+                                            <a class="btn btn btn-warning btn-block btn-sm" href="{% url 'admin:index' %}">
+                                                <span class="glyphicon glyphicon glyphicon-cog"></span> Admin
+                                            </a>
+                                            {% endif %}
                                             <button class="btn btn btn-primary btn-block btn-sm" href="#disconnectModal" data-toggle="modal" data-target="#disconnectModal">
                                                 <span class="glyphicon glyphicon-log-out"></span> Logout
                                             </button>
+                                            {% else %}
+                                            <a class="btn btn-success btn-block btn-sm" href="{% url 'login' %}">
+                                                <span class="glyphicon glyphicon-log-in"></span> Login
+                                            </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </li>
+                        {% else %}
+                        <li class="{% block activo_login %} {% endblock %} dropdown">
+                            <a class="btn btn-block btn-sm" href="{% url 'login' %}">
+                                <span class="glyphicon glyphicon-log-in"></span> Login
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
-                    <!-- Ventana modal iniciar sesion -->
-                    <div class="modal fade" id="connectModal">
-                        <div class="modal-dialog ">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h2>Iniciar sesión</h2>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="">
-                                        <div class="form-group">
-                                            <input class="form-control" type="text" name="username" id="user" placeholder="Username" autofocus required>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" type="password" name="password" id="pass" placeholder="Password" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <a href="#forgotPasswordModal" data-toggle="modal" data-target="#forgotPasswordModal" class="btn btn-info btn-block">Forgot password?</a>
-                                        </div>
-                                        <div class="checkbox">
-                                            <label><input type="checkbox" value="remember" id="remember">Remember me</label>
-                                        </div>
-                                        <div class="form-group form-group-inline" style="text-align: right;">
-                                            <button class="btn btn-success" type="submit">Login</button>
-                                            <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Ventana modal cerrar sesion -->
                     <div class="modal fade" id="disconnectModal">
                         <div class="modal-dialog ">
@@ -148,32 +154,10 @@
                                     <p>¿Está seguro de que desea desconectar la sesión?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-success" type="submit">Desconectar</button>
+                                    <a href="{% url 'logout' %}?next=/">
+                                        <button class="btn btn-success" type="submit">Desconectar</button>
+                                    </a>
                                     <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Ventana modal recordar password -->
-                    <div class="modal fade" id="forgotPasswordModal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h2>Resetear password</h2>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="">
-                                        <div class="form-group">
-                                            <input class="form-control" type="text" name="mailaddress" id="mailaddress" placeholder="Your email address..." autofocus required>
-                                            <input name="_csrf" id="token" type="hidden" value="aKcseI6i-FGe6_EmdBd2h-p2T3Wfol-Mrpd4">
-                                            <span class="help-block"><small>Enter the email address you used to sign-up.</small></span>
-                                        </div>
-                                        <div class="form-group" style="text-align: right;">
-                                            <button class="btn btn-success" type="submit">Reset Password</button>
-                                            <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -191,7 +175,7 @@
 </main>
 
 <!-- Footer -->
-<footer class="_bgColor1 _ftColor0T">
+<footer class="_bgColor1 _ftColor0T _mt-20">
     <!-- Barra superior y de share - Solo visible con varnab completa -->
     <div class="container">
         <div class="row">
@@ -272,9 +256,6 @@
     </div>
 </footer>
 
-<!-- JQuery y Bootstrap -->
-<script src='{% static "js/jquery-1.11.1.js" %}'></script>
-<script src='{% static "js/bootstrap-3.3.0.js" %}'></script>
 <!-- My scripts -->
 <script>
 		jQuery(window).resize(function() {
@@ -309,8 +290,9 @@
 				e.preventDefault();
 			});
 		});
-
 </script>
+{% block body_js %}
+{% endblock %}
 </body>
 
 </html>

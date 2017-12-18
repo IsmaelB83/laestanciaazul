@@ -1,13 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Post, Category, PostCategory, PostComment
+from .models import Post, Category, PostCategory, PostComment, Author, PostImage
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
 class PostModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "content", "num_comments", "updated", "timestamp"]
+    list_display = ["title", "content", "updated", "timestamp"]
     list_display_links = ["title"]
-    list_editable = ["content", "num_comments"]
+    list_editable = ["content"]
     list_filter = ["updated", "timestamp"]
     search_fields = ["title", "content"]
     class Meta:
@@ -37,20 +37,44 @@ class PostCategoryModelAdmin(admin.ModelAdmin):
 
 
 class PostCommentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "num_comment", "user", "comment", "post", "num_likes", "timestamp", "updated"]
+    list_display = ["id", "post", "num_comment", "comment", "timestamp", "updated"]
     list_display_links = ["id"]
-    list_editable = ["comment", "post", "num_likes"]
-    list_filter = ["user", "post"]
-    search_fields = ["user", "post"]
+    list_editable = ["comment", "post"]
+    list_filter = ["author", "post"]
+    search_fields = ["author", "post"]
 
     class Meta:
-        model = PostCategory
+        model = PostComment
+
+
+class PostImageModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "post", "image", "timestamp"]
+    list_display_links = ["id"]
+    list_editable = ["post", "image"]
+    list_filter = ["post"]
+    search_fields = ["post"]
+
+    class Meta:
+        model = PostImage
+
+
+class AuthorModelAdmin(admin.ModelAdmin):
+    list_display = ["user", "location", "birth_date", "image"]
+    list_display_links = ["user"]
+    list_editable = ["location", "birth_date"]
+    list_filter = ["user"]
+    search_fields = ["user"]
+
+    class Meta:
+        model = Author
 
 
 admin.site.register(Post, PostModelAdmin)
 admin.site.register(Category, CategoryModelAdmin)
 admin.site.register(PostCategory, PostCategoryModelAdmin)
 admin.site.register(PostComment, PostCommentModelAdmin)
+admin.site.register(PostImage, PostImageModelAdmin)
+admin.site.register(Author, AuthorModelAdmin)
 
 # Admin is very good to model the application because it
 # easily allow us to test the CRUD concept:#

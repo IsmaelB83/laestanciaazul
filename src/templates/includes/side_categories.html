@@ -5,7 +5,11 @@
     {% for category in categories %}
     <div class="panel">
         <a href='{{ category.get_absolute_url }}'>
+            {% if category == category_actual %}
+            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15 active">{{ category.category }}</button>
+            {% else %}
             <button class="categories _btnColor2 _pd-18 _w-100 _ft-15">{{ category.category }}</button>
+            {% endif %}
         </a>
     </div>
     {% endfor %}

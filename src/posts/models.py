@@ -1,28 +1,35 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
 # MVC Model View Controller
-def upload_location(instance, filename):
-    return "%s/%i/%s" % (instance.author, instance.id, filename)
+def upload_location_post(instance, filename):
+    return '%s/%i/%s' % (instance.author.user.first_name, instance.id, filename)
 
+
+def upload_location_author(instance, filename):
+    return '%s/%s' % (instance.user, filename)
+
+
+def upload_location_postimage(instance, filename):
+    return '%s/%i/%s' % (instance.post.author.user.first_name, instance.post.id, filename)
 
 class Post(models.Model):
     title = models.CharField(null=False, blank=False, max_length=120)
     content = models.TextField(null=False, blank=False)
-    author = models.CharField(null=False, max_length=20)
+    author = models.ForeignKey('Author', null=True, on_delete=models.SET_NULL)
+    num_likes = models.PositiveIntegerField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    num_comments = models.PositiveIntegerField(null=False, blank=False)
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
-    image = models.ImageField(
-        upload_to=upload_location,
+    image = models.ImageField(upload_to=upload_location_post,
         null=True,
-        blank=True,
-        height_field="height_field",
-        width_field="width_field")
+        blank=True, height_field='height_field', width_field='width_field')
 
     def __unicode__(self):
         return self.title
@@ -31,7 +38,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("blog:post", kwargs={"id": self.id})
+        return reverse('blog:post', kwargs={'id': self.id})
 
     class Meta:
         ordering = ['-timestamp', '-updated']
@@ -44,7 +51,6 @@ class Category(models.Model):
     css_class = models.CharField(null=False, blank=False, max_length=20)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    thumbnail = models.ImageField(upload_to=upload_location, null=True, blank=True, height_field="height_field", width_field="width_field")
 
     def __unicode__(self):
         return self.category
@@ -53,7 +59,10 @@ class Category(models.Model):
         return self.category
 
     def get_absolute_url(self):
-        return reverse("blog:category", kwargs={"id": self.id})
+        return reverse('blog:category', kwargs={'id': self.id})
+
+    def __iter__(self):
+        return [self.id, self.sort, self.category, self.css_class, self.timestamp, self.updated]
 
     class Meta:
         ordering = ['sort']
@@ -65,19 +74,58 @@ class PostCategory(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     class Meta:
-        unique_together = (("post", "category"),)
+        unique_together = (('post', 'category'),)
         ordering = ['-post', 'category']
 
 
 class PostComment(models.Model):
     num_comment = models.PositiveIntegerField(null=False, blank=False)
-    user = models.CharField(null=False, blank=False, max_length=20)
-    comment = models.TextField(null=False, blank=False)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    num_likes = models.PositiveIntegerField(null=False, blank=False)
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, blank=True, null=True)
+    anonymous_name = models.CharField(null=False, blank=True, default='none', max_length=30)
+    anonymous_email = models.EmailField(null=False, blank=True, default='none@none.com', max_length=40)
+    comment = models.TextField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
-        unique_together = (("post", "num_comment"),)
+        unique_together = (('post', 'num_comment'),)
         ordering = ['post', '-num_comment']
+
+
+class PostImage(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    caption = models.CharField(null=False, blank=True, max_length=50, default="No caption")
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+    height_field = models.IntegerField(default=0)
+    width_field = models.IntegerField(default=0)
+    image = models.ImageField(upload_to=upload_location_postimage, null=True, blank=True, height_field='height_field', width_field='width_field')
+
+
+class Author(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=30, blank=False)
+    description = models.CharField(max_length=100, blank=False, null=False)
+    birth_date = models.DateField(null=True, blank=True)
+    height_field = models.IntegerField(default=0)
+    width_field = models.IntegerField(default=0)
+    image = models.ImageField(upload_to=upload_location_author, null=True, blank=True, height_field='height_field', width_field='width_field')
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Author.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        if instance.is_superuser == False:
+            instance.author.save()
+
+    def __unicode__(self):
+        return self.user.first_name
+
+    def __str__(self):
+        return self.user.first_name
+
+    def get_absolute_url(self):
+        return reverse('blog:profile', kwargs={'id': self.id})

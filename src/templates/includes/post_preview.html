@@ -4,19 +4,23 @@
 <div class="_previewXL">
     <div class="_previewXL-Title">
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
-        <span>By {{ post.author }} - {{ post.timestamp }}<a href="">
-            <span class="_previewXL-comments">{{ post.num_comments }} Comments</span></a>
+        <span>By <strong>{{ post.author.user.first_name }}</strong> <small> {{ post.timestamp|date:"M d, Y" }} ago</small>
+            <a href='{{ post.get_absolute_url }}#form_comments'>
+                <span class="_previewXL-comments">{{ post.postcomment_set.all.count }} Comments</span>
+            </a>
         </span>
     </div>
     <div class="_previewXL-Body">
         <a href=""><img src='{% static post.image %}' class="img-rounded" width="200px"></a>
-        <p>{{ post.content|safe|linebreaks|truncatechars:500 }}<span><a href='{{ post.get_absolute_url }}'> leer mas...</a></span></p>
+        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:75 }}
+            <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
+        </p>
     </div>
     <div class="_previewXL-Footer">
-        {% for post_category in post_categories %}
-        {% if post_category.post == post %}
-        <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
-        {% endif %}
+        {% for post_category in post.postcategory_set.all %}
+        <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
+            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category}}</span>
+        </a>
         {% endfor %}
     </div>
 </div>

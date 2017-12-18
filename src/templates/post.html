@@ -15,12 +15,15 @@ Blog - Post
                 <!-- .entry-header -->
                 <div class="_previewXL-Title">
                     <h3>{{ post.title }}</h3>
-                    <span>{{ post.author }}
-                        <a href="#comentarios">
-                            <span class="_previewXL-comments">{{ post.num_comments }} Comments</span>
+                    <span>{{ post.author }} on {{ post.timestamp }}
+                        <a href="#form_comments" class="_ftColor0" data-toggle="tooltip" data-placement="left" title="Comments">
+                            <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
+                        </a>
+                        <a href="#form_comments" class="_ftColor0" data-toggle="tooltip" data-placement="right" title="Loved">
+                            <i class="fa fa-heart"></i> {{ post.num_likes }} likes
                         </a>
                     </span>
-                    <img class="img-responsive _mt-10" width="100%" src="{{ post.image.url }}">
+                    <img src="{{ post.image.url }}" class="img-responsive _mt-10" width="100%">
                 </div>
                 <!-- .entry-content -->
                 <div class="_previewXL-Body">
@@ -30,30 +33,30 @@ Blog - Post
                 <div class="_previewXL-Footer">
                     <span>{{ post.author }} <small> posted on {{ post.timestamp }}</small></span>
                     <div class="_mt-5">
-                        <span class="label label-info">programming</span>
-                        <span class="label label-primary">linux</span>
-                        <span class="label label-success">raspberry pi</span>
+                        {% for post_category in post.postcategory_set.all %}
+                        <span class="label label-{{ post_category.css_class }}">{{post_category.category</span>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="dejarcomentario col-xs-12 _pl-0 _pr-0 _mt-10">
-                    {% include "includes/form_comments.html" %}
+                    {% include "includes/form_comments.html" with post=post %}
+                    {% include "includes/comments.html" with post=post %}
                 </div>
-                {% include "includes/comments.html" %}
             </article>
         </div>
         <!-- Sidebar derecha-->
-        <div class="col-xs-12 col-md-4 _pl-sm-30 pull-right">
+        <div class="col-xs-12 col-md-4 _pl-sm-30 pull-right _pl-0 _pl-sm-20">
             <!-- Categorias-->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_categorias.html" %}
+                {% include "includes/side_categories.html" %}
             </div>
             <!-- Popular posts-->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_popular_posts.html" %}
+                {% include "includes/side_popular_posts.html" with comments_recent=comments_recent %}
             </div>
             <!-- Last pictures -->
             <div class="col-xs-12 _mt-20">
-                {% include "includes/side_recent_images.html" %}
+                {% include "includes/side_recent_images.html" with pictures_recent=pictures_recent %}
             </div>
         </div>
     </div>

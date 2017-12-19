@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+Blog - {{ title }}
+{% endblock %}
+
+{% block main_content %}
+<div class="container _bgColor0">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <form method="post" action="" id="post_form" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div>
+                    <!-- Titulo del post -->
+                    <div class="form-group col-xs-12 _pl-0 _pr-0">
+                        <label for="title">Titulo</label>
+                        <input id="title" name="title" type="text" class="form-control" placeholder="enter your title here" maxlength="120" value="{{ post.title }}">
+                    </div>
+                    <!-- Categorias del post -->
+                    <div class="form-group col-xs-12_pl-0 _pr-0">
+                        <label> Categorías </label><br>
+                        {% for category in categories %}
+                        <input type="checkbox" name="postcategory" value="{{ category.id }}" id="categoria_{{ category.id }}" autocomplete="off"
+                               {% for cat in post.postcategory_set.all %}
+                               {% if cat.category.id== category.id %}
+                               checked
+                               {% endif %}
+                               {% endfor %}
+                        />
+                        <div class="btn-group">
+                            <label for="categoria_{{ category.id }}" class="btn btn-xs btn-{{ category.css_class}}">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                <span> </span>
+                            </label>
+                            <label for="categoria_{{ category.id }}" class="btn btn-xs btn-default active">
+                                {{ category.category }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Status del post -->
+                    <div class="form-group col-xs-12 _pl-0 _pr-0">
+                        <label>Estado del Post</label><br>
+                        {% for id, label in form.status.field.choices %}
+                        <input type="radio" name="status" value="{{ id }}" id="id_status_post_{{ id }}" required
+                               {% if post.status== id %}
+                               checked
+                               {% endif %}
+                        />
+                        <div class="btn-group">
+                            <label for="id_status_post_{{ id }}" class="btn btn-xs btn-default">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                <span> </span>
+                            </label>
+                            <label for="id_status_post_{{ id }}" class="btn btn-xs btn-default active">
+                                {{ label }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Fecha de publicacion -->
+                    <div class="form-group">
+                        <label for="fecha">Fecha de publicación</label>
+                        <div class='input-group date' id='fecha' name='fecha' style="width: 300px;">
+                            <input type='text' id='published_date' name='published_date' class="form-control input-sm"
+                                   value="{{ post.published_date|date:'YYYY-mm-dd HH:ii' }}"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#fecha').datetimepicker({
+                                showClear: true,
+                                showClose: true,
+
+                                format: 'YYYY-MM-DD hh:mm',
+                                locale: 'es'
+                            });
+                        });
+
+                    </script>
+                    <!-- Imagen -->
+                    <div class="form-group">
+                        <label for="main_image">Imagen de cabecera</label><br>
+                        <div id="main_image" class="input-group">
+                            <input id="nombre_imagen" name="nombre_imagen" type="text" class="form-control input-sm" placeholder="Search for..." readonly
+                                   value="{{ post.image }}">
+                            <span class="input-group-btn">
+                                <input type="file" name="image" id="id_image" class="hidden">
+                                <button id="upload_1_btn" class="btn btn-sm _btnColor1" type="button">Upload file</button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Tabla imagenes adicionales -->
+                    <div class="form-group">
+                        <label for="tabla_imagenes">Imagenes adicionales (máximo 5)</label>
+                        <table id="tabla_imagenes" class="table table-striped _ẗable-imagenes">
+                            <col style="width:50%">
+                            <col style="width:30%">
+                            <col style="width:14%">
+                            <col style="width:3%">
+                            <col style="width:3%">
+                            <thead>
+                            <th>Image</th>
+                            <th>Caption</th>
+                            <th>Dimension</th>
+                            <th></th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input id="upload_f1c1_text" name="upload_f1c1_text" type="text" class="form-control input-sm _input-xs" placeholder="" readonly></td>
+                                <td><input id="upload_f1c2_text" name="upload_f1c2_text" type="text" class="form-control input-sm _input-xs" placeholder=""></td>
+                                <td><input id="upload_f1c3_text" name="upload_f1c3_text" type="text" class="form-control input-sm _input-xs" placeholder="" readonly></td>
+                                <td>
+                                    <input id="upload_f1_input" type="file" class="hidden">
+                                    <button id="upload_f1_btn" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal" data-target="#delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Editor wysiwyg -->
+                    <div class="form-group">
+                        <label for="content">Contenido</label><br>
+                        {% load wysiwyg %}
+                        {% wysiwyg_setup %}
+                        <textarea id="content" name="content">
+                            {{ post.content }}
+                        </textarea>
+                        {% wysiwyg_editor "content" %}
+                    </div>
+                </div>
+                <!-- Submit -->
+                <div class="form-group pull-right _mt-0">
+                    <button type="submit" type="button" class="btn _btnColor1 submit">
+                        <i class="fa fa-cloud" aria-hidden="true"></i> Save post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal delete -->
+<div class="modal fade" id="delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Delete image</h3>
+                </div>
+                <div class="form-group alert alert-danger">
+                    <span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?
+                </div>
+                <div class="form-group form-inline">
+                    <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span> Actualizar</button>
+                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block body_js %}
+<script type="text/javascript">
+    $('#upload_1_btn').click(function(){
+        $('#id_image').click();
+    })
+
+    $('#upload_f1_btn').click(function(){
+        $('#upload_f1_input').click();
+    })
+
+    $('#id_image').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#nombre_imagen').val(file.name);
+    });
+
+    $('#upload_f1_input').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#upload_f1c1_text').val(file.name);
+    });
+
+</script>
+{% endblock %}

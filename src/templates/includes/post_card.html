@@ -5,7 +5,11 @@
     <div class="_preview-title _bgColor0">
         <div class="_preview-title_img">
             <a href="{{ post.get_absolute_url }}">
+                {% if post.image %}
                 <figure><img src='{{ post.image.url }}' class="img-responsive" width="100%"></figure>
+                {% else %}
+                <figure><img src='' class="img-responsive" width="100%"></figure>
+                {% endif %}
             </a>
         </div>
         <h4><a class="_ftColor1 _ftHColor3" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>

@@ -1,14 +1,11 @@
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
 
-from .models import Post, Category, PostCategory, PostComment, Author, PostImage
-from .forms import PostForm, PostCommentForm, LoginForm
+from .models import Post, Category, PostComment, Author, PostImage, PostCategory
+from .forms import PostForm, PostCommentForm
 
 # Create your views here.
 def index(request):
@@ -114,44 +111,51 @@ def post_view(request, id):
 def post_create(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            form = PostForm(request.POST or None, request.FILES or None)
+            form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = request.user
+                post.author = Author.objects.get(user=request.user)
+                post.num_likes = 0
                 post.save()
+                for aux in form.cleaned_data['postcategory']:
+                    post_category = PostCategory()
+                    post_category.post = post
+                    post_category.category = Category.objects.get(id=aux)
+                    post_category.save()
                 messages.success(request, 'Successfully created')
-                return redirect('blog:list')
+                return redirect('blog:index')
         else:
             form = PostForm()
-        context = {'title': 'Create new post'
-        }
-        return render(request, 'post_create.html', {'form': form})
+
+        context = {"title": "Create post", "form": form, }
+
+        return render(request, 'post_form.html', context)
     else:
         messages.error(request, 'Not authenticated')
         return redirect('blog:index')
 
-def posts_update(request, id):
+
+def post_edit(request, id):
     if request.user.is_authenticated:
         post = get_object_or_404(Post, id=id)
         form = PostForm(request.POST or None, request.FILES or None, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            messages.success(request, '<a href="">Item saved</a>', extra_tags='html_seguro')
-            return redirect('blog:list')
+        if request.method == 'POST':
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.save()
+                for postC in PostCategory.objects.filter(post=post):
+                    postC.delete()
+                for aux in form.cleaned_data['postcategory']:
+                    post_category = PostCategory()
+                    post_category.post = post
+                    post_category.category = Category.objects.get(id=aux)
+                    post_category.save()
+                messages.success(request, 'Successfully created')
+                return redirect('blog:index')
 
-        context = {'title': 'Edit post: ' + post.title, 'post': post, 'form': form,
-        }
+        context = {"title": "Edit post", "post": post, "form": form, }
+
         return render(request, 'post_form.html', context)
     else:
         messages.error(request, 'Not authenticated')
-        return redirect('blog:list')
-
-def posts_delete(request, id):
-    if request.user.is_authenticated:
-        post = get_object_or_404(Post, id=id)
-        post.delete()
-        messages.success(request, 'Successfully deleted')
-    else:
-        messages.error(request, 'Not authenticated')
-    return redirect('blog:list')
+        return redirect('blog:index')

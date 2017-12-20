@@ -12,11 +12,16 @@
                 {% endif %}
             </a>
         </div>
-        <h4><a class="_ftColor1 _ftHColor3" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+        <div style="height:80px; line-height: 80px; text-align: center;">
+            <h4 style="display: inline-block; vertical-align: middle;">
+                <a class="_ftColor1 _ftHColor3" href="{{ post.get_absolute_url }}">{{ post.title|title|truncatechars:70 }}</a>
+            </h4>
+        </div>
     </div>
     <div class="_preview-footer _bgColor1">
         <img class="_bgColor0" src='{{ post.author.image.url }}'>
-        <span><a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="left" title="Author">{{ post.author.user.first_name }}</a></span>
+        <span><a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="left" title="Author">
+            {{ post.author.user.first_name|truncatechars:12 }}</a></span>
         <span class="pull-right">
             <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="left" title="Comments"><i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }}</a>
             <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="right" title="Loved"><i class="fa fa-heart"></i> {{ post.num_likes }}</a>

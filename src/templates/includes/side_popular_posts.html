@@ -11,7 +11,7 @@
             <img src='' alt="thumbnail" class="img-responsive img-rounded">
             {% endif %}
         </a>
-        <p>{{ post.title }}<a href='{{ post.get_absolute_url }}'>[...]</a></p>
+        <p>{{ post.title|title }}<a href='{{ post.get_absolute_url }}'>[...]</a></p>
     </div>
     {% endfor %}
 </div>

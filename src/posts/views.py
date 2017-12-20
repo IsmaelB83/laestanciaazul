@@ -9,7 +9,7 @@ from .forms import PostForm, PostCommentForm
 
 # Create your views here.
 def index(request):
-    posts_all = Post.objects.all()
+    posts_all = Post.objects.all()[:15]
     paginator = Paginator(posts_all, 3)
     page_request_var = 'page'
     page = request.GET.get('page')
@@ -20,11 +20,13 @@ def index(request):
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
 
+    posts_cards = Post.objects.order_by('timestamp')[:3]
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     comments_recent = PostComment.objects.order_by('-timestamp')[:4]
     pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
 
-    context = {'title': 'List of Posts', 'posts': posts_page, 'posts_popular': posts_popular, 'comments_recent': comments_recent, 'pictures_recent': pictures_recent, 'page_request': page_request_var,
+    context = {'title': 'List of Posts', 'posts': posts_page, 'posts_cards': posts_cards, 'posts_popular': posts_popular,
+        'comments_recent': comments_recent, 'pictures_recent': pictures_recent, 'page_request': page_request_var,
     }
     return render(request, 'index.html', context)
 
@@ -78,7 +80,8 @@ def category(request, id):
     comments_recent = PostComment.objects.filter(post__in=posts_all).order_by('-timestamp')[:4]
     pictures_recent = PostImage.objects.filter(post__in=posts_all).order_by('-timestamp')[:12]
 
-    context = {'title': 'Category', 'category': category, 'posts': posts_page, 'posts_popular': posts_popular, 'comments_recent': comments_recent, 'pictures_recent': pictures_recent,
+    context = {'title': 'Category', 'category': category, 'posts': posts_page, 'posts_popular': posts_popular, 'comments_recent': comments_recent,
+        'pictures_recent': pictures_recent,
         'page_request': page_request_var
     }
     return render(request, 'category.html', context)
@@ -108,6 +111,7 @@ def post_view(request, id):
     pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
 
     context = {'title': post.title, 'posts_popular': posts_popular, 'pictures_recent': pictures_recent, 'post': post, }
+    
     return render(request, 'post.html', context)
 
 
@@ -130,7 +134,7 @@ def post_create(request):
         else:
             form = PostForm()
 
-        context = {"title": "Create post", "form": form, }
+        context = {'title': 'Create post', 'form': form, }
 
         return render(request, 'post_form.html', context)
     else:
@@ -156,7 +160,7 @@ def post_edit(request, id):
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')
 
-        context = {"title": "Edit post", "post": post, "form": form, }
+        context = {'title': 'Edit post', 'post': post, 'form': form, }
 
         return render(request, 'post_form.html', context)
     else:

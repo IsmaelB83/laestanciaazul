@@ -18,116 +18,120 @@ Blog - {{ title }}
                         <label for="title">Titulo</label>
                         <input id="title" name="title" type="text" class="form-control" placeholder="enter your title here" maxlength="120" value="{{ post.title }}">
                     </div>
-                    <!-- Categorias del post -->
-                    <div class="form-group col-xs-12_pl-0 _pr-0">
-                        <label> Categorías </label><br>
-                        {% for category in categories %}
-                        <input type="checkbox" name="postcategory" value="{{ category.id }}" id="categoria_{{ category.id }}" autocomplete="off"
-                               {% for cat in post.postcategory_set.all %}
-                               {% if cat.category.id== category.id %}
-                               checked
-                               {% endif %}
-                               {% endfor %}
-                        />
-                        <div class="btn-group">
-                            <label for="categoria_{{ category.id }}" class="btn btn-xs btn-{{ category.css_class}}">
-                                <span class="glyphicon glyphicon-ok"></span>
-                                <span> </span>
-                            </label>
-                            <label for="categoria_{{ category.id }}" class="btn btn-xs btn-default active">
-                                {{ category.category }}
-                            </label>
+                    <!-- Categorias, status y fecha-->
+                    <div class="col-xs-12 _pl-0 _pr-0">
+                        <!-- Categorías -->
+                        <div class="form-group col-xs-12 col-sm-6 pull-left _pl-0 _pr-0">
+                            <label> Categorías </label><br>
+                            {% for category in categories %}
+                            <input type="checkbox" name="postcategory" value="{{ category.id }}" id="categoria_{{ category.id }}" autocomplete="off"
+                                   {% for cat in post.postcategory_set.all %}
+                                   {% if cat.category.id== category.id %}
+                                   checked
+                                   {% endif %}
+                                   {% endfor %}
+                            />
+                            <div class="btn-group">
+                                <label for="categoria_{{ category.id }}" class="btn btn-sm btn-{{ category.css_class}}">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                    <span> </span>
+                                </label>
+                                <label for="categoria_{{ category.id }}" class="btn btn-sm btn-default active">
+                                    {{ category.category }}
+                                </label>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
-                    <!-- Status del post -->
-                    <div class="form-group col-xs-12 _pl-0 _pr-0">
-                        <label>Estado del Post</label><br>
-                        {% for id, label in form.status.field.choices %}
-                        <input type="radio" name="status" value="{{ id }}" id="id_status_post_{{ id }}" required
-                               {% if post.status== id %}
-                               checked
-                               {% endif %}
-                        />
-                        <div class="btn-group">
-                            <label for="id_status_post_{{ id }}" class="btn btn-xs btn-default">
-                                <span class="glyphicon glyphicon-ok"></span>
-                                <span> </span>
-                            </label>
-                            <label for="id_status_post_{{ id }}" class="btn btn-xs btn-default active">
-                                {{ label }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <!-- Fecha de publicacion -->
-                    <div class="form-group">
-                        <label for="fecha">Fecha de publicación</label>
-                        <div class='input-group date' id='fecha' name='fecha' style="width: 300px;">
-                            <input type='text' id='published_date' name='published_date' class="form-control input-sm"
-                                   value="{{ post.published_date|date:'YYYY-mm-dd HH:ii' }}"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#fecha').datetimepicker({
-                                showClear: true,
-                                showClose: true,
+                        <!-- Status y fecha del post -->
+                        <div class="col-xs-12 col-sm-6 pull-right _pl-0 _pr-0">
+                            <div class="form-group col-xs-12 col-sm-8 _pl-30 _pr-0">
+                                <label>Estado del Post</label><br>
+                                {% for id, label in form.status.field.choices %}
+                                <input type="radio" name="status" value="{{ id }}" id="id_status_post_{{ id }}" required
+                                       {% if post.status== id %}
+                                       checked
+                                       {% endif %}
+                                />
+                                <div class="btn-group">
+                                    <label for="id_status_post_{{ id }}" class="btn btn-sm btn-default">
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                        <span> </span>
+                                    </label>
+                                    <label for="id_status_post_{{ id }}" class="btn btn-sm btn-default active">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-4 _pl-0 _pr-0">
+                                <label for="fecha">Fecha de publicación</label>
+                                <div class='input-group date' id='fecha' name='fecha' style="width: 100%">
+                                    <input type='text' id='published_date' name='published_date' class="form-control input-sm"
+                                           value="{{ post.published_date|date:'YYYY-mm-dd HH:ii' }}"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#fecha').datetimepicker({
+                                        showClear: true,
+                                        showClose: true,
 
-                                format: 'YYYY-MM-DD hh:mm',
-                                locale: 'es'
-                            });
-                        });
+                                        format: 'YYYY-MM-DD hh:mm',
+                                        locale: 'es'
+                                    });
+                                });
 
-                    </script>
-                    <!-- Imagen -->
-                    <div class="form-group">
-                        <label for="main_image">Imagen de cabecera</label><br>
-                        <div id="main_image" class="input-group">
-                            <input id="nombre_imagen" name="nombre_imagen" type="text" class="form-control input-sm" placeholder="Search for..." readonly
-                                   value="{{ post.image }}">
-                            <span class="input-group-btn">
-                                <input type="file" name="image" id="id_image" class="hidden">
-                                <button id="upload_1_btn" class="btn btn-sm _btnColor1" type="button">Upload file</button>
-                            </span>
+
+                            </script>
                         </div>
                     </div>
-                    <!-- Tabla imagenes adicionales -->
+                    <!-- Imagenes -->
                     <div class="form-group">
-                        <label for="tabla_imagenes">Imagenes adicionales (máximo 5)</label>
                         <table id="tabla_imagenes" class="table table-striped _ẗable-imagenes">
-                            <col style="width:50%">
-                            <col style="width:30%">
+                            <col style="width:40%">
+                            <col style="width:40%">
                             <col style="width:14%">
                             <col style="width:3%">
                             <col style="width:3%">
                             <thead>
-                            <th>Image</th>
-                            <th>Caption</th>
-                            <th>Dimension</th>
-                            <th></th>
-                            <th></th>
+                            <th style="padding-left: 0px">Imagenes post (la primera será la principal)</th>
                             </thead>
                             <tbody>
+                            {% for i in "012345" %}
                             <tr>
-                                <td><input id="upload_f1c1_text" name="upload_f1c1_text" type="text" class="form-control input-sm _input-xs" placeholder="" readonly></td>
-                                <td><input id="upload_f1c2_text" name="upload_f1c2_text" type="text" class="form-control input-sm _input-xs" placeholder=""></td>
-                                <td><input id="upload_f1c3_text" name="upload_f1c3_text" type="text" class="form-control input-sm _input-xs" placeholder="" readonly></td>
+                                <td style="padding-left: 0px">
+                                    <input id="img{{i}}_name" name="img{{i}}_name" type="text" class="form-control input-sm _input-xs"
+                                           placeholder="nombre de la imagen..." readonly>
+                                </td>
                                 <td>
-                                    <input id="upload_f1_input" type="file" class="hidden">
-                                    <button id="upload_f1_btn" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
+                                    <input id="img{{i}}_caption" name="img{{i}}_caption" type="text" class="form-control input-sm _input-xs"
+                                           placeholder="descripción de la imagen...">
+                                </td>
+                                <td>
+                                    <input id="img{{i}}_size" name="img{{i}}_size" type="text" class="form-control input-sm _input-xs" readonly
+                                           placeholder="dimensiones...">
+                                </td>
+                                <td>
+                                    {% if i == "0" %}
+                                    <input id="id_image" name="image" type="file" class="hidden">
+                                    {% else %}
+                                    <input id="img{{i}}_file" id="img{{i}}_file" type="file" class="hidden">
+                                    {% endif %}
+                                    <button id="img{{i}}_btn_file" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </button>
                                 </td>
-                                <td>
-                                    <button class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal" data-target="#delete">
+                                <td style="padding-right: 0px">
+                                    <button id="img{{i}}_btn_del" class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal"
+                                            data-target="#delete">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
                                 </td>
                             </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -178,37 +182,83 @@ Blog - {{ title }}
 
 {% block body_js %}
 <script type="text/javascript">
-    $('#upload_1_btn').click(function(){
-        $('#id_image').click();
-    })
-
-    $('#upload_f1_btn').click(function(){
-        $('#upload_f1_input').click();
-    })
+    $('#img0_btn_file').click(function(){ $('#id_image').click(); })
+    $('#img1_btn_file').click(function(){ $('#img1_file').click(); })
+    $('#img2_btn_file').click(function(){ $('#img2_file').click(); })
+    $('#img3_btn_file').click(function(){ $('#img3_file').click(); })
+    $('#img4_btn_file').click(function(){ $('#img4_file').click(); })
+    $('#img5_btn_file').click(function(){ $('#img5_file').click(); })
 
     $('#id_image').bind('change', function() {
         var file  = this.files[0];
         var img = new Image();
-
         img.onload = function() {
             console.log('onload width', this.width);
             console.log('onload height', this.height);
+            $('#img0_size').val(this.width + "x" + this.height);
         }
         img.src = URL.createObjectURL(file);
-        $('#nombre_imagen').val(file.name);
+        $('#img0_name').val(file.name);
     });
 
-    $('#upload_f1_input').bind('change', function() {
+    $('#img1_file').bind('change', function() {
         var file  = this.files[0];
         var img = new Image();
-
         img.onload = function() {
             console.log('onload width', this.width);
             console.log('onload height', this.height);
+            $('#img1_size').val(this.width + "x" + this.height);
         }
         img.src = URL.createObjectURL(file);
-        $('#upload_f1c1_text').val(file.name);
+        $('#img1_name').val(file.name);
     });
 
+    $('#img2_file').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+            $('#img2_size').val(this.width + "x" + this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#img2_name').val(file.name);
+    });
+
+    $('#img3_file').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+            $('#img3_size').val(this.width + "x" + this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#img3_name').val(file.name);
+    });
+
+    $('#img4_file').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+            $('#img4_size').val(this.width + "x" + this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#img4_name').val(file.name);
+    });
+
+    $('#img5_file').bind('change', function() {
+        var file  = this.files[0];
+        var img = new Image();
+        img.onload = function() {
+            console.log('onload width', this.width);
+            console.log('onload height', this.height);
+            $('#img5_size').val(this.width + "x" + this.height);
+        }
+        img.src = URL.createObjectURL(file);
+        $('#img5_name').val(file.name);
+    });
 </script>
 {% endblock %}

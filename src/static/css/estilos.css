@@ -715,7 +715,7 @@ button._pagination {
 	-webkit-box-shadow: 1px 4px 16px 3px rgba(199,197,199,1);
 	-moz-box-shadow: 1px 4px 16px 3px rgba(199,197,199,1);
 	box-shadow: 1px 4px 16px 3px rgba(199,197,199,1);
-	height: 253 !important;
+	height: 100% !important;
 }
 
 ._preview-title { 
@@ -732,6 +732,11 @@ button._pagination {
 ._preview-title h4 a {
 	text-decoration:none;
 	transition: 0.3s;
+}
+
+._preview-title_img img {
+    min-height: 200px !important;
+    max-height: 200px !important;
 }
 
 ._preview-title_img figure {
@@ -765,7 +770,7 @@ button._pagination {
 	width: 33px;
 	height: 33px;
 	border-radius: 100%;
-	margin-right: 10px;
+	margin-right: 7px;
 	border: 2px solid #fff;
 	cursor: pointer;
 }

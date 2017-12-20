@@ -86,20 +86,23 @@ def category(request, id):
 
 def post_view(request, id):
     post = get_object_or_404(Post, id=id)
-
     if request.method == 'POST':
-        form = PostCommentForm(request.POST)
-        if form.is_valid():
-            post_comment = form.save(commit=False)
-            if request.user.is_authenticated:
-                post_comment.author = request.user.author
-            post_comment.post = post
-            try:
-                post_comment.num_comment = post.postcomment_set.latest('num_comment').num_comment + 1
-            except ObjectDoesNotExist:
-                post_comment.num_comment = 1
-            post_comment.save()
-            messages.success(request, 'Successfully created')
+        if request.is_ajax():
+            post.num_likes = post.num_likes + 1
+            post.save()
+        else:
+            form = PostCommentForm(request.POST)
+            if form.is_valid():
+                post_comment = form.save(commit=False)
+                if request.user.is_authenticated:
+                    post_comment.author = request.user.author
+                post_comment.post = post
+                try:
+                    post_comment.num_comment = post.postcomment_set.latest('num_comment').num_comment + 1
+                except ObjectDoesNotExist:
+                    post_comment.num_comment = 1
+                post_comment.save()
+                messages.success(request, 'Comentario añadido')
 
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     pictures_recent = PostImage.objects.order_by('-timestamp')[:12]

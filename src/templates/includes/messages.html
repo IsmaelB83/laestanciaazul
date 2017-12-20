@@ -1,16 +1,23 @@
 {% if messages %}
-<div class='messages'>
-    <ul class="messages">
-        {% for message in messages %}
-        <li
-                {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-            {% if "html_seguro" in message.tags %}
-            {{ message|safe }}
+<div class="container _pt-5 _pb-5">
+    <div class="row">
+        <div class="col-xs-12">
+            {% for message in messages %}
+            {% if message.tags == "error" %}
+            <div class="alert alert-danger _messages">
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success _messages">
             {% else %}
-            {{ message }}
+                    <div class="alert alert-info _messages">
             {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <li>
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                            {{ message }}
+                        </li>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 </div>
 {% endif %}

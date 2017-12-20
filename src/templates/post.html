@@ -19,9 +19,28 @@ Blog - Post
                         <a href="#form_comments" class="_ftColor0" data-toggle="tooltip" data-placement="left" title="Comments">
                             <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
                         </a>
-                        <a href="#form_comments" class="_ftColor0" data-toggle="tooltip" data-placement="right" title="Loved">
-                            <i class="fa fa-heart"></i> {{ post.num_likes }} likes
+                        <a id="like" href="#" class="_ftColor0" data-toggle="tooltip" data-placement="right" title="Loved">
+                            <i class="fa fa-heart"></i>
+                            <input id="numlikes" value="{{ post.num_likes }} likes" style="border:none;" readonly>
                         </a>
+                        <script>
+                             $("#like").click(function(e) {
+                                e.preventDefault();
+                                var self = $(this);
+                                ajax_req = $.ajax({
+                                    url: self.attr("href"),
+                                    type: "POST",
+                                    data: {
+                                        name: "sebastian",
+                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                    },
+                                    success: function(ctx) {console.log(ctx);}
+                                });
+                                var likes = parseInt(document.getElementById("numlikes").value);
+                                likes++;
+                                document.getElementById("numlikes").value = likes + " likes";
+                            });
+                        </script>
                     </span>
                     <img src="{{ post.image.url }}" class="img-responsive _mt-10" width="100%">
                 </div>

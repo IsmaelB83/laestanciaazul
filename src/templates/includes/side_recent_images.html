@@ -5,21 +5,27 @@
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"0:4" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}' title="Image Title"><img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded"></a>
+            <a href='{{ picture.post.get_absolute_url }}'>
+                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            </a>
         </div>
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"4:8" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}' title="Image Title"><img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded"></a>
+            <a href='{{ picture.post.get_absolute_url }}'>
+                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            </a>
         </div>
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"8:12" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}' title="Image Title"><img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded"></a>
+            <a href='{{ picture.post.get_absolute_url }}'>
+                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            </a>
         </div>
         {% endfor %}
     </div>

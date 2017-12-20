@@ -26,18 +26,18 @@ active
         <!-- Posts en portada  (main)-->
         <div class="col-xs-12 _mt-20 col-md-8 pull-left _pr-0 _pl-0">
             <div class="col-xs-12 col-sm-4 _mt-xs-10">
-                <aside>
-                    {% include "includes/post_card.html" with post=posts.0 %}
+                <aside class="_previewColCards">
+                    {% include "includes/post_card.html" with post=posts_cards.0 %}
+                </aside>
+            </div>
+            <div class="col-xs-12 col-sm-4 _mt-xs-10">
+                <aside class="_previewColCards">
+                    {% include "includes/post_card.html" with post=posts_cards.1 %}
                 </aside>
             </div>
             <div class="col-xs-12 col-sm-4 _mt-xs-10">
                 <aside>
-                    {% include "includes/post_card.html" with post=posts.1 %}
-                </aside>
-            </div>
-            <div class="col-xs-12 col-sm-4 _mt-xs-10">
-                <aside>
-                    {% include "includes/post_card.html" with post=posts.2 %}
+                    {% include "includes/post_card.html" with post=posts_cards.2 %}
                 </aside>
             </div>
             <div class="col-xs-12 _mt-30">

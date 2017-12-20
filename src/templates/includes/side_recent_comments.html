@@ -12,7 +12,7 @@
             {% endif %}
             <small> {{ comment.timestamp|timesince }} ago</small>
         </p>
-        <h5><a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title }}</a></h5>
+        <h5><a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title|title }}</a></h5>
         <p>{{ comment.comment }} </p>
     </div>
     {% endfor %}

@@ -6,6 +6,10 @@
 Blog - Post
 {% endblock %}
 
+{% block edit_post %}
+<li><a class="_btnColor4" href='{% url "blog:post_edit" id=post.id %}'>Edit Post</a></li>
+{% endblock %}
+
 {% block main_content %}
 <div class="container _bgColor0">
     <div class="row">

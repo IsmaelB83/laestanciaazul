@@ -19,8 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include("posts.urls", namespace='blog')), url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^admin/', admin.site.urls), url(r'^', include("posts.urls", namespace='blog')), url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

@@ -443,7 +443,7 @@ footer .navigation li a:hover {
 }
 /*<== JUMBOTRON */
 
-/*==> BUTTONS */
+/*==> ACCORDION */
 button.accordion {
 	cursor: pointer;
 	border: none;
@@ -619,8 +619,8 @@ button._pagination {
 
 ._previewXS img {
 	margin-top: 5px;
-	width: 39%;
-    max-height: 50px;
+	width: 23.8%;
+    max-height: 70px;
 	float: left;
 }
 
@@ -630,7 +630,7 @@ button._pagination {
 
 ._previewXS p {
 	float: right;
-	width: 58%;
+	width: 72%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1em;
 	color:#444;
@@ -718,15 +718,14 @@ button._pagination {
 	height: 100% !important;
 }
 
-._preview-title { 
-	padding: 5px;
-	padding-bottom: 0px;
+._preview-title {
 	text-align: center;
 }
 
 ._preview-title h4 {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin: 0px;
+	padding: 5px;
+	font-size: 1.1em;
 }
 
 ._preview-title h4 a {
@@ -734,25 +733,23 @@ button._pagination {
 	transition: 0.3s;
 }
 
-._preview-title_img img {
-    min-height: 200px !important;
-    max-height: 200px !important;
+._preview-title img {
+    width: 100%;
+    height: 150px;
 }
 
-._preview-title_img figure {
-	width: 100%;
-	overflow: hidden;
-	cursor: pointer;
-}
-
-._preview-title_img figure:hover img{
-	-webkit-transform: rotate(15deg) scale(1.4);
-	transform: rotate(15deg) scale(1.4);
+._preview-title figure img {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
 }
+._preview-title figure:hover img {
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
 
-._preview-footer { 
+._preview-footer {
 	padding: 10px;
 	position: relative;
 }
@@ -767,11 +764,8 @@ button._pagination {
 ._preview-footer span a:hover { color: #F39C12; }
 
 ._preview-footer > img {
-	width: 33px;
-	height: 33px;
-	border-radius: 100%;
-	margin-right: 7px;
-	border: 2px solid #fff;
+	width: 35px;
+	height: 35px;
 	cursor: pointer;
 }
 
@@ -799,8 +793,9 @@ button._pagination {
 }
 
 ._preview-user img {
-	width: 100px;
-	height:100px;
+	margin-top: 10px;
+	width: 80px;
+	height: 80px;
 	float: left;
 }
 
@@ -917,12 +912,6 @@ button._pagination {
 	margin-top: 10px;
 }
 
-
-/*.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {*/
-._ẗable-imagenes > tbody > tr > th, ._ẗable-imagenes > tbody > tr > td {
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-}
 
 .icon-input-btn{
     display: inline-block;

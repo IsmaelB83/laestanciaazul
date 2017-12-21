@@ -129,6 +129,13 @@ def post_create(request):
                     post_category.post = post
                     post_category.category = Category.objects.get(id=aux)
                     post_category.save()
+                for image in form.cleaned_data['postimage']:
+                    post_image = PostImage()
+                    post_image.post = post
+                    post_image.image = image
+                    post_image.caption = image.name
+                    post_image.save()
+
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')
         else:

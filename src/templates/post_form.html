@@ -89,51 +89,76 @@ Blog - {{ title }}
                         </div>
                     </div>
                     <!-- Imagenes -->
-                    <div class="form-group">
+                    <div class="form-group _mt-20">
+                        <label> Imagenes post (la primera es la principal) </label><br>
                         <table id="tabla_imagenes" class="table table-striped _ẗable-imagenes">
+                            <col style="width:5%">
                             <col style="width:40%">
-                            <col style="width:40%">
+                            <col style="width:20%">
                             <col style="width:14%">
                             <col style="width:3%">
                             <col style="width:3%">
-                            <thead>
-                            <th style="padding-left: 0px">Imagenes post (la primera será la principal)</th>
-                            </thead>
                             <tbody>
-                            {% for i in "012345" %}
+                            {% for i in "01" %}
                             <tr>
                                 <td style="padding-left: 0px">
+                                    <img src="img{{i}}_img" name="img{{i}}_img" width="50px" height="50px">
+                                </td>
+                                <td>
                                     <input id="img{{i}}_name" name="img{{i}}_name" type="text" class="form-control input-sm _input-xs"
-                                           placeholder="nombre de la imagen..." readonly>
+                                           {% if i== "0" %}
+                                    placeholder="imagen principal del post..." readonly>
+                                    {% elif i == "1" %}
+                                    placeholder="seleccione imagenes adicionales para el post..." readonly>
+                                    {% endif %}
                                 </td>
                                 <td>
-                                    <input id="img{{i}}_caption" name="img{{i}}_caption" type="text" class="form-control input-sm _input-xs"
-                                           placeholder="descripción de la imagen...">
+                                    <input id="img{{i}}_size" name="img{{i}}_size" type="text" class="form-control input-sm _input-xs"
+                                           placeholder="tamaño de la imagen..." readonly>
                                 </td>
                                 <td>
-                                    <input id="img{{i}}_size" name="img{{i}}_size" type="text" class="form-control input-sm _input-xs" readonly
+                                    <input id="img{{i}}_dim" name="img{{i}}_dim" type="text" class="form-control input-sm _input-xs" readonly
                                            placeholder="dimensiones...">
                                 </td>
                                 <td>
                                     {% if i == "0" %}
                                     <input id="id_image" name="image" type="file" class="hidden">
-                                    {% else %}
-                                    <input id="img{{i}}_file" id="img{{i}}_file" type="file" class="hidden">
-                                    {% endif %}
                                     <button id="img{{i}}_btn_file" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </button>
+                                    {% elif i == "1" %}
+                                    <input id="img{{i}}_file" id="img{{i}}_file" type="file" class="hidden" multiple="multiple"
+                                           accept=".gif,.jpg,.jpeg,.png">
+                                    <button id="img{{i}}_btn_file" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                    {% endif %}
                                 </td>
                                 <td style="padding-right: 0px">
+                                    {% if i == "0" %}
                                     <button id="img{{i}}_btn_del" class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal"
                                             data-target="#delete">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
+                                    {% elif i == "1" %}
+                                    <button id="img{{i}}_btn_del" class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal"
+                                            data-target="#delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                    <div class="form-group">
+                        <legend>Simple Upload</legend>
+                        <input id="input1" type="file" name="files[]" multiple="multiple" accept=".gif,.jpg,.jpeg,.png">
+                        <!--onchange="getFileSizeandName(this);"-->
+                        <div id="elPreview">
+
+                        </div>
                     </div>
                     <!-- Editor wysiwyg -->
                     <div class="form-group">
@@ -182,6 +207,102 @@ Blog - {{ title }}
 
 {% block body_js %}
 <script type="text/javascript">
+
+    window.URL    = window.URL || window.webkitURL;
+    var elBrowse  = document.getElementById("input1"),
+        elPreview = document.getElementById("elPreview"),
+        useBlob   = false && window.URL; // set to `true` to use Blob instead of Data-URL
+
+    elBrowse.addEventListener("change", function() {
+        var files = this.files, errors = "";
+        if (!files) {
+            errors += "File upload not supported by your browser.";
+        }
+        if (files && files[0]) {
+            for(var i=0; i<files.length; i++) {
+                var file = files[i];
+                if ( (/\.(png|jpeg|jpg|gif)$/i).test(file.name) ) {
+                    readImage( file );
+                } else {
+                    errors += file.name +" Unsupported Image extension\n";
+                }
+            }
+        }
+        if (errors) {
+            alert(errors);
+        }
+    });
+
+    function readImage (file) {
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+            var image  = new Image();
+            image.addEventListener("load", function () {
+                var imageInfo = file.name +' '+
+                image.width +'×'+
+                image.height +' '+
+                file.type +' '+
+                Math.round(file.size/1024) +'KB';
+
+                // Show image and info
+                elPreview.appendChild(this);
+                elPreview.insertAdjacentHTML("beforeend", imageInfo +'<br>');
+
+                if (useBlob) {
+                    // Free some memory
+                    window.URL.revokeObjectURL(image.src);
+                }
+            });
+            image.src = useBlob ? window.URL.createObjectURL(file) : reader.result;
+        });
+        reader.readAsDataURL(file);
+    }
+
+    var totalsizeOfUploadFiles = 0;
+    var useBlob = false && window.URL;
+
+    function getFileSizeandName(input)
+    {
+        var select = $('#uploadTable');
+        $("#uploadTable tr").remove();
+        for(var i =0; i<input.files.length; i++)
+        {
+            var filename = input.files[i].name;
+            if ( (/\.(png|jpeg|jpg|gif)$/i).test(filename) ) {
+                var filesizeInBytes = input.files[i].size;
+                var filesizeInMB = (filesizeInBytes / (1024*1024)).toFixed(2);
+                var dimensions = input.files[i].width + " " + input.files[i].height
+
+                var reader = new FileReader();
+                reader.addEventListener("load", function () {
+                    var image  = new Image();
+                    image.addEventListener("load", function () {
+                      dimensions = image.width  +'×'+ image.height;
+                    });
+                    image.src = useBlob ? window.URL.createObjectURL(input.files[i]) : reader.result;
+                });
+                reader.readAsDataURL(input.files[i]);
+
+                select.append($('<tr id=tr'+i+'><td id=filetd'+i+'>'+filename+'</td><td id=filedimensiond'+i+'>'+dimensions+'</td><td id=filesizetd'+i+'>'+filesizeInMB+'</tr>'));
+                totalsizeOfUploadFiles += parseFloat(filesizeInMB);
+                $('#totalsize').text(totalsizeOfUploadFiles.toFixed(2)+" MB");
+                if(i==0)
+                    $('#filecount').text("1file");
+                else
+                {
+                    var no = parseInt(i) + 1;
+                    $('#filecount').text(no+"files");
+                }
+            }
+        }
+    }
+
+    function CloseAndRefresh()
+    {
+        opener.location.reload(true);
+        self.close();
+    }
+
     $('#img0_btn_file').click(function(){ $('#id_image').click(); })
     $('#img1_btn_file').click(function(){ $('#img1_file').click(); })
     $('#img2_btn_file').click(function(){ $('#img2_file').click(); })
@@ -195,9 +316,10 @@ Blog - {{ title }}
         img.onload = function() {
             console.log('onload width', this.width);
             console.log('onload height', this.height);
-            $('#img0_size').val(this.width + "x" + this.height);
+            $('#img0_dim').val(this.width + "x" + this.height);
         }
         img.src = URL.createObjectURL(file);
+        $('#img0_size').val(file.size);
         $('#img0_name').val(file.name);
     });
 

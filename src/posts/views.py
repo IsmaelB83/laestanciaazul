@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
 from .models import Post, Category, PostComment, Author, PostImage, PostCategory
-from .forms import PostForm, PostCommentForm
+from .forms import PostForm, PostFormEdit, PostCommentForm
 
 # Create your views here.
 def index(request):
@@ -124,10 +124,10 @@ def post_create(request):
                 post.author = Author.objects.get(user=request.user)
                 post.num_likes = 0
                 post.save()
-                for aux in form.cleaned_data['postcategory']:
+                for category in form.cleaned_data['postcategory']:
                     post_category = PostCategory()
                     post_category.post = post
-                    post_category.category = Category.objects.get(id=aux)
+                    post_category.category = Category.objects.get(id=category)
                     post_category.save()
                 for image in form.cleaned_data['postimage']:
                     post_image = PostImage()
@@ -152,18 +152,26 @@ def post_create(request):
 def post_edit(request, id):
     if request.user.is_authenticated:
         post = get_object_or_404(Post, id=id)
-        form = PostForm(request.POST or None, request.FILES or None, instance=post)
+        form = PostFormEdit(request.POST or None, request.FILES or None, instance=post)
         if request.method == 'POST':
             if form.is_valid():
                 post = form.save(commit=False)
                 post.save()
                 for postC in PostCategory.objects.filter(post=post):
                     postC.delete()
-                for aux in form.cleaned_data['postcategory']:
+                for category in form.cleaned_data['postcategory']:
                     post_category = PostCategory()
                     post_category.post = post
-                    post_category.category = Category.objects.get(id=aux)
+                    post_category.category = Category.objects.get(id=category)
                     post_category.save()
+                for image in PostImage.objects.filter(post=post):
+                    image.delete()
+                for image in form.cleaned_data['postimage']:
+                    post_image = PostImage()
+                    post_image.post = post
+                    post_image.image = image
+                    post_image.caption = image.name
+                    post_image.save()
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')
 

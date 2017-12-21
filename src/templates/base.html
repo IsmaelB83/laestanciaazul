@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-ES">
 
 <!-- Head -->
 {% load staticfiles %}
@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-datetimepicker-4.17.47.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/font-awesome.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-social.css" %}'/>
+    <link rel="stylesheet" type="text/css" href='{% static "css/fileinput.css" %}'/>
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Fonts -->
@@ -23,6 +24,7 @@
     <script src='{% static "js/moment-2.9.0.js" %}'></script>
     <script src='{% static "js/bootstrap-3.3.0.js" %}'></script>
     <script src='{% static "js/bootstrap-datetimepicker-4.14.30.js" %}'></script>
+    <script src='{% static "js/fileinput.js" %}'></script>
 </head>
 
 <!-- Body -->
@@ -72,7 +74,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown">Author <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
                                 <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Create Post</a></li>
-                                <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Edit Post</a></li>
+                                {% block edit_post %} {% endblock %}
                             </ul>
                         </li>
                         {% endif %}

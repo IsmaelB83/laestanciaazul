@@ -48,9 +48,7 @@ Blog - {{ title }}
                                 <label>Estado del Post</label><br>
                                 {% for id, label in form.status.field.choices %}
                                 <input type="radio" name="status" value="{{ id }}" id="id_status_post_{{ id }}" required
-                                       {% if post.status== id %}
-                                       checked
-                                       {% endif %}
+                                       {%if post%} readonly {%if post.status== id%} checked {%endif%}{%endif%}
                                 />
                                 <div class="btn-group">
                                     <label for="id_status_post_{{ id }}" class="btn btn-sm btn-default">
@@ -67,7 +65,7 @@ Blog - {{ title }}
                                 <label for="fecha">Fecha de publicación</label>
                                 <div class='input-group date' id='fecha' name='fecha' style="width: 100%">
                                     <input type='text' id='published_date' name='published_date' class="form-control input-sm"
-                                           value="{{ post.published_date|date:'YYYY-mm-dd HH:ii' }}"/>
+                                           value="{{ post.published_date|date:'YYYY-mm-dd HH:ii' }}" {%if post%}readonly{%endif%}/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -88,77 +86,88 @@ Blog - {{ title }}
                             </script>
                         </div>
                     </div>
-                    <!-- Imagenes -->
+                    <!-- Imagen principal -->
                     <div class="form-group _mt-20">
-                        <label> Imagenes post (la primera es la principal) </label><br>
-                        <table id="tabla_imagenes" class="table table-striped _ẗable-imagenes">
+                        <label for="tabla"> Imagen principal del post</label>
+                        <table id="tabla">
                             <col style="width:5%">
-                            <col style="width:40%">
-                            <col style="width:20%">
-                            <col style="width:14%">
-                            <col style="width:3%">
-                            <col style="width:3%">
+                            <col style="width:60%">
+                            <col style="width:15%">
+                            <col style="width:15%">
+                            <col>
                             <tbody>
-                            {% for i in "01" %}
                             <tr>
-                                <td style="padding-left: 0px">
-                                    <img src="img{{i}}_img" name="img{{i}}_img" width="50px" height="50px">
-                                </td>
                                 <td>
-                                    <input id="img{{i}}_name" name="img{{i}}_name" type="text" class="form-control input-sm _input-xs"
-                                           {% if i== "0" %}
-                                    placeholder="imagen principal del post..." readonly>
-                                    {% elif i == "1" %}
-                                    placeholder="seleccione imagenes adicionales para el post..." readonly>
-                                    {% endif %}
+
+                                    <img id="image_prev" name="image_prev" width="100%" height="75px"
+                                         {%if post.image.url %}src="{{ post.image.url }}" {%endif%}>
                                 </td>
-                                <td>
-                                    <input id="img{{i}}_size" name="img{{i}}_size" type="text" class="form-control input-sm _input-xs"
-                                           placeholder="tamaño de la imagen..." readonly>
+                                <td style="padding-left: 10px">
+                                    <input id="image_name" name="image_name" type="text" class="form-control input-sm"
+                                           placeholder="imagen principal del post..." readonly value="{{ post.image.name }}">
                                 </td>
-                                <td>
-                                    <input id="img{{i}}_dim" name="img{{i}}_dim" type="text" class="form-control input-sm _input-xs" readonly
-                                           placeholder="dimensiones...">
+                                <td style="padding-left: 5px">
+                                    <input id="image_size" name="image_size" type="text" class="form-control input-sm"
+                                           placeholder="tamaño de la imagen..." readonly value="{{ post.image.size }}">
                                 </td>
-                                <td>
-                                    {% if i == "0" %}
-                                    <input id="id_image" name="image" type="file" class="hidden">
-                                    <button id="img{{i}}_btn_file" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
+                                <td style="padding-left: 5px">
+                                    <input id="image_dim" name="image_dim" type="text" class="form-control input-sm" readonly
+                                           placeholder="dimensiones..." readonly value="{{ post.width_field }}x{{ post.height_field }}">
+                                </td>
+                                <td style="padding-left: 5px">
+                                    <input id="id_image" name="image" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
+                                           onchange="readURL(this);">
+                                    <button id="image_btn" class="btn btn-sm _btnColor1" type="button" data-title="Edit">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </button>
-                                    {% elif i == "1" %}
-                                    <input id="img{{i}}_file" id="img{{i}}_file" type="file" class="hidden" multiple="multiple"
-                                           accept=".gif,.jpg,.jpeg,.png">
-                                    <button id="img{{i}}_btn_file" class="btn btn-xs _btnColor1" type="button" data-title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                    {% endif %}
-                                </td>
-                                <td style="padding-right: 0px">
-                                    {% if i == "0" %}
-                                    <button id="img{{i}}_btn_del" class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal"
-                                            data-target="#delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                    {% elif i == "1" %}
-                                    <button id="img{{i}}_btn_del" class="btn btn-xs _btnColor1" type="button" data-title="Delete" data-toggle="modal"
-                                            data-target="#delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                    {% endif %}
                                 </td>
                             </tr>
-                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    <div class="form-group">
-                        <legend>Simple Upload</legend>
-                        <input id="input1" type="file" name="files[]" multiple="multiple" accept=".gif,.jpg,.jpeg,.png">
-                        <!--onchange="getFileSizeandName(this);"-->
-                        <div id="elPreview">
-
+                    <!-- Imagenes del post -->
+                    <div class="form-group _mt-20">
+                        <label for="id_postimage">Resto de imagenes del post</label>
+                        <div class="file-loading">
+                            <input id="id_postimage" name="postimage" type="file" name="files[]" accept=".gif,.jpg,.jpeg,.png"
+                                   class="btn _btnColor1" multiple>
                         </div>
+                        <script>
+                            {% if post %}
+                                var
+                                {% for aux in post.postimage_set.all %}
+                                    img{{aux.id}} = "{{aux.image.url}}"{%if forloop.last%};{%else%},{%endif%}
+                                {% endfor %}
+                            {% endif %}
+                            $(document).on('ready', function(){
+                                $("#id_postimage").fileinput({
+                                    initialPreview: [
+                                        {% for aux in post.postimage_set.all %}
+                                            img{{aux.id}},
+                                        {% endfor %}
+                                    ],
+                                    initialPreviewAsData: true,
+                                    initialPreviewConfig: [
+                                        {% for aux in post.postimage_set.all %}
+                                            {% verbatim %}{{% endverbatim %}
+                                             caption: "{{aux.image.name}}",
+                                             downloadUrl: "{{aux.image.url}}",
+                                             size: {{aux.image.size}},
+                                             width: {{aux.image.width}},
+                                             height: {{aux.image.height}},
+                                             key: {{ forloop.counter }}
+                                             {% verbatim %}}{% endverbatim %},
+                                        {% endfor %}
+                                    ],
+                                    overwriteInitial: true,
+                                    maxFileSize: 1024,
+                                    initialCaption: "Select your post files here",
+                                    showUpload: false,
+                                    allowedFileTypes: ['image']
+                                });
+                            });
+
+                        </script>
                     </div>
                     <!-- Editor wysiwyg -->
                     <div class="form-group">
@@ -207,180 +216,21 @@ Blog - {{ title }}
 
 {% block body_js %}
 <script type="text/javascript">
+$('#image_btn').click(function(){ $('#id_image').click(); })
 
-    window.URL    = window.URL || window.webkitURL;
-    var elBrowse  = document.getElementById("input1"),
-        elPreview = document.getElementById("elPreview"),
-        useBlob   = false && window.URL; // set to `true` to use Blob instead of Data-URL
-
-    elBrowse.addEventListener("change", function() {
-        var files = this.files, errors = "";
-        if (!files) {
-            errors += "File upload not supported by your browser.";
-        }
-        if (files && files[0]) {
-            for(var i=0; i<files.length; i++) {
-                var file = files[i];
-                if ( (/\.(png|jpeg|jpg|gif)$/i).test(file.name) ) {
-                    readImage( file );
-                } else {
-                    errors += file.name +" Unsupported Image extension\n";
-                }
-            }
-        }
-        if (errors) {
-            alert(errors);
-        }
-    });
-
-    function readImage (file) {
+function readURL(input) {
+    if (input.files && input.files[0]) {
         var reader = new FileReader();
-        reader.addEventListener("load", function () {
-            var image  = new Image();
-            image.addEventListener("load", function () {
-                var imageInfo = file.name +' '+
-                image.width +'×'+
-                image.height +' '+
-                file.type +' '+
-                Math.round(file.size/1024) +'KB';
-
-                // Show image and info
-                elPreview.appendChild(this);
-                elPreview.insertAdjacentHTML("beforeend", imageInfo +'<br>');
-
-                if (useBlob) {
-                    // Free some memory
-                    window.URL.revokeObjectURL(image.src);
-                }
-            });
-            image.src = useBlob ? window.URL.createObjectURL(file) : reader.result;
-        });
-        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            var image = document.getElementById("image_prev");
+            image.src = e.target.result;
+            $('#image_dim').val(e.target.result.width + "x" + e.target.result.height);
+        };
+        $('#image_size').val(input.files[0].size);
+        $('#image_name').val(input.files[0].name);
+        reader.readAsDataURL(id_image.files[0]);
     }
+}
 
-    var totalsizeOfUploadFiles = 0;
-    var useBlob = false && window.URL;
-
-    function getFileSizeandName(input)
-    {
-        var select = $('#uploadTable');
-        $("#uploadTable tr").remove();
-        for(var i =0; i<input.files.length; i++)
-        {
-            var filename = input.files[i].name;
-            if ( (/\.(png|jpeg|jpg|gif)$/i).test(filename) ) {
-                var filesizeInBytes = input.files[i].size;
-                var filesizeInMB = (filesizeInBytes / (1024*1024)).toFixed(2);
-                var dimensions = input.files[i].width + " " + input.files[i].height
-
-                var reader = new FileReader();
-                reader.addEventListener("load", function () {
-                    var image  = new Image();
-                    image.addEventListener("load", function () {
-                      dimensions = image.width  +'×'+ image.height;
-                    });
-                    image.src = useBlob ? window.URL.createObjectURL(input.files[i]) : reader.result;
-                });
-                reader.readAsDataURL(input.files[i]);
-
-                select.append($('<tr id=tr'+i+'><td id=filetd'+i+'>'+filename+'</td><td id=filedimensiond'+i+'>'+dimensions+'</td><td id=filesizetd'+i+'>'+filesizeInMB+'</tr>'));
-                totalsizeOfUploadFiles += parseFloat(filesizeInMB);
-                $('#totalsize').text(totalsizeOfUploadFiles.toFixed(2)+" MB");
-                if(i==0)
-                    $('#filecount').text("1file");
-                else
-                {
-                    var no = parseInt(i) + 1;
-                    $('#filecount').text(no+"files");
-                }
-            }
-        }
-    }
-
-    function CloseAndRefresh()
-    {
-        opener.location.reload(true);
-        self.close();
-    }
-
-    $('#img0_btn_file').click(function(){ $('#id_image').click(); })
-    $('#img1_btn_file').click(function(){ $('#img1_file').click(); })
-    $('#img2_btn_file').click(function(){ $('#img2_file').click(); })
-    $('#img3_btn_file').click(function(){ $('#img3_file').click(); })
-    $('#img4_btn_file').click(function(){ $('#img4_file').click(); })
-    $('#img5_btn_file').click(function(){ $('#img5_file').click(); })
-
-    $('#id_image').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img0_dim').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img0_size').val(file.size);
-        $('#img0_name').val(file.name);
-    });
-
-    $('#img1_file').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img1_size').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img1_name').val(file.name);
-    });
-
-    $('#img2_file').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img2_size').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img2_name').val(file.name);
-    });
-
-    $('#img3_file').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img3_size').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img3_name').val(file.name);
-    });
-
-    $('#img4_file').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img4_size').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img4_name').val(file.name);
-    });
-
-    $('#img5_file').bind('change', function() {
-        var file  = this.files[0];
-        var img = new Image();
-        img.onload = function() {
-            console.log('onload width', this.width);
-            console.log('onload height', this.height);
-            $('#img5_size').val(this.width + "x" + this.height);
-        }
-        img.src = URL.createObjectURL(file);
-        $('#img5_name').val(file.name);
-    });
 </script>
 {% endblock %}

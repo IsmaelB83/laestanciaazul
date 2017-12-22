@@ -35,8 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles', 'django_wysiwyg', 'ckeditor', 'social_django', 'posts',
+    'django.contrib.messages', 'django.contrib.staticfiles', 'django_wysiwyg', 'ckeditor', 'social_django', 'posts',
 ]
 
 MIDDLEWARE = [
@@ -45,8 +44,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', 'social_django.middleware.SocialAuthExceptionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'web.urls'
@@ -149,3 +148,7 @@ SOCIAL_AUTH_GITHUB_SECRET = 'e56ed15138b4ff99648e8d9ec120d6c15e859a5c'
 
 SOCIAL_AUTH_TWITTER_KEY = 'qaimVTiE9XJZ15GKhfYd2w8br'
 SOCIAL_AUTH_TWITTER_SECRET = 'F3YSB2DwW3E3h4yiPWebecBYdKVb4GRbCzQXQZkZzwkxA1akE6'
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False

@@ -20,10 +20,10 @@ Blog - Post
                 <div class="_previewXL-Title">
                     <h3>{{ post.title }}</h3>
                     <span>{{ post.author }} on {{ post.timestamp }}
-                        <a href="#form_comments" class="_ftColor0" data-toggle="tooltip" data-placement="left" title="Comments">
+                        <a href="#form_comments" class="" data-toggle="tooltip" data-placement="left" title="Comments">
                             <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
                         </a>
-                        <a id="like" href="#" class="_ftColor0" data-toggle="tooltip" data-placement="right" title="Loved">
+                        <a id="like" href="#" class="" data-toggle="tooltip" data-placement="right" title="Loved">
                             <i class="fa fa-heart"></i>
                             <input id="numlikes" value="{{ post.num_likes }} likes" style="border:none;" readonly>
                         </a>

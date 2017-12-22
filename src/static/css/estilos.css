@@ -544,24 +544,24 @@ button._pagination {
 	padding-top: 0px;
 }
 
-._previewXL span{
+._previewXL > span{
 	font-family: 'Monda', sans-serif;
 }
 
-._previewXL span a {
+._previewXL > span a {
 	color:#EB7F1A;
 	padding-left: 15px;
 	cursor:pointer;
 	display:inline;
 }
 
-._previewXL span a:hover {
+._previewXL > span a:hover {
 	text-decoration:underline;
 }
 
-._previewXL-Title span a:hover,
-._previewXL-Title span a:active,
-._previewXL-Title span a:focus {
+._previewXL-Title > span a:hover,
+._previewXL-Title > span a:active,
+._previewXL-Title > span a:focus {
 	text-decoration:none;
 }
 

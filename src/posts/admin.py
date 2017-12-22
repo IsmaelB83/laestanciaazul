@@ -1,7 +1,7 @@
 from django.contrib import admin
-
 # Register your models here.
 from .models import Post, Category, PostCategory, PostComment, Author, PostImage
+
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
 class PostModelAdmin(admin.ModelAdmin):

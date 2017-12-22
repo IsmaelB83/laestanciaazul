@@ -1,18 +1,16 @@
-from django.conf import settings
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib import messages
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
-from django.http import Http404, HttpResponseRedirect
-from django.views.generic import DeleteView, TemplateView
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 
-from .forms import PostForm, PostFormEdit, PostCommentForm, SocialProfileForm, UserForm
-from .models import Post, Category, PostComment, Author, PostImage, PostCategory, User
+from social_django.models import UserSocialAuth
 
+from .forms import PostForm, PostFormEdit, PostCommentForm
+from .models import Post, Category, PostComment, Author, PostImage, PostCategory
 
 # Create your views here.
 def index(request):
@@ -190,87 +188,48 @@ def post_edit(request, id):
         return redirect('blog:index')
 
 
-DEFAULT_RETURNTO_PATH = getattr(settings, 'DEFAULT_RETURNTO_PATH', '/')
+@login_required
+def settings(request):
+    user = request.user
+    try:
+        github_login = user.social_auth.get(provider='github')
+    except UserSocialAuth.DoesNotExist:
+        github_login = None
+    try:
+        twitter_login = user.social_auth.get(provider='twitter')
+    except UserSocialAuth.DoesNotExist:
+        twitter_login = None
+    try:
+        facebook_login = user.social_auth.get(provider='facebook')
+    except UserSocialAuth.DoesNotExist:
+        facebook_login = None
+
+    can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
+
+    context = {'github_login': github_login, 'twitter_login': twitter_login, 'facebook_login': facebook_login, 'can_disconnect': can_disconnect}
+
+    return render(request, 'settings.html', context)
 
 
-class SelectAuthView(TemplateView):
-    """
-    Lets users choose how they want to request access.
-    url: /select
-    """
-    template_name = 'socialprofile/sp_account_select.html'
+@login_required
+def password(request):
+    if request.user.has_usable_password():
+        PasswordForm = PasswordChangeForm
+    else:
+        PasswordForm = AdminPasswordChangeForm
 
-    def get_context_data(self, **kwargs):
-        """Ensure that 'next' gets passed along"""
-        next_url = self.request.GET.get(REDIRECT_FIELD_NAME, DEFAULT_RETURNTO_PATH)
-        context = super(SelectAuthView, self).get_context_data(**kwargs)
-        context['next_param'] = REDIRECT_FIELD_NAME
-        context['next_url'] = next_url
-        return context
-
-
-class SocialProfileView(TemplateView):
-    """
-    Profile View Page
-    url: /profile/view
-    """
-    template_name = 'socialprofile/sp_profile_view.html'
-
-    http_method_names = {'get'}
-
-    def get_context_data(self, **kwargs):
-        """Load up the default data to show in the display form."""
-        username = self.kwargs.get('username')
-        if username:
-            user = get_object_or_404(User, username=username)
-        elif self.request.user.is_authenticated():
-            user = self.request.user
+    if request.method == 'POST':
+        form = PasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('blog:index')
         else:
-            raise Http404  # Case where user gets to this view anonymously for non-existent user
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordForm(request.user)
 
-        return_to = self.request.GET.get('returnTo', DEFAULT_RETURNTO_PATH)
+    context = {'form': form}
 
-        sp_form = SocialProfileForm(instance=user.social_profile)
-        user_form = UserForm(instance=user)
-
-        sp_form.initial['returnTo'] = return_to
-
-        return {'sp_form': sp_form, 'user_form': user_form}
-
-
-class SocialProfileEditView(SocialProfileView):
-    """
-    Profile Editing View
-    url: /profile/edit
-    """
-
-    template_name = 'socialprofile/sp_profile_edit.html'
-
-    http_method_names = {'get', 'post'}
-
-    def post(self, request, *args, **kwargs):
-        user_form = UserForm(request.POST, instance=request.user)
-        sp_form = SocialProfileForm(request.POST, instance=request.user.social_profile)
-
-        if user_form.is_valid() & sp_form.is_valid():
-            user_form.save()
-            sp_form.save()
-            messages.add_message(self.request, messages.INFO, _('Your profile has been updated.'))
-            return HttpResponseRedirect(sp_form.cleaned_data.get('returnTo', DEFAULT_RETURNTO_PATH))
-        else:
-            messages.add_message(self.request, messages.INFO, _('Your profile has NOT been updated.'))
-            return self.render_to_response({'sp_form': sp_form, 'user_form': user_form})
-
-
-class DeleteSocialProfileView(DeleteView):
-    """
-    Account Delete Confirm Modal View
-    url: /delete
-    """
-    success_url = reverse_lazy('sp_logout_page')
-    template_name = "socialprofile/sp_delete_account_modal.html"
-    model = User
-
-    def get_object(self, queryset=None):
-        """Get the object that we are going to delete"""
-        return self.request.user
+    return render(request, 'password.html', context)

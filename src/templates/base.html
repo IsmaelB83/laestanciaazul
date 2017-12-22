@@ -102,19 +102,19 @@
                                 <li>
                                     <div class="navbar-login col-xs-12 _pt-15 _pb-15">
                                         <div class="col-xs-12 _pt-10 _pb-10">
-                                            <div class="col-xs-4 _pd-0 ">
+                                            <div class="col-xs-6 _pd-0 ">
                                                 <img class="_bgColor0 img-responsive img-rounded" width="100%"
-                                                     {%if users.author.image%}
+                                                     {%if user.author.image%}
                                                      src='{{ user.author.image.url }}'
                                                      {%else%}
                                                      src=''
                                                      {%endif%}>
                                             </div>
-                                            <div class="col-xs-8 ">
+                                            <div class="col-xs-6 ">
                                                 <p class="text-left">
                                                     <strong>{{ user.first_name }}</strong><br>
                                                     <small>{{ user.email }}</small>
-                                                    <br><br>
+                                                    <br>
                                                     <small>{{ user.author.description }}</small>
                                                     <br>
                                                     <small>{{ user.author.location }}</small>

@@ -21,7 +21,9 @@
     <div class="_previewXL-Footer">
         {% for post_category in post.postcategory_set.all %}
         {% if post_category.post == post %}
-        <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
+        <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
+            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
+        </a>
         {% endif %}
         {% endfor %}
     </div>

@@ -103,7 +103,12 @@
                                     <div class="navbar-login col-xs-12 _pt-15 _pb-15">
                                         <div class="col-xs-12 _pt-10 _pb-10">
                                             <div class="col-xs-4 _pd-0 ">
-                                                <img src='{{ user.author.image.url }}' class="_bgColor0 img-responsive img-rounded" width="100%">
+                                                <img class="_bgColor0 img-responsive img-rounded" width="100%"
+                                                     {%if users.author.image%}
+                                                     src='{{ user.author.image.url }}'
+                                                     {%else%}
+                                                     src=''
+                                                     {%endif%}>
                                             </div>
                                             <div class="col-xs-8 ">
                                                 <p class="text-left">
@@ -170,6 +175,9 @@
 
 <!-- Bloque principal -->
 <main>
+    {% block header %}
+    {% endblock %}
+
     {% include "includes/messages.html" %}
     {% block main_content %}
     {% endblock %}

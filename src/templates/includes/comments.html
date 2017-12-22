@@ -12,10 +12,15 @@
         <div class="col-xs-1 _pl-0 _pr-0">
             {% if comment.author %}
             <a href="{{ comment.author.get_absolute_url }}">
-                <img src='{{ comment.author.image.url }}' width="100%" class="img-responsive img-rounded" alt="">
+                <img width="100%" class="img-responsive img-rounded"
+                     {%if comment.author.image%}
+                     src='{{ comment.author.image.url }}'
+                     {%else%}
+                     src='{% static "img/dummy-user.png" %}'
+                     {%endif%}>
             </a>
             {% else %}
-            <img src='{% static "img/anonymous.jpeg" %}' width="100%" class="img-responsive img-rounded" alt="">
+            <img src='{% static "img/dummy-user.png" %}' width="100%" class="img-responsive img-rounded" alt="">
             {% endif %}
         </div>
         <div class="media-body col-xs-11 _pr-0">

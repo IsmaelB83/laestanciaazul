@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="container _bgColor0">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 _mt-30 _pr-sm-20">
+            <h2 class="_titleSection">SOCIAL LOGIN</h2>
+            <p>Please review and complete information:</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,14 +1,16 @@
 # Python imports
 # Django imports
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
 # Third party app imports
 from social_django.models import UserSocialAuth
 # Local app imports
 from .models import Author
+from .forms import SocialForm
 
 
 # Create your views here.
@@ -51,12 +53,12 @@ def profile(request, id):
 @login_required
 def password(request):
     if request.user.has_usable_password():
-        PasswordForm = PasswordChangeForm
+        password_form = PasswordChangeForm
     else:
-        PasswordForm = AdminPasswordChangeForm
+        password_form = AdminPasswordChangeForm
     
     if request.method == 'POST':
-        form = PasswordForm(request.user, request.POST)
+        form = password_form(request.user, request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
@@ -65,8 +67,28 @@ def password(request):
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = PasswordForm(request.user)
+        form = password_form(request.user)
     
     context = {'form': form}
     
     return render(request, 'password.html', context)
+
+
+@login_required
+def social(request):
+    # Salvar los datos
+    if request.method == 'POST':
+        form = SocialForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Your data has been updated!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = SocialForm()
+    
+    context = {'form': form}
+    
+    return render(request, 'social_register.html', context)

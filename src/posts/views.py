@@ -1,16 +1,16 @@
+# Python imports
+# Django imports
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from django.contrib.auth.decorators import login_required
-
-from social_django.models import UserSocialAuth
-
+from django.apps import apps
+# Third party app imports
+# Local app imports
 from .forms import PostForm, PostFormEdit, PostCommentForm
-from .models import Post, Category, PostComment, Author, PostImage, PostCategory
+from .models import Post, Category, PostComment, PostImage, PostCategory
+
 
 # Create your views here.
 def index(request):
@@ -18,6 +18,7 @@ def index(request):
     paginator = Paginator(posts_all, 3)
     page_request_var = 'page'
     page = request.GET.get('page')
+    
     try:
         posts_page = paginator.page(page)
     except PageNotAnInteger:
@@ -29,21 +30,22 @@ def index(request):
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     comments_recent = PostComment.objects.order_by('-timestamp')[:4]
     pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
-
-    context = {'title': 'List of Posts', 'posts': posts_page, 'posts_cards': posts_cards, 'posts_popular': posts_popular,
-        'comments_recent': comments_recent, 'pictures_recent': pictures_recent, 'page_request': page_request_var,
+    
+    context = {
+        'title': 'List of Posts',
+        'posts': posts_page,
+        'posts_cards': posts_cards,
+        'posts_popular': posts_popular,
+        'comments_recent': comments_recent,
+        'pictures_recent': pictures_recent,
+        'page_request': page_request_var,
     }
+    
     return render(request, 'index.html', context)
 
 
 def contact(request):
     return render(request, 'contact.html')
-
-
-def profile(request, id):
-    author = get_object_or_404(Author, id=id)
-    context = {'author': author}
-    return render(request, 'profile.html', context)
 
 
 def archive(request):
@@ -126,7 +128,7 @@ def post_create(request):
             form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = Author.objects.get(user=request.user)
+                post.author = apps.get_model('user', 'Author').objects.get(user=request.user)
                 post.num_likes = 0
                 post.save()
                 for category in form.cleaned_data['postcategory']:
@@ -186,50 +188,3 @@ def post_edit(request, id):
     else:
         messages.error(request, 'Not authenticated')
         return redirect('blog:index')
-
-
-@login_required
-def settings(request):
-    user = request.user
-    try:
-        github_login = user.social_auth.get(provider='github')
-    except UserSocialAuth.DoesNotExist:
-        github_login = None
-    try:
-        twitter_login = user.social_auth.get(provider='twitter')
-    except UserSocialAuth.DoesNotExist:
-        twitter_login = None
-    try:
-        facebook_login = user.social_auth.get(provider='facebook')
-    except UserSocialAuth.DoesNotExist:
-        facebook_login = None
-
-    can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
-
-    context = {'github_login': github_login, 'twitter_login': twitter_login, 'facebook_login': facebook_login, 'can_disconnect': can_disconnect}
-
-    return render(request, 'settings.html', context)
-
-
-@login_required
-def password(request):
-    if request.user.has_usable_password():
-        PasswordForm = PasswordChangeForm
-    else:
-        PasswordForm = AdminPasswordChangeForm
-
-    if request.method == 'POST':
-        form = PasswordForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('blog:index')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordForm(request.user)
-
-    context = {'form': form}
-
-    return render(request, 'password.html', context)

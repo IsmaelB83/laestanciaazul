@@ -1,25 +1,21 @@
+# Python imports
+# Django imports
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from social_django.models import UserSocialAuth
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
-from urllib.request import urlopen
+
+
+# Third party app imports
+# Local app imports
+
 
 # Create your models here.
 # MVC Model View Controller
 def upload_location_post(instance, filename):
-    return '%s/%s' % (instance.author.user.first_name, filename)
-
-
-def upload_location_author(instance, filename):
-    return '%s/%s' % (instance.user, filename)
+    return 'posts/%s/%s' % (instance.author.user.first_name, filename)
 
 
 def upload_location_postimage(instance, filename):
-    return '%s/%i/%s' % (instance.post.author.user.first_name, instance.post.id, filename)
+    return 'posts/%s/%i/%s' % (instance.post.author.user.first_name, instance.post.id, filename)
 
 
 class Post(models.Model):
@@ -27,7 +23,7 @@ class Post(models.Model):
 
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
     content = models.TextField(null=False, blank=False, default='none')
-    author = models.ForeignKey('Author', null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey('user.Author', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
     num_likes = models.PositiveIntegerField(null=False, blank=False, default=0)
     published_date = models.DateTimeField(null=False, blank=False)
@@ -36,7 +32,12 @@ class Post(models.Model):
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
     image = models.ImageField(
-        null=True, blank=True, upload_to=upload_location_post, height_field='height_field', width_field='width_field')
+        null=True,
+        blank=True,
+        upload_to=upload_location_post,
+        height_field='height_field',
+        width_field='width_field'
+    )
 
     def __unicode__(self):
         return self.title
@@ -94,7 +95,7 @@ class PostCategory(models.Model):
 class PostComment(models.Model):
     num_comment = models.PositiveIntegerField(null=False, blank=False)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey('user.Author', on_delete=models.CASCADE, blank=True, null=True)
     anonymous_name = models.CharField(null=False, blank=True, default='none', max_length=30)
     anonymous_email = models.EmailField(null=False, blank=True, default='none@none.com', max_length=40)
     comment = models.TextField(null=False, blank=False)
@@ -112,33 +113,9 @@ class PostImage(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
-    image = models.ImageField(upload_to=upload_location_postimage, null=True, blank=True, height_field='height_field', width_field='width_field')
-
-
-class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=30, blank=False)
-    description = models.CharField(max_length=100, blank=False, null=False)
-    birth_date = models.DateField(null=True, blank=True)
-    height_field = models.IntegerField(default=0)
-    width_field = models.IntegerField(default=0)
-    image = models.ImageField(upload_to=upload_location_author, null=True, blank=True, height_field='height_field', width_field='width_field')
-
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Author.objects.create(user=instance)  # socials = UserSocialAuth.objects.all()  # if socials:  #     author = Author.objects.get(user=instance)  #     author.location = "Social"  #     author.description = socials[0].provider + " user"  #     if socials[0].provider == "twitter":  #         img_temp = NamedTemporaryFile(delete=True)  #         img_temp.write(urlopen("https://twitter.com/" + socials[0] + "/profile_image?size=original").read())  #         img_temp.flush()  #         author.image.save(author+"_photo", File(img_temp), save=True)  #         author.save()
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        if instance.is_superuser == False:
-            instance.author.save()
-
-    def __unicode__(self):
-        return self.user.first_name
-
-    def __str__(self):
-        return self.user.first_name
-
-    def get_absolute_url(self):
-        return reverse('blog:profile', kwargs={'id': self.id})
+    image = models.ImageField(
+        upload_to=upload_location_postimage,
+        null=True,
+        blank=True,
+        height_field='height_field',
+        width_field='width_field')

@@ -35,7 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages', 'django.contrib.staticfiles', 'django_wysiwyg', 'ckeditor', 'social_django', 'posts',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_wysiwyg',
+    'ckeditor',
+    'social_django',
+    'user',
+    'posts',
 ]
 
 MIDDLEWARE = [
@@ -44,7 +50,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
@@ -59,16 +66,22 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth', 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends', 'social_django.context_processors.login_redirect', "posts.context_processors.categories",
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'posts.context_processors.categories',
             ],
         },
     },
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2', 'social_core.backends.twitter.TwitterOAuth', 'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',)
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 WSGI_APPLICATION = 'web.wsgi.application'
 
@@ -133,22 +146,22 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
 DEBUG = 'true'
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = '/'
-
 SESSION_EXPIRE_AT_BROWSER_CLOSE = 'false'
 
 SESSION_COOKIE_AGE = 60 * 60  # 60 minutos
 
 DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/'
+
 SOCIAL_AUTH_GITHUB_KEY = 'e783c1fbf581a979e01c'
 SOCIAL_AUTH_GITHUB_SECRET = 'e56ed15138b4ff99648e8d9ec120d6c15e859a5c'
-
 SOCIAL_AUTH_TWITTER_KEY = 'qaimVTiE9XJZ15GKhfYd2w8br'
 SOCIAL_AUTH_TWITTER_SECRET = 'F3YSB2DwW3E3h4yiPWebecBYdKVb4GRbCzQXQZkZzwkxA1akE6'
 
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/2'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False

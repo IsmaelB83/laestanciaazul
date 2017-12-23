@@ -1,6 +1,11 @@
+# Python imports
+# Django imports
 from django import forms
+# Third party app imports
 from multiupload.fields import MultiFileField
+# Local app imports
 from .models import Post, PostComment, Category
+
 
 CATEGORY_CHOICES = [[c.id, c.category] for c in Category.objects.all()]
 
@@ -28,8 +33,3 @@ class PostCommentForm(forms.ModelForm):
     class Meta:
         model = PostComment
         fields = ['anonymous_name', 'anonymous_email', 'comment', ]
-
-
-class LoginForm(forms.ModelForm):
-    user = forms.CharField(label='Username', required=True, max_length=20, widget=forms.TextInput(attrs={'placeholder': 'username', 'autocomplete': 'off'}))
-    password = forms.CharField(label='Password', required=True, max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'autocomplete': 'off'}))

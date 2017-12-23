@@ -1,6 +1,9 @@
+# Python imports
+# Django imports
 from django.contrib import admin
-# Register your models here.
-from .models import Post, Category, PostCategory, PostComment, Author, PostImage
+# Third party app imports
+# Local app imports
+from .models import Post, Category, PostCategory, PostComment, PostImage
 
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
@@ -58,23 +61,11 @@ class PostImageModelAdmin(admin.ModelAdmin):
         model = PostImage
 
 
-class AuthorModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "location", "birth_date", "image"]
-    list_display_links = ["user"]
-    list_editable = ["location", "birth_date"]
-    list_filter = ["user"]
-    search_fields = ["user"]
-
-    class Meta:
-        model = Author
-
-
 admin.site.register(Post, PostModelAdmin)
 admin.site.register(Category, CategoryModelAdmin)
 admin.site.register(PostCategory, PostCategoryModelAdmin)
 admin.site.register(PostComment, PostCommentModelAdmin)
 admin.site.register(PostImage, PostImageModelAdmin)
-admin.site.register(Author, AuthorModelAdmin)
 
 # Admin is very good to model the application because it
 # easily allow us to test the CRUD concept:#

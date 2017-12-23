@@ -8,5 +8,6 @@ from . import views
 
 urlpatterns = [
     url(r'^profile/(?P<id>\d+)/$', views.profile, name='profile'),
-    url(r'^settings/password/$', views.password, name='password'),
+    url(r'^password/$', views.password, name='password'),
+    url(r'^register/$', views.social, name='social'),
 ]

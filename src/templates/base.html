@@ -102,22 +102,22 @@
                                 <li>
                                     <div class="navbar-login col-xs-12 _pt-15 _pb-15">
                                         <div class="col-xs-12 _pt-10 _pb-10">
-                                            <div class="col-xs-6 _pd-0 ">
+                                            <div class="col-xs-4 _pd-0 ">
                                                 <img class="_bgColor0 img-responsive img-rounded" width="100%"
-                                                     {%if user.author.image%}
-                                                     src='{{ user.author.image.url }}'
+                                                     {%if user.profile.image%}
+                                                     src='{{ user.profile.image.url }}'
                                                      {%else%}
                                                      src=''
                                                      {%endif%}>
                                             </div>
-                                            <div class="col-xs-6 ">
+                                            <div class="col-xs-8 ">
                                                 <p class="text-left">
                                                     <strong>{{ user.first_name }}</strong><br>
                                                     <small>{{ user.email }}</small>
                                                     <br>
-                                                    <small>{{ user.author.description }}</small>
+                                                    <small>{{ user.profile.description }}</small>
                                                     <br>
-                                                    <small>{{ user.author.location }}</small>
+                                                    <small>{{ user.profile.location }}</small>
                                                 </p>
                                             </div>
                                         </div>
@@ -128,6 +128,9 @@
                                                 <span class="glyphicon glyphicon glyphicon-cog"></span> Admin
                                             </a>
                                             {% endif %}
+                                            <a class="btn btn btn-warning btn-block btn-sm" href="{% url 'user:register' %}">
+                                                <span class="glyphicon glyphicon-edit"></span> Edit profile
+                                            </a>
                                             <button class="btn btn btn-primary btn-block btn-sm" href="#disconnectModal" data-toggle="modal" data-target="#disconnectModal">
                                                 <span class="glyphicon glyphicon-log-out"></span> Logout
                                             </button>
@@ -267,38 +270,38 @@
 
 <!-- My scripts -->
 <script>
-		jQuery(window).resize(function() {
-   			var divWidth = $('#powered').width();
-    		$('#powered').css('height', divWidth/6);
-		});
+jQuery(window).resize(function() {
+    var divWidth = $('#powered').width();
+    $('#powered').css('height', divWidth/6);
+});
 
-		$('.carousel-indicators  li').on('mouseover',function() {
-			$(this).trigger('click');
-		})
+$('.carousel-indicators  li').on('mouseover',function() {
+    $(this).trigger('click');
+})
 
-		jQuery(document).ready(function() {
+jQuery(document).ready(function() {
 
-			var divWidth = $('#powered').width();
-    		$('#powered').css('height', divWidth/6);
+    var divWidth = $('#powered').width();
+    $('#powered').css('height', divWidth/6);
 
-			function close_accordion_section() {
-				jQuery('.accordion').removeClass('active');
-			}
+    function close_accordion_section() {
+        jQuery('.accordion').removeClass('active');
+    }
 
-			jQuery('.accordion').click(function(e) {
-				// Grab current anchor value
-				var currentAttrValue = jQuery(this).attr('href');
+    jQuery('.accordion').click(function(e) {
+        // Grab current anchor value
+        var currentAttrValue = jQuery(this).attr('href');
 
-				if(jQuery(e.target).is('.active')) {
-					close_accordion_section();
-				}else {
-					close_accordion_section();
-					// Add active class to section title
-					jQuery(this).addClass('active');
-				}
-				e.preventDefault();
-			});
-		});
+        if(jQuery(e.target).is('.active')) {
+            close_accordion_section();
+        }else {
+            close_accordion_section();
+            // Add active class to section title
+            jQuery(this).addClass('active');
+        }
+        e.preventDefault();
+    });
+});
 </script>
 {% block body_js %}
 {% endblock %}

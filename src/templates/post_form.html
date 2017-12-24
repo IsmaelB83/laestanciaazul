@@ -26,7 +26,7 @@ Blog - {{ title }}
                             {% for category in categories %}
                             <input type="checkbox" name="postcategory" value="{{ category.id }}" id="categoria_{{ category.id }}" autocomplete="off"
                                    {% for cat in post.postcategory_set.all %}
-                                   {% if cat.category.id== category.id %}
+                                   {% if cat.category.id == category.id %}
                                    checked
                                    {% endif %}
                                    {% endfor %}/>
@@ -47,7 +47,7 @@ Blog - {{ title }}
                                 <label>Estado del Post</label><br>
                                 {% for id, label in form.status.field.choices %}
                                 <input type="radio" name="status" value="{{ id }}" id="id_status_post_{{ id }}" required
-                                       {%if post%} readonly {%if post.status== id%} checked {%endif%}{%endif%}
+                                       {%if post%} readonly {%if post.status == id%} checked {%endif%}{%endif%}
                                 />
                                 <div class="btn-group">
                                     <label for="id_status_post_{{ id }}" class="btn btn-sm btn-default">

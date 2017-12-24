@@ -59,7 +59,10 @@ def archive(request):
         posts_page = paginator.page(1)
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
-    context = {'title': 'List of Posts', 'posts': posts_page, 'page_request': page_request_var
+    context = {
+        'title': 'List of Posts',
+        'posts': posts_page,
+        'page_request': page_request_var
     }
     return render(request, 'archive.html', context)
 
@@ -105,7 +108,7 @@ def post_view(request, id):
             if form.is_valid():
                 post_comment = form.save(commit=False)
                 if request.user.is_authenticated:
-                    post_comment.author = request.user.author
+                    post_comment.user = request.user
                 post_comment.post = post
                 try:
                     post_comment.num_comment = post.postcomment_set.latest('num_comment').num_comment + 1
@@ -117,7 +120,12 @@ def post_view(request, id):
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
 
-    context = {'title': post.title, 'posts_popular': posts_popular, 'pictures_recent': pictures_recent, 'post': post, }
+    context = {
+        'title': post.title,
+        'posts_popular': posts_popular,
+        'pictures_recent': pictures_recent,
+        'post': post,
+    }
     
     return render(request, 'post.html', context)
 

@@ -2,8 +2,7 @@
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
-
-
+from django.contrib.auth.models import User
 # Third party app imports
 # Local app imports
 
@@ -11,11 +10,11 @@ from django.core.urlresolvers import reverse
 # Create your models here.
 # MVC Model View Controller
 def upload_location_post(instance, filename):
-    return 'posts/%s/%s' % (instance.author.user.first_name, filename)
+    return 'posts/%s/%s' % (instance.profile.user.first_name, filename)
 
 
 def upload_location_postimage(instance, filename):
-    return 'posts/%s/%i/%s' % (instance.post.author.user.first_name, instance.post.id, filename)
+    return 'posts/%s/%i/%s' % (instance.post.profile.user.first_name, instance.post.id, filename)
 
 
 class Post(models.Model):
@@ -23,7 +22,7 @@ class Post(models.Model):
 
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
     content = models.TextField(null=False, blank=False, default='none')
-    author = models.ForeignKey('user.Author', null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey('user.Profile', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
     num_likes = models.PositiveIntegerField(null=False, blank=False, default=0)
     published_date = models.DateTimeField(null=False, blank=False)
@@ -95,9 +94,7 @@ class PostCategory(models.Model):
 class PostComment(models.Model):
     num_comment = models.PositiveIntegerField(null=False, blank=False)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    author = models.ForeignKey('user.Author', on_delete=models.CASCADE, blank=True, null=True)
-    anonymous_name = models.CharField(null=False, blank=True, default='none', max_length=30)
-    anonymous_email = models.EmailField(null=False, blank=True, default='none@none.com', max_length=40)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.TextField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)

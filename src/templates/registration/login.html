@@ -17,25 +17,54 @@ active
             {% endif %}
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
-                <div class="form-group">
-                    <input class="form-control" type="text" name="username" id="user" placeholder="Username" autofocus required>
+                <div class="col-xs-2    _pl-0 _pr-0">
+                    <h2 class="_titleSection">SOCIAL</h2>
+                    <div class="form-group">
+                        <ul class="list-unstyled">
+                        <li class="list-inline-item">
+                            <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-twitter">
+                                <span class="fa fa-twitter"></span>
+                            </a> Twitter
+                        </li>
+                        <li class="list-inline-item _mt-5">
+                            <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-facebook">
+                                <span class="fa fa-facebook"></span>
+                            </a> Facebook
+                        </li>
+                        <li class="list-inline-item _mt-5">
+                            <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-linkedin">
+                                <span class="fa fa-linkedin"></span>
+                            </a> Linkedin
+                        </li>
+                        <li class="list-inline-item _mt-5">
+                            <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-instagram">
+                                <span class="fa fa-instagram"></span>
+                            </a> Instagram
+                        </li>
+                        <li class="list-inline-item _mt-5">
+                            <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-md btn-github">
+                                <span class="fa fa-github"></span>
+                            </a> Github
+                        </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" id="pass" placeholder="Password" required>
-                </div>
-                <div class="form-group">
-                    <a href="{% url 'password_reset' %}" class="btn btn-warning btn-block" type="submit">Remember password</a>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="remember" name="remember_me" id="remember_me">Remember me</label>
-                </div>
-                <!--<p><strong>-- OR --</strong></p>
-                <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
-                <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a>-->
-                <div class="form-group form-group-inline">
-                    <div class="pull-right">
-                        <button class="btn btn-success" type="submit">Login</button>
-                        <a href="{% url 'blog:index' %}" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                <div class="col-xs-10 _pl-0 _pr-0">
+                    <h2 class="_titleSection">WEB LOGIN</h2>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="username" id="user" placeholder="Username" autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" name="password" id="pass" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <a href="{% url 'password_reset' %}" class="btn btn-warning btn-block" type="submit">Remember password</a>
+                    </div>
+                    <div class="form-group form-group-inline">
+                        <div class="pull-right">
+                            <button class="btn btn-success" type="submit">Login</button>
+                            <a href="{% url 'blog:index' %}" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                        </div>
                     </div>
                 </div>
             </form>

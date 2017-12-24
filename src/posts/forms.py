@@ -1,17 +1,19 @@
 # Python imports
 # Django imports
 from django import forms
+from django.apps import apps
 # Third party app imports
 from multiupload.fields import MultiFileField
 # Local app imports
-from .models import Post, PostComment, Category
+from .models import Post
 
 
-CATEGORY_CHOICES = [[c.id, c.category] for c in Category.objects.all()]
+#CATEGORY_CHOICES = [[c.id, c.category] for c in apps.get_model('category', 'Category').objects.all()]
 
 
 class PostForm(forms.ModelForm):
-    postcategory = forms.MultipleChoiceField(choices=CATEGORY_CHOICES, required=True, widget=forms.CheckboxSelectMultiple, )
+    #choices = CATEGORY_CHOICES,
+    postcategory = forms.MultipleChoiceField( required=True, widget=forms.CheckboxSelectMultiple, )
     status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect, )
     postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
 
@@ -21,7 +23,8 @@ class PostForm(forms.ModelForm):
 
 
 class PostFormEdit(forms.ModelForm):
-    postcategory = forms.MultipleChoiceField(choices=CATEGORY_CHOICES, required=True, widget=forms.CheckboxSelectMultiple, )
+    #choices=CATEGORY_CHOICES,
+    postcategory = forms.MultipleChoiceField( required=True, widget=forms.CheckboxSelectMultiple, )
     postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
 
     class Meta:
@@ -29,7 +32,3 @@ class PostFormEdit(forms.ModelForm):
         fields = ('title', 'postcategory', 'status', 'published_date', 'image', 'content', 'postimage')
 
 
-class PostCommentForm(forms.ModelForm):
-    class Meta:
-        model = PostComment
-        fields = ['comment', ]

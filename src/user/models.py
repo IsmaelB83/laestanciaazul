@@ -15,7 +15,7 @@ def upload_location_author(instance, filename):
 
 
 # Create your models here.
-class Profile(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=30, blank=False)
     description = models.CharField(max_length=100, blank=False, null=False)
@@ -32,7 +32,7 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            Profile.objects.create(user=instance)
+            UserProfile.objects.create(user=instance)
             # socials = UserSocialAuth.objects.all()
             #  if socials:
             #     author = profile.objects.get(user=instance)

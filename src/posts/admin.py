@@ -40,11 +40,11 @@ class PostCategoryModelAdmin(admin.ModelAdmin):
 
 
 class PostCommentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "post", "num_comment", "comment", "timestamp", "updated"]
+    list_display = ["id", "user", "post", "num_comment", "comment", "timestamp", "updated"]
     list_display_links = ["id"]
     list_editable = ["comment", "post"]
-    list_filter = ["author", "post"]
-    search_fields = ["author", "post"]
+    list_filter = ["user", "post"]
+    search_fields = ["user", "post"]
 
     class Meta:
         model = PostComment

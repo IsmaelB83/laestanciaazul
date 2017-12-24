@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block main_content %}
+<div class="container _bgColor0">
+    <div class="row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-10 _pl-sm-30">
+            <h2 class="_titleSection">USER PROFILE</h2>
+        </div>
+        <form method="post" action="" id="user_form" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <!-- Imagen usuaio-->
+            <div class="col-xs-12 col-sm-2">
+                <div class="form-group">
+                    <img id="id_avatar" class="img-responsive img-block img-rounded" alt=""
+                        {%if profile.image%}
+                        src='{{profile.image.url}}'
+                        {%else%}
+                        src='{% static "img/dummy-user.png" %}'
+                        {%endif%}
+                        style="height: 132px;">
+                    <br>
+                    <input id="id_image" name="image" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
+                           onchange="readURL(this);">
+                    <button id="id_image_btn" class="btn btn-sm btn-block _btnColor1" type="button" data-title="Edit">
+                        <i class="fa fa-edit"></i><span> Image profile</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-10 _pl-sm-30">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="user_id" id="id_user_id" placeholder="username..." required readonly maxlength="30"
+                        {%if profile%}
+                           value="{{profile.user}}"
+                        {%endif%}>
+                </div>
+                <div class="form-group form-inline">
+                        <input class="form-control" type="text" name="first_name" id="id_first_name" placeholder="your name..." required maxlength="30"
+                        {%if profile%}
+                           value="{{profile.user.first_name}}"
+                        {%endif%}>
+                        <input class="form-control" type="text" name="last_name" id="id_last_name" placeholder="your lastname..." required maxlength="30"
+                        {%if profile%}
+                           value="{{profile.user.last_name}}"
+                        {%endif%}>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="email" id="id_email" placeholder="email address..." required maxlength="40"
+                        {%if profile%}
+                           value="{{profile.user.email}}"
+                        {%endif%}>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="description" id="id_description" placeholder="small description about you..." maxlength="100"
+                        {%if profile%}
+                           value="{{profile.description}}"
+                        {%endif%}>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="location" id="id_location" placeholder="your city here..." required maxlength="40"
+                        {%if profile%}
+                           value="{{profile.location}}"
+                        {%endif%}>
+                </div>
+                <!--<div class="form-inline">
+                    <input class="form-control" type="date" name="birth_date" id="id_birth_date" maxlength="10"
+                        {%if profile%}
+                           value="{{profile.birth_day|date:'YYYY-mm-dd'}}"
+                        {%endif%} style="max-width: 200px;"><small> Fecha de nacimiento</small>
+                </div>-->
+                <div class="form-group pull-right _mt-0">
+                    <button type="submit" class="btn _btnColor1 submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_js %}
+<script type="text/javascript">
+$('#id_image_btn').click(function(){ $('#id_image').click(); })
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var image = document.getElementById("id_avatar");
+            image.src = e.target.result;
+        };
+        reader.readAsDataURL(id_image.files[0]);
+    }
+}
+</script>
+{% endblock %}

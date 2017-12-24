@@ -3,11 +3,11 @@
 from django.contrib import admin
 # Third party app imports
 # Local app imports
-from .models import Author
+from .models import Profile
 
 
 # Register your models here.
-class AuthorModelAdmin(admin.ModelAdmin):
+class ProfileModelAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "location", "birth_date", "image"]
     list_display_links = ["id", "user"]
     list_editable = ["location", "birth_date"]
@@ -15,7 +15,7 @@ class AuthorModelAdmin(admin.ModelAdmin):
     search_fields = ["user"]
     
     class Meta:
-        model = Author
+        model = Profile
 
 
-admin.site.register(Author, AuthorModelAdmin)
+admin.site.register(Profile, ProfileModelAdmin)

@@ -5,10 +5,8 @@
     {% for comment in comments_recent %}
     <div class="_commentXS">
         <p>
-            {% if comment.author %}
-            <a href="{{ comment.author.get_absolute_url }}"><span>{{ comment.author.user.first_name }}</span></a>
-            {% else %}
-            <span>{{ comment.anonymous_name }}</span>
+            {% if comment.user %}
+            <a href="{{ comment.user.profile.get_absolute_url }}"><span>{{ comment.user.first_name }}</span></a>
             {% endif %}
             <small> {{ comment.timestamp|timesince }} ago</small>
         </p>

@@ -10,11 +10,11 @@
     {% for comment in post.postcomment_set.all %}
     <div class="media col-xs-12 _pl-0 _pr-0">
         <div class="col-xs-1 _pl-0 _pr-0">
-            {% if comment.author %}
-            <a href="{{ comment.author.get_absolute_url }}">
+            {% if comment.user %}
+            <a href="{{ comment.user.profile.get_absolute_url }}">
                 <img width="100%" class="img-responsive img-rounded"
-                     {%if comment.author.image%}
-                     src='{{ comment.author.image.url }}'
+                     {%if comment.user.profile.image%}
+                     src='{{ comment.user.profile.image.url }}'
                      {%else%}
                      src='{% static "img/dummy-user.png" %}'
                      {%endif%}>
@@ -25,10 +25,8 @@
         </div>
         <div class="media-body col-xs-11 _pr-0">
             <p class="nombre">
-                {% if comment.author %}
-                <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.user.first_name }}</a>
-                {% else %}
-                {{ comment.anonymous_name }}
+                {% if comment.user.profile %}
+                <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user.first_name }}</a>
                 {% endif %}
                 <span><small> {{ comment.timestamp|timesince }} ago</span></small>
             </p>

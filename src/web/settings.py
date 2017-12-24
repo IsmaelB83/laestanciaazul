@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_wysiwyg',
-    'ckeditor',
     'social_django',
+    'ckeditor',
+    'category',
+    'gallery',
     'user',
+    'discuss',
     'posts',
 ]
 
@@ -70,7 +73,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'posts.context_processors.categories',
+                'category.context_processors.categories_pre_proc',
             ],
         },
     },

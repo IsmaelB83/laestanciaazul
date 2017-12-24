@@ -2,7 +2,6 @@
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 # Third party app imports
 # Local app imports
 
@@ -13,16 +12,12 @@ def upload_location_post(instance, filename):
     return 'posts/%s/%s' % (instance.profile.user.first_name, filename)
 
 
-def upload_location_postimage(instance, filename):
-    return 'posts/%s/%i/%s' % (instance.post.profile.user.first_name, instance.post.id, filename)
-
-
 class Post(models.Model):
     STATUSES = (('IN', 'Inactive'), ('DR', 'Draft'), ('PB', 'Published'),)
 
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
     content = models.TextField(null=False, blank=False, default='none')
-    author = models.ForeignKey('user.Profile', null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey('user.UserProfile', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
     num_likes = models.PositiveIntegerField(null=False, blank=False, default=0)
     published_date = models.DateTimeField(null=False, blank=False)
@@ -51,38 +46,14 @@ class Post(models.Model):
         ordering = ['-timestamp', '-updated']
 
 
-class Category(models.Model):
-    id = models.CharField(primary_key=True, max_length=5)
-    sort = models.IntegerField(null=False, blank=False)
-    category = models.CharField(null=False, blank=False, max_length=20)
-    css_class = models.CharField(null=False, blank=False, max_length=20)
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-
-    def __unicode__(self):
-        return self.category
-
-    def __str__(self):
-        return self.category
-
-    def get_absolute_url(self):
-        return reverse('blog:category', kwargs={'id': self.id})
-
-    def __iter__(self):
-        return [self.id, self.sort, self.category, self.css_class, self.timestamp, self.updated]
-
-    class Meta:
-        ordering = ['sort']
+class PostImage(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    image = models.ForeignKey('gallery.Image', on_delete=models.CASCADE)
 
 
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-
-    class Meta:
-        unique_together = (('post', 'category'),)
-        ordering = ['-post', 'category']
+    category = models.ForeignKey('category.Category', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.post.title + ":" + self.category.id
@@ -92,27 +63,8 @@ class PostCategory(models.Model):
 
 
 class PostComment(models.Model):
-    num_comment = models.PositiveIntegerField(null=False, blank=False)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    comment = models.TextField(null=False, blank=False)
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+    comment = models.ForeignKey('discuss.Comment', on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (('post', 'num_comment'),)
-        ordering = ['post', '-num_comment']
-
-
-class PostImage(models.Model):
-    post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    caption = models.CharField(null=False, blank=True, max_length=50, default="No caption")
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    height_field = models.IntegerField(default=0)
-    width_field = models.IntegerField(default=0)
-    image = models.ImageField(
-        upload_to=upload_location_postimage,
-        null=True,
-        blank=True,
-        height_field='height_field',
-        width_field='width_field')
+        ordering = ['-post', '-comment__timestamp']

@@ -1,19 +1,19 @@
 # Python imports
 # Django imports
+from django.apps import apps
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.apps import apps
 # Third party app imports
 # Local app imports
-from .forms import PostForm, PostFormEdit, PostCommentForm
-from .models import Post, Category, PostComment, PostImage, PostCategory
+from .forms import PostForm, PostFormEdit
+from .models import Post, PostImage, PostCategory
 
 
 # Create your views here.
-def index(request):
+def index_view(request):
     posts_all = Post.objects.all()[:15]
     paginator = Paginator(posts_all, 3)
     page_request_var = 'page'
@@ -28,8 +28,8 @@ def index(request):
 
     posts_cards = Post.objects.order_by('timestamp')[:3]
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
-    comments_recent = PostComment.objects.order_by('-timestamp')[:4]
-    pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
+    comments_recent = apps.get_model('discuss', 'Comment').objects.order_by('-timestamp')[:4]
+    pictures_recent = apps.get_model('gallery', 'Image').objects.order_by('-timestamp')[:12]
     
     context = {
         'title': 'List of Posts',
@@ -44,11 +44,11 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def contact(request):
+def contact_view(request):
     return render(request, 'contact.html')
 
 
-def archive(request):
+def archive_view(request):
     posts_all = Post.objects.all()
     paginator = Paginator(posts_all, 3)
     page_request_var = 'page'
@@ -67,9 +67,9 @@ def archive(request):
     return render(request, 'archive.html', context)
 
 
-def category(request, id):
+def category_view(request, id):
     try:
-        category = Category.objects.get(id=id)
+        category = apps.get_model('category', 'Category').objects.get(id=id)
         if id != 'all' and category:
             posts_all = Post.objects.filter(postcategory__category=category)
         else:
@@ -87,10 +87,15 @@ def category(request, id):
         posts_page = paginator.page(paginator.num_pages)
 
     posts_popular = posts_all.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
-    comments_recent = PostComment.objects.filter(post__in=posts_all).order_by('-timestamp')[:4]
+    comments_recent = apps.get_model('discuss', 'Comment').objects.filter(post__in=posts_all).order_by('-timestamp')[:4]
     pictures_recent = PostImage.objects.filter(post__in=posts_all).order_by('-timestamp')[:12]
 
-    context = {'title': 'Category', 'category': category, 'posts': posts_page, 'posts_popular': posts_popular, 'comments_recent': comments_recent,
+    context = {
+        'title': 'Category',
+        'category': category,
+        'posts': posts_page,
+        'posts_popular': posts_popular,
+        'comments_recent': comments_recent,
         'pictures_recent': pictures_recent,
         'page_request': page_request_var
     }
@@ -104,7 +109,7 @@ def post_view(request, id):
             post.num_likes = post.num_likes + 1
             post.save()
         else:
-            form = PostCommentForm(request.POST)
+            form = apps.get_model('discuss', 'PostCommentForm')(request.POST)
             if form.is_valid():
                 post_comment = form.save(commit=False)
                 if request.user.is_authenticated:
@@ -126,11 +131,10 @@ def post_view(request, id):
         'pictures_recent': pictures_recent,
         'post': post,
     }
-    
     return render(request, 'post.html', context)
 
 
-def post_create(request):
+def post_create_view(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = PostForm(request.POST, request.FILES)
@@ -142,7 +146,7 @@ def post_create(request):
                 for category in form.cleaned_data['postcategory']:
                     post_category = PostCategory()
                     post_category.post = post
-                    post_category.category = Category.objects.get(id=category)
+                    post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                     post_category.save()
                 for image in form.cleaned_data['postimage']:
                     post_image = PostImage()
@@ -164,7 +168,7 @@ def post_create(request):
         return redirect('blog:index')
 
 
-def post_edit(request, id):
+def post_edit_view(request, id):
     if request.user.is_authenticated:
         post = get_object_or_404(Post, id=id)
         form = PostFormEdit(request.POST or None, request.FILES or None, instance=post)
@@ -177,7 +181,7 @@ def post_edit(request, id):
                 for category in form.cleaned_data['postcategory']:
                     post_category = PostCategory()
                     post_category.post = post
-                    post_category.category = Category.objects.get(id=category)
+                    post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                     post_category.save()
                 for image in PostImage.objects.filter(post=post):
                     image.delete()

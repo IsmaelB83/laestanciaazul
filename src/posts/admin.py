@@ -3,7 +3,7 @@
 from django.contrib import admin
 # Third party app imports
 # Local app imports
-from .models import Post, Category, PostCategory, PostComment, PostImage
+from .models import Post, PostCategory, PostImage
 
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
@@ -17,17 +17,6 @@ class PostModelAdmin(admin.ModelAdmin):
         model = Post
 
 
-class CategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "sort", "category", "css_class", "updated", "timestamp"]
-    list_display_links = ["id"]
-    list_editable = ["sort", "category", "css_class"]
-    list_filter = ["updated", "timestamp"]
-    search_fields = ["category"]
-
-    class Meta:
-        model = Category
-
-
 class PostCategoryModelAdmin(admin.ModelAdmin):
     list_display = ["id", "post", "category"]
     list_display_links = ["id"]
@@ -39,19 +28,8 @@ class PostCategoryModelAdmin(admin.ModelAdmin):
         model = PostCategory
 
 
-class PostCommentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "post", "num_comment", "comment", "timestamp", "updated"]
-    list_display_links = ["id"]
-    list_editable = ["comment", "post"]
-    list_filter = ["user", "post"]
-    search_fields = ["user", "post"]
-
-    class Meta:
-        model = PostComment
-
-
 class PostImageModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "post", "image", "timestamp"]
+    list_display = ["id", "post", "image"]
     list_display_links = ["id"]
     list_editable = ["post", "image"]
     list_filter = ["post"]
@@ -62,9 +40,7 @@ class PostImageModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostModelAdmin)
-admin.site.register(Category, CategoryModelAdmin)
 admin.site.register(PostCategory, PostCategoryModelAdmin)
-admin.site.register(PostComment, PostCommentModelAdmin)
 admin.site.register(PostImage, PostImageModelAdmin)
 
 # Admin is very good to model the application because it

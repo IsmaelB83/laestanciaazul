@@ -3,7 +3,7 @@
 from django import forms
 # Third party app imports
 # Local app imports
-from .models import Profile
+from .models import UserProfile
 
 
 class LoginForm(forms.ModelForm):
@@ -18,5 +18,5 @@ class ProfileForm(forms.ModelForm):
     email = forms.EmailField(max_length=50)
 
     class Meta:
-        model = Profile
+        model = UserProfile
         fields = ('user_id', 'first_name', 'last_name', 'email', 'location', 'description', 'birth_date', 'image')

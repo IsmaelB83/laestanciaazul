@@ -3,7 +3,7 @@
 from django.contrib import admin
 # Third party app imports
 # Local app imports
-from .models import Profile
+from .models import UserProfile
 
 
 # Register your models here.
@@ -15,7 +15,7 @@ class ProfileModelAdmin(admin.ModelAdmin):
     search_fields = ["user"]
     
     class Meta:
-        model = Profile
+        model = UserProfile
 
 
-admin.site.register(Profile, ProfileModelAdmin)
+admin.site.register(UserProfile, ProfileModelAdmin)

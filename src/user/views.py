@@ -9,15 +9,15 @@ from django.contrib.auth.decorators import login_required
 # Third party app imports
 from social_django.models import UserSocialAuth
 # Local app imports
-from .models import Profile
+from .models import UserProfile
 from .forms import ProfileForm
 
 
 # Create your views here.
 def profile(request, id):
     # Recuperar usuario y autor asociado
-    profile = get_object_or_404(Profile, id=id)
-    # El perfil a buscar es el del usuario logueado?
+    profile = get_object_or_404(UserProfile, id=id)
+    # El perfil a buscar es el del usuari   o logueado?
     if profile.user == request.user:
         try:
             github_login = profile.social_auth.get(provider='github')
@@ -76,7 +76,11 @@ def password(request):
 @login_required
 def register(request):
     # Salvar los datos
-    profile = Profile.objects.get(user=request.user)
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = UserProfile()
+        profile.user = request.user
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -87,7 +91,10 @@ def register(request):
             request.user.save()
             request.user.profile = form.save(commit=False)
             request.user.profile.id = profile.id
-            request.user.profile.save(force_update=True)
+            if profile.id:
+                request.user.profile.save(force_update=True)
+            else:
+                request.user.profile.save()
             messages.success(request, 'Your data has been updated!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:

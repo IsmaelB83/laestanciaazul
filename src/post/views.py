@@ -161,20 +161,27 @@ def post_create_view(request):
         if request.method == 'POST':
             form = PostForm(request.POST, request.FILES)
             if form.is_valid():
+                image = Image()
+                image.caption = form.cleaned_data['image_file'].name
+                image.image = form.cleaned_data['image_file']
+                image.save()
                 post = form.save(commit=False)
                 post.author = UserProfile.objects.get(user=request.user)
-                post.num_likes = 0
+                post.image = image
                 post.save()
                 for category in form.cleaned_data['postcategory']:
                     post_category = PostCategory()
                     post_category.post = post
                     post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                     post_category.save()
-                for image in form.cleaned_data['postimage']:
+                for file_image in form.cleaned_data['postimage']:
+                    image = Image()
+                    image.caption = file_image.name
+                    image.image = file_image
+                    image.save()
                     post_image = PostImage()
                     post_image.post = post
                     post_image.image = image
-                    post_image.caption = image.name
                     post_image.save()
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')

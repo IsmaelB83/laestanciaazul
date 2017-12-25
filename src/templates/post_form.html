@@ -12,7 +12,8 @@ Blog - {{ title }}
         <div class="col-xs-12 col-md-12">
             <form method="post" action="" id="post_form" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
-                <div>
+                {{form.as_p}}
+                {%comment%}<div>
                     <!-- Titulo del post -->
                     <div class="form-group col-xs-12 _pl-0 _pr-0">
                         <label for="title">Titulo</label>
@@ -87,7 +88,7 @@ Blog - {{ title }}
                     </div>
                     <!-- Imagen principal -->
                     <div class="form-group _mt-20">
-                        <label for="tabla"> Imagen principal del post</label>
+                            <label for="tabla"> Imagen principal del post</label>
                         <table id="tabla">
                             <col style="width:5%">
                             <col style="width:60%">
@@ -97,7 +98,6 @@ Blog - {{ title }}
                             <tbody>
                             <tr>
                                 <td>
-
                                     <img id="image_prev" name="image_prev" width="100%" height="75px"
                                          {%if post.image.url %}src="{{ post.image.url }}" {%endif%}>
                                 </td>
@@ -114,7 +114,7 @@ Blog - {{ title }}
                                            placeholder="dimensiones..." readonly value="{{ post.width_field }}x{{ post.height_field }}">
                                 </td>
                                 <td style="padding-left: 5px">
-                                    <input id="id_image" name="image" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
+                                    <input id="id_image_file" name="image_file" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
                                            onchange="readURL(this);">
                                     <button id="image_btn" class="btn btn-sm _btnColor1" type="button" data-title="Edit">
                                         <span class="glyphicon glyphicon-pencil"></span>
@@ -178,7 +178,7 @@ Blog - {{ title }}
                         </textarea>
                         {% wysiwyg_editor "content" %}
                     </div>
-                </div>
+                </div>{%endcomment%}
                 <!-- Submit -->
                 <div class="form-group pull-right _mt-0">
                     <button type="submit" type="button" class="btn _btnColor1 submit">
@@ -215,7 +215,7 @@ Blog - {{ title }}
 
 {% block body_js %}
 <script type="text/javascript">
-$('#image_btn').click(function(){ $('#id_image').click(); })
+$('#image_btn').click(function(){ $('#id_image_file').click(); })
 
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -227,7 +227,7 @@ function readURL(input) {
         };
         $('#image_size').val(input.files[0].size);
         $('#image_name').val(input.files[0].name);
-        reader.readAsDataURL(id_image.files[0]);
+        reader.readAsDataURL(id_image_file.files[0]);
     }
 }
 

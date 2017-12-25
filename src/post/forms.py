@@ -18,11 +18,12 @@ class PostForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple
     )
     status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect)
-    postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
+    image_file = forms.FileField()
+    postimage = MultiFileField(min_num=0, max_num=10, max_file_size=1024 * 1024)
 
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image', 'content', 'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')
 
 
 class PostFormEdit(forms.ModelForm):

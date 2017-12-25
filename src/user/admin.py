@@ -8,9 +8,9 @@ from .models import UserProfile
 
 # Register your models here.
 class ProfileModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "location", "birth_date", "image"]
-    list_display_links = ["id", "user"]
-    list_editable = ["location", "birth_date"]
+    list_display = ["user", "location", "image"]
+    list_display_links = ["user"]
+    list_editable = ["location"]
     list_filter = ["user"]
     search_fields = ["user"]
     

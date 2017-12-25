@@ -6,12 +6,6 @@ from django.core.urlresolvers import reverse
 # Local app imports
 
 
-# Create your models here.
-# MVC Model View Controller
-def upload_location_post(instance, filename):
-    return 'posts/%s/%s' % (instance.profile.user.first_name, filename)
-
-
 class Post(models.Model):
     STATUSES = (('IN', 'Inactive'), ('DR', 'Draft'), ('PB', 'Published'),)
 
@@ -19,19 +13,10 @@ class Post(models.Model):
     content = models.TextField(null=False, blank=False, default='none')
     author = models.ForeignKey('user.UserProfile', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
-    num_likes = models.PositiveIntegerField(null=False, blank=False, default=0)
     published_date = models.DateTimeField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    height_field = models.IntegerField(default=0)
-    width_field = models.IntegerField(default=0)
-    image = models.ImageField(
-        null=True,
-        blank=True,
-        upload_to=upload_location_post,
-        height_field='height_field',
-        width_field='width_field'
-    )
+    image = models.ForeignKey('gallery.Image', null=True, on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return self.title
@@ -50,16 +35,16 @@ class PostImage(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     image = models.ForeignKey('gallery.Image', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.post.title + ": " + self.post.image.caption
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('category.Category', on_delete=models.CASCADE)
 
-    def __unicode__(self):
-        return self.post.title + ":" + self.category.id
-
     def __str__(self):
-        return self.post.title + ":" + self.category.id
+        return self.post.title + ": " + self.category.id
 
 
 class PostComment(models.Model):
@@ -68,3 +53,6 @@ class PostComment(models.Model):
 
     class Meta:
         ordering = ['-post', '-comment__timestamp']
+
+    def __str__(self):
+        return self.post.title + ": " + self.comment.content

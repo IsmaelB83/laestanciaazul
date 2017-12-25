@@ -1,6 +1,5 @@
 # Python imports
 # Django imports
-from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import update_session_auth_hash
@@ -13,40 +12,69 @@ from .models import UserProfile
 from .forms import ProfileForm
 
 
-# Create your views here.
-def profile(request, id):
-    # Recuperar usuario y autor asociado
-    profile = get_object_or_404(UserProfile, id=id)
-    # El perfil a buscar es el del usuari   o logueado?
-    if profile.user == request.user:
-        try:
-            github_login = profile.social_auth.get(provider='github')
-        except UserSocialAuth.DoesNotExist:
-            github_login = None
-        try:
-            twitter_login = profile.social_auth.get(provider='twitter')
-        except UserSocialAuth.DoesNotExist:
-            twitter_login = None
-        try:
-            facebook_login = profile.social_auth.get(provider='facebook')
-        except UserSocialAuth.DoesNotExist:
-            facebook_login = None
-        # Sólo puede desconectar red social si ha introducido password
-        can_disconnect = (profile.social_auth.count() > 1 or profile.has_usable_password())
-    else:
+@login_required
+def user_register_view(request):
+
+    # Se obtiene el perfil del usuario, o si no existe se crea uno nuevo
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = UserProfile()
+        profile.user = request.user
+
+    # Recupero todos los perfiles disponibles
+    try:
+        github_login = profile.user.social_auth.get(provider='github')
+    except UserSocialAuth.DoesNotExist:
         github_login = None
+    try:
+        twitter_login = profile.user.social_auth.get(provider='twitter')
+    except UserSocialAuth.DoesNotExist:
         twitter_login = None
-        facebook_login = None
-        can_disconnect = False
-    # Contexto y render
+
+    # Sólo puede desconectar red social si ha introducido password
+    can_disconnect = (profile.user.social_auth.count() > 1 or profile.user  .has_usable_password())
+
+    # Evento POST
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.user.first_name = form.cleaned_data['first_name']
+            profile.user.last_name = form.cleaned_data['last_name']
+            profile.user.email = form.cleaned_data['email']
+            profile.user.save()
+            profile.save()
+            messages.success(request, 'Tus datos de usuario han sido actualizados')
+            return redirect('blog:index')
+        else:
+            messages.error(request, 'Corrige los errores indicados')
+    else:
+        form = ProfileForm(instance=profile)
+
+    # Generamos el contexto
     context = {
+        'form': form,
         'profile': profile,
         'github_login': github_login,
         'twitter_login': twitter_login,
-        'facebook_login': facebook_login,
         'can_disconnect': can_disconnect
     }
-    return render(request, 'user/profile.html', context)
+
+    # Renderizamos el template del edición del perfil
+    return render(request, 'user/register.html', context)
+
+
+# Create your views here.
+def about_user_view(request, user):
+    # Recuperar usuario y autor asociado
+    profile = get_object_or_404(UserProfile, user=user)
+    # Contexto y render
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'user/about_user.html', context)
 
 
 @login_required
@@ -71,40 +99,3 @@ def password(request):
     context = {'form': form}
     
     return render(request, 'user/password.html', context)
-
-
-@login_required
-def register(request):
-    # Salvar los datos
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        profile = UserProfile()
-        profile.user = request.user
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            request.user.first_name = form.cleaned_data['first_name']
-            request.user.last_name = form.cleaned_data['last_name']
-            request.user.is_staff = False
-            request.user.email = form.cleaned_data['email']
-            request.user.save()
-            request.user.profile = form.save(commit=False)
-            request.user.profile.id = profile.id
-            if profile.id:
-                request.user.profile.save(force_update=True)
-            else:
-                request.user.profile.save()
-            messages.success(request, 'Your data has been updated!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = ProfileForm(instance=profile)
-    
-    context = {
-        'form': form,
-        'profile': profile,
-    }
-    
-    return render(request, 'user/register.html', context)

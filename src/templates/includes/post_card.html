@@ -6,7 +6,7 @@
         <div class="_hover">
             <a href="{{ post.get_absolute_url }}">
                 {% if post.image %}
-                <figure><img src='{{ post.image.url }}' class="img-responsive" width="100%"></figure>
+                <figure><img src='{{ post.image.image.url }}' class="img-responsive" width="100%"></figure>
                 {% else %}
                 <figure><img src='{% static "img/dummy-post.jpg" %}' class="img-responsive" width="100%"></figure>
                 {% endif %}
@@ -26,13 +26,16 @@
     </div>
     <div class="_preview-footer _bgColor1">
         <img class="_bgColor0 img-circle"
-             {% if post.image %}
+             {% if post.author.image %}
              src='{{ post.author.image.url }}'
+             {% elif post.author.image_url%}
+             src='{{ post.author.image_url }}'
              {% else %}
              src='{% static "img/dummy-user.png" %}'
              {% endif %}>
         <span>
-            <a class="_ftColor0" href="#" data-toggle="tooltip" data-placement="left" title="Author">
+            <a class="_ftColor0" href="{{post.author.get_absolute_url}}" data-toggle="tooltip" data-placement="left"
+               title="Author">
                 {%if post%}
                 {{ post.author.user.first_name|truncatechars:12 }}
                 {%else%}
@@ -45,7 +48,7 @@
                 <i class="fa fa-comments"></i>{%if post%} {{post.postcomment_set.all.count}}{%else%} 0{%endif%}
             </a>
             <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="right" title="Loved">
-                <i class="fa fa-heart"></i>{%if post%} {{post.num_likes}}{%else%} 0{%endif%}
+                <i class="fa fa-heart"></i>{%if post%} {{post.postlike_set.all.count}}{%else%} 0{%endif%}
             </a>
         </span>
         <div class="_preview-user _bgColor1">

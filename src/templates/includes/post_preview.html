@@ -19,7 +19,7 @@
     <div class="_previewXL-Footer">
         {% for post_category in post.postcategory_set.all %}
         <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
-            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category}}</span>
+            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.name}}</span>
         </a>
         {% endfor %}
     </div>

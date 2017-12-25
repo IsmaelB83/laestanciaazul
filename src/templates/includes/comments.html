@@ -2,22 +2,23 @@
 
 {% if post.postcomment_set.all.count > 0 %}
 <div id="comments" class="col-xs-12 _pl-0 _pr-0 _previewXL-comments">
-    <span>
+    <span style="color: #EB7F1A !important;">
         <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
-        <i class="fa fa-heart _ml-10"></i> {{ post.num_likes }} likes
+        <i class="fa fa-heart _ml-10"></i> {{ post.postlike_set.all.count }} likes
     </span>
-
-    {% for comment in post.postcomment_set.all %}
-    <div class="media col-xs-12 _pl-0 _pr-0">
+    {% for post_comment in post.postcomment_set.all %}
+    <div class="media col-xs-12 _pl-0 _pr-0 _mt-5">
         <div class="col-xs-1 _pl-0 _pr-0">
-            {% if comment.user %}
-            <a href="{{ comment.user.profile.get_absolute_url }}">
+            {% if post_comment.comment.user %}
+            <a href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">
                 <img width="100%" class="img-responsive img-rounded"
-                     {%if comment.user.profile.image%}
-                     src='{{ comment.user.profile.image.url }}'
+                     {%if post_comment.comment.user.userprofile.image%}
+                     src='{{ post_comment.comment.user.userprofile.image.url }}'
+                     {%elif post_comment.comment.user.userprofile.image_url%}
+                     src='{{ post_comment.comment.user.userprofile.image_url }}'
                      {%else%}
                      src='{% static "img/dummy-user.png" %}'
-                     {%endif%}>
+                     {%endif%} style="min-height: 52px;">
             </a>
             {% else %}
             <img src='{% static "img/dummy-user.png" %}' width="100%" class="img-responsive img-rounded" alt="">
@@ -25,13 +26,13 @@
         </div>
         <div class="media-body col-xs-11 _pr-0">
             <p class="nombre">
-                {% if comment.user.profile %}
-                <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user.first_name }}</a>
+                {% if post_comment.comment.user %}
+                <a href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">{{ post_comment.comment.user.first_name }}</a>
                 {% endif %}
-                <span><small> {{ comment.timestamp|timesince }} ago</span></small>
+                <span><small>comment {{ post_comment.comment.timestamp|timesince }} ago</span></small>
             </p>
             <p class="comentario">
-                {{ comment.comment }}
+                {{ post_comment.comment.content }}
             </p>
         </div>
     </div>

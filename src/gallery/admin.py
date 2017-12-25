@@ -16,3 +16,6 @@ class ImageModelAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Image
+
+
+admin.site.register(Image, ImageModelAdmin)

@@ -559,10 +559,16 @@ button._pagination {
 	text-decoration:underline;
 }
 
+._previewXL-Title > span a {
+	color: #EB7F1A !important;
+}
+
 ._previewXL-Title > span a:hover,
 ._previewXL-Title > span a:active,
 ._previewXL-Title > span a:focus {
-	text-decoration:none;
+	color: #EB7F1A !important;
+	font-weight: bold;
+    text-decoration: none;
 }
 
 ._previewXL-Title h3 {
@@ -589,7 +595,8 @@ button._pagination {
 	position: relative;
 }
 
-._previewXL-comments span {
+._previewXL-comments span,
+._previewXL-comments span,{
     color: #EB7F1A;
 }
 
@@ -893,8 +900,9 @@ button._pagination {
 
 .media {
 	border-top: 1px solid #bfbfbf;
-	padding-top: 15px;
-	margin-top: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin: 0px;
 }
 
 .media .nombre {
@@ -905,11 +913,11 @@ button._pagination {
 .media .nombre span {
 	font-size: 12px;
 	color: #464646;
-	margin-left: 10px;
+	margin-left: 5px;
 }
 
 .media .comentario {
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 

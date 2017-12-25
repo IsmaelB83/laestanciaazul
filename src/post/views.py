@@ -9,11 +9,16 @@ from django.contrib import messages
 # Third party app imports
 # Local app imports
 from .forms import PostForm, PostFormEdit
-from .models import Post, PostImage, PostCategory
+from .models import Post, PostImage, PostCategory, PostComment
+from discuss.models import Comment
+from gallery.models import Image
+from user.models import UserProfile
+from category.models import Category
+from like.models import PostLike
 
 
-# Create your views here.
 def index_view(request):
+
     posts_all = Post.objects.all()[:15]
     paginator = Paginator(posts_all, 3)
     page_request_var = 'page'
@@ -28,8 +33,8 @@ def index_view(request):
 
     posts_cards = Post.objects.order_by('timestamp')[:3]
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
-    comments_recent = apps.get_model('discuss', 'Comment').objects.order_by('-timestamp')[:4]
-    pictures_recent = apps.get_model('gallery', 'Image').objects.order_by('-timestamp')[:12]
+    comments_recent = Comment.objects.order_by('-timestamp')[:4]
+    pictures_recent = Image.objects.order_by('-timestamp')[:12]
     
     context = {
         'title': 'List of Posts',
@@ -61,7 +66,7 @@ def archive_view(request):
         posts_page = paginator.page(paginator.num_pages)
     context = {
         'title': 'List of Posts',
-        'posts': posts_page,
+        'post': posts_page,
         'page_request': page_request_var
     }
     return render(request, 'archive.html', context)
@@ -69,7 +74,7 @@ def archive_view(request):
 
 def category_view(request, id):
     try:
-        category = apps.get_model('category', 'Category').objects.get(id=id)
+        category = Category.objects.get(id=id)
         if id != 'all' and category:
             posts_all = Post.objects.filter(postcategory__category=category)
         else:
@@ -87,8 +92,8 @@ def category_view(request, id):
         posts_page = paginator.page(paginator.num_pages)
 
     posts_popular = posts_all.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
-    comments_recent = apps.get_model('discuss', 'Comment').objects.filter(post__in=posts_all).order_by('-timestamp')[:4]
-    pictures_recent = PostImage.objects.filter(post__in=posts_all).order_by('-timestamp')[:12]
+    comments_recent = PostComment.objects.filter(post__in=posts_all).order_by('-comment__timestamp')[:4]
+    pictures_recent = Image.objects.order_by('-timestamp')[:12]
 
     context = {
         'title': 'Category',
@@ -105,30 +110,47 @@ def category_view(request, id):
 def post_view(request, id):
     post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
-        if request.is_ajax():
-            post.num_likes = post.num_likes + 1
-            post.save()
-        else:
-            form = apps.get_model('discuss', 'PostCommentForm')(request.POST)
-            if form.is_valid():
-                post_comment = form.save(commit=False)
-                if request.user.is_authenticated:
-                    post_comment.user = request.user
+        if request.user.is_authenticated:
+            if request.is_ajax():
+                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+                if x_forwarded_for:
+                    ip = x_forwarded_for.split(',')[0]
+                else:
+                    ip = request.META.get('REMOTE_ADDR')
+
+                if not PostLike.objects.filter(post=post, user=request.user, ip=ip).exists():
+                    like = PostLike()
+                    like.post = post
+                    like.user = request.user
+                    like.ip = ip
+                    like.save()
+                else:
+                    like = PostLike.objects.filter(post=post, user=request.user, ip=ip)
+                    like.delete()
+            else:
+                comment = Comment()
+                comment.user = request.user
+                comment.content = request.POST['comment']
+                comment.save()
+                post_comment = PostComment()
                 post_comment.post = post
-                try:
-                    post_comment.num_comment = post.postcomment_set.latest('num_comment').num_comment + 1
-                except ObjectDoesNotExist:
-                    post_comment.num_comment = 1
+                post_comment.comment = comment
                 post_comment.save()
                 messages.success(request, 'Comentario añadido')
+        else:
+            messages.error(request, 'Es necesario hacer log in para dar un like')
 
     posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
-    pictures_recent = PostImage.objects.order_by('-timestamp')[:12]
+    pictures_recent = Image.objects.order_by('-timestamp')[:12]
+    already_like = "False"
+    if request.user.is_authenticated:
+        already_like = PostLike.objects.filter(post=post, user=request.user).exists()
 
     context = {
         'title': post.title,
         'posts_popular': posts_popular,
         'pictures_recent': pictures_recent,
+        'already_like': already_like,
         'post': post,
     }
     return render(request, 'post.html', context)
@@ -140,7 +162,7 @@ def post_create_view(request):
             form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = apps.get_model('user', 'Author').objects.get(user=request.user)
+                post.author = UserProfile.objects.get(user=request.user)
                 post.num_likes = 0
                 post.save()
                 for category in form.cleaned_data['postcategory']:
@@ -154,13 +176,15 @@ def post_create_view(request):
                     post_image.image = image
                     post_image.caption = image.name
                     post_image.save()
-
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')
         else:
             form = PostForm()
 
-        context = {'title': 'Create post', 'form': form, }
+        context = {
+            'title': 'Create post',
+            'form': form,
+        }
 
         return render(request, 'post_form.html', context)
     else:
@@ -194,7 +218,11 @@ def post_edit_view(request, id):
                 messages.success(request, 'Successfully created')
                 return redirect('blog:index')
 
-        context = {'title': 'Edit post', 'post': post, 'form': form, }
+        context = {
+            'title': 'Edit post',
+            'post': post,
+            'form': form,
+        }
 
         return render(request, 'post_form.html', context)
     else:

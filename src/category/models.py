@@ -21,7 +21,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category:Category', kwargs={'id': self.id})
+        return reverse('blog:category', kwargs={'id': self.id})
 
     def __iter__(self):
         return [self.id, self.sort, self.name, self.css_class, self.timestamp, self.updated]

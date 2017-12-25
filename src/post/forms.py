@@ -5,16 +5,19 @@ from django.apps import apps
 # Third party app imports
 from multiupload.fields import MultiFileField
 # Local app imports
-from .models import Post
+from .models import Post, PostComment
 
 
-#CATEGORY_CHOICES = [[c.id, c.category] for c in apps.get_model('category', 'Category').objects.all()]
+CATEGORY_CHOICES = [[c.id, c.name] for c in apps.get_model('category', 'Category').objects.all()]
 
 
 class PostForm(forms.ModelForm):
-    #choices = CATEGORY_CHOICES,
-    postcategory = forms.MultipleChoiceField( required=True, widget=forms.CheckboxSelectMultiple, )
-    status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect, )
+    postcategory = forms.MultipleChoiceField(
+        choices=CATEGORY_CHOICES,
+        required=True,
+        widget=forms.CheckboxSelectMultiple
+    )
+    status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect)
     postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
 
     class Meta:
@@ -23,12 +26,13 @@ class PostForm(forms.ModelForm):
 
 
 class PostFormEdit(forms.ModelForm):
-    #choices=CATEGORY_CHOICES,
-    postcategory = forms.MultipleChoiceField( required=True, widget=forms.CheckboxSelectMultiple, )
+    postcategory = forms.MultipleChoiceField(
+        choices=CATEGORY_CHOICES,
+        required=True,
+        widget=forms.CheckboxSelectMultiple
+    )
     postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
 
     class Meta:
         model = Post
         fields = ('title', 'postcategory', 'status', 'published_date', 'image', 'content', 'postimage')
-
-

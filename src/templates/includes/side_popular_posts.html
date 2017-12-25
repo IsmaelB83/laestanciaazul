@@ -6,9 +6,9 @@
     <div class="_previewXS">
         <a href='{{ post.get_absolute_url }}'>
             {% if post.image %}
-            <img src='{{ post.image.url }}' alt="thumbnail" class="img-responsive img-rounded">
+            <img src='{{ post.image.image.url }}' alt="thumbnail" class="img-responsive img-rounded">
             {% else %}
-            <img src='' alt="thumbnail" class="img-responsive img-rounded">
+            <img src='{% static "img/dummy-post.jpg" %}' alt="thumbnail" class="img-responsive img-rounded">
             {% endif %}
         </a>
         <p>{{ post.title|title }}<a href='{{ post.get_absolute_url }}'>[...]</a></p>

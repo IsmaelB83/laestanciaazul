@@ -6,9 +6,9 @@
     <div class="panel">
         <a href='{{ category.get_absolute_url }}'>
             {% if category == category_actual %}
-            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15 active">{{ category.category }}</button>
+            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15 active">{{ category.name }}</button>
             {% else %}
-            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15">{{ category.category }}</button>
+            <button class="categories _btnColor2 _pd-18 _w-100 _ft-15">{{ category.name }}</button>
             {% endif %}
         </a>
     </div>

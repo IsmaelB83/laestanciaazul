@@ -23,41 +23,48 @@ Blog - Post
                         <a href="#form_comments" class="" data-toggle="tooltip" data-placement="left" title="Comments">
                             <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
                         </a>
-                        <a id="like" href="#" class="" data-toggle="tooltip" data-placement="right" title="Loved">
-                            <i class="fa fa-heart"></i>
-                            <input id="numlikes" value="{{ post.num_likes }} likes" style="border:none;" readonly>
+                        <a id="id_like" href="#" class="" data-toggle="tooltip" data-placement="right" title="Loved">
+                            <i class="fa fa-heart" style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}"></i>
+                            <input id="id_likes" value="{{ post.postlike_set.all.count }} likes"
+                                style="border:none; background-color: transparent;
+                                {%if already_like == True%} color: #15B23A; font-weight: bold;{%endif%}" readonly>
                         </a>
                         <script>
-                             $("#like").click(function(e) {
+                             $("#id_like").click(function(e) {
                                 e.preventDefault();
                                 var self = $(this);
                                 ajax_req = $.ajax({
                                     url: self.attr("href"),
                                     type: "POST",
                                     data: {
-                                        name: "sebastian",
                                         csrfmiddlewaretoken: '{{ csrf_token }}',
                                     },
                                     success: function(ctx) {console.log(ctx);}
                                 });
-                                var likes = parseInt(document.getElementById("numlikes").value);
-                                likes++;
-                                document.getElementById("numlikes").value = likes + " likes";
+                                $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
                             });
                         </script>
                     </span>
-                    <img src="{{ post.image.url }}" class="img-responsive _mt-10" width="100%">
+                    <img class="img-responsive _mt-10" width="100%"
+                         {%if post.image %}
+                            src="{{ post.image.image.url }}" >
+                         {%endif%}
                 </div>
                 <!-- .entry-content -->
                 <div class="_previewXL-Body">
                     {{ post.content|safe }}
                 </div>
                 <!-- .entry-footer -->
-                <div class="_previewXL-Footer">
-                    <span>{{ post.author }} <small> posted on {{ post.timestamp }}</small></span>
+                <div class="_previewXL-Footer _mt-10">
+                    <a href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
+                    <span><small> posted on {{ post.timestamp }}</small></span>
                     <div class="_mt-5">
                         {% for post_category in post.postcategory_set.all %}
-                        <span class="label label-{{ post_category.css_class }}">{{post_category.category</span>
+                        <a href="{{post_category.category.get_absolute_url}}" style="text-decoration: none">
+                            <span class="label label-{{ post_category.category.css_class }}">
+                                {{post_category.category.name}}
+                            </span>
+                        </a>
                         {% endfor %}
                     </div>
                 </div>

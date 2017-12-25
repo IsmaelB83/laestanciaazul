@@ -6,7 +6,7 @@ from django.db import models
 
 
 def upload_location_postimage(instance, filename):
-    return 'posts/%s/' % filename
+    return 'post/%s/' % filename
 
 
 # Create your models here.
@@ -21,3 +21,6 @@ class Image(models.Model):
         blank=True,
         height_field='height_field',
         width_field='width_field')
+
+    def __str__(self):
+        return self.caption

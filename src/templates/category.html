@@ -16,7 +16,7 @@ active
     <div class="row">
         <!-- Listado de POSTs -->
         <div class="col-xs-12 col-md-8 _mt-20 pull-left">
-            <h2 class="_titleSection">{{ category.category|upper }}</h2>
+            <h2 class="_titleSection">{{ category.name|upper }}</h2>
             {% for post in posts %}
             {% include "includes/post_preview.html" with post=post %}
             {% endfor %}

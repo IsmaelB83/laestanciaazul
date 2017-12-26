@@ -12,8 +12,7 @@ Blog - {{ title }}
         <div class="col-xs-12 col-md-12">
             <form method="post" action="" id="post_form" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
-                {{form.as_p}}
-                {%comment%}<div>
+                <div>
                     <!-- Titulo del post -->
                     <div class="form-group col-xs-12 _pl-0 _pr-0">
                         <label for="title">Titulo</label>
@@ -81,61 +80,61 @@ Blog - {{ title }}
                                         locale: 'es'
                                     });
                                 });
-
-
                             </script>
                         </div>
                     </div>
-                    <!-- Imagen principal -->
-                    <div class="form-group _mt-20">
-                            <label for="tabla"> Imagen principal del post</label>
-                        <table id="tabla">
-                            <col style="width:5%">
-                            <col style="width:60%">
-                            <col style="width:15%">
-                            <col style="width:15%">
-                            <col>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <img id="image_prev" name="image_prev" width="100%" height="75px"
-                                         {%if post.image.url %}src="{{ post.image.url }}" {%endif%}>
-                                </td>
-                                <td style="padding-left: 10px">
-                                    <input id="image_name" name="image_name" type="text" class="form-control input-sm"
-                                           placeholder="imagen principal del post..." readonly value="{{ post.image.name }}">
-                                </td>
-                                <td style="padding-left: 5px">
-                                    <input id="image_size" name="image_size" type="text" class="form-control input-sm"
-                                           placeholder="tamaño de la imagen..." readonly value="{{ post.image.size }}">
-                                </td>
-                                <td style="padding-left: 5px">
-                                    <input id="image_dim" name="image_dim" type="text" class="form-control input-sm" readonly
-                                           placeholder="dimensiones..." readonly value="{{ post.width_field }}x{{ post.height_field }}">
-                                </td>
-                                <td style="padding-left: 5px">
-                                    <input id="id_image_file" name="image_file" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
-                                           onchange="readURL(this);">
-                                    <button id="image_btn" class="btn btn-sm _btnColor1" type="button" data-title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Imagenes del post -->
-                    <div class="form-group _mt-20">
+                    <!-- Imagenes -->
+                    <div class="row">
+                        <!-- Imagen principal -->
+                        <div class="col-xs-12 col-sm-4 form-group _mt-20">
+                            <label for="id_image_file">Imagen de cabecera</label>
+                            <div class="file-loading">
+                                <input type="file" id="id_image_file" name="image_file" accept=".jpg,.jpeg,.png" class="btn _btnColor1">
+                            </div>
+                            <script>
+                            {% if post %}
+                                var imagen_ppal = "{{post.image.image.url}}";
+                            {% endif %}
+                            $(document).on('ready', function(){
+                                $("#id_image_file").fileinput({
+                                    initialPreview: [
+                                        {%if post%}
+                                        imagen_ppal,
+                                        {%endif%}
+                                    ],
+                                    initialPreviewAsData: true,
+                                    initialPreviewConfig: [
+                                         {%if post%}
+                                         {% verbatim %}{{% endverbatim %}
+                                         caption: "{{post.image.caption}}",
+                                         downloadUrl: "{{post.image.image.url}}",
+                                         size: {{post.image.image.size}},
+                                         width: {{post.image.image.width}},
+                                         height: {{post.image.image.height}},
+                                         key: 1
+                                         {% verbatim %}}{% endverbatim %}
+                                         {%endif%}
+                                    ],
+                                    overwriteInitial: true,
+                                    maxFileSize: 1024,
+                                    initialCaption:"Imagen principal...",
+                                    showUpload: false,
+                                    allowedFileTypes: ['image']
+                                });
+                            });
+                            </script>
+                        </div>
+                        <!-- Imagenes del post -->
+                        <div class="col-xs-12 col-sm-8 form-group _mt-20">
                         <label for="id_postimage">Resto de imagenes del post</label>
                         <div class="file-loading">
-                            <input id="id_postimage" name="postimage" type="file" name="files[]" accept=".gif,.jpg,.jpeg,.png"
-                                   class="btn _btnColor1" multiple>
+                            <input type="file" id="id_postimage" name="postimage" accept=".jpg,.jpeg,.png" class="btn _btnColor1" multiple>
                         </div>
                         <script>
                             {% if post %}
                                 var
                                 {% for aux in post.postimage_set.all %}
-                                    img{{aux.id}} = "{{aux.image.url}}"{%if forloop.last%};{%else%},{%endif%}
+                                    img{{aux.id}} = "{{aux.image.image.url}}"{%if forloop.last%};{%else%},{%endif%}
                                 {% endfor %}
                             {% endif %}
                             $(document).on('ready', function(){
@@ -149,24 +148,24 @@ Blog - {{ title }}
                                     initialPreviewConfig: [
                                         {% for aux in post.postimage_set.all %}
                                             {% verbatim %}{{% endverbatim %}
-                                             caption: "{{aux.image.name}}",
-                                             downloadUrl: "{{aux.image.url}}",
-                                             size: {{aux.image.size}},
-                                             width: {{aux.image.width}},
-                                             height: {{aux.image.height}},
+                                             caption: "{{aux.image.caption}}",
+                                             downloadUrl: "{{aux.image.image.url}}",
+                                             size: {{aux.image.image.size}},
+                                             width: {{aux.image.image.width}},
+                                             height: {{aux.image.image.height}},
                                              key: {{ forloop.counter }}
                                              {% verbatim %}}{% endverbatim %},
                                         {% endfor %}
                                     ],
                                     overwriteInitial: true,
                                     maxFileSize: 1024,
-                                    initialCaption: "Select your post files here",
+                                    initialCaption: "Imagenes del post...",
                                     showUpload: false,
                                     allowedFileTypes: ['image']
                                 });
                             });
-
                         </script>
+                    </div>
                     </div>
                     <!-- Editor wysiwyg -->
                     <div class="form-group">
@@ -178,7 +177,7 @@ Blog - {{ title }}
                         </textarea>
                         {% wysiwyg_editor "content" %}
                     </div>
-                </div>{%endcomment%}
+                </div>
                 <!-- Submit -->
                 <div class="form-group pull-right _mt-0">
                     <button type="submit" type="button" class="btn _btnColor1 submit">
@@ -189,47 +188,9 @@ Blog - {{ title }}
         </div>
     </div>
 </div>
-
-<!-- Modal delete -->
-<div class="modal fade" id="delete">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="form-group">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>Delete image</h3>
-                </div>
-                <div class="form-group alert alert-danger">
-                    <span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?
-                </div>
-                <div class="form-group form-inline">
-                    <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span> Actualizar</button>
-                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock %}
 
 {% block body_js %}
 <script type="text/javascript">
-$('#image_btn').click(function(){ $('#id_image_file').click(); })
-
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var image = document.getElementById("image_prev");
-            image.src = e.target.result;
-            $('#image_dim').val(e.target.result.width + "x" + e.target.result.height);
-        };
-        $('#image_size').val(input.files[0].size);
-        $('#image_name').val(input.files[0].name);
-        reader.readAsDataURL(id_image_file.files[0]);
-    }
-}
-
 </script>
 {% endblock %}

@@ -4,7 +4,11 @@
 <div class="_previewXL">
     <div class="_previewXL-Title">
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title|title }}</a></h3>
-        <span>By <strong>{{ post.author.user.first_name }}</strong> <small> {{ post.timestamp|date:"M d, Y" }} ago</small>
+        <span>By
+            <a href="{{ post.author.user.userprofile.get_absolute_url }}">
+                <strong>{{ post.author.user.first_name }}</strong>
+            </a>
+            <small> {{ post.timestamp|date:"M d, Y" }} ago</small>
             <a href='{{ post.get_absolute_url }}#form_comments'>
                 <span class="_previewXL-comments">{{ post.postcomment_set.all.count }} Comments</span></a>
             </a>

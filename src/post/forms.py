@@ -32,8 +32,9 @@ class PostFormEdit(forms.ModelForm):
         required=True,
         widget=forms.CheckboxSelectMultiple
     )
-    postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024)
+    image_file = forms.FileField(required=False)
+    postimage = MultiFileField(min_num=0, max_num=100, max_file_size=1024 * 1024, required=False)
 
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image', 'content', 'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')

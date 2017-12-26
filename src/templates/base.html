@@ -68,7 +68,7 @@
                                 {% endfor %}
                             </ul>
                         </li>
-                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' %}">Archivo</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2017 0%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="#">Galeria</a></li>
                         {% if user.is_authenticated %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">
@@ -249,7 +249,7 @@
                                 <li><a href="{% url 'blog:index' %}" title="">Home</a></li>
                                 <li><a href="{% url 'blog:contact' %}" title="">Contact</a></li>
                                 <li><a href="{% url 'blog:category' id='all' %}" title="">Categories</a></li>
-                                <li><a href="{% url 'blog:archive' %}" title="">Archive</a></li>
+                                <li><a href="{% url 'blog:archive' 2017 0 %}" title="">Archive</a></li>
                             </ul>
                         </div>
                     </div>

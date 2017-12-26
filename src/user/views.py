@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 # Third party app imports
@@ -67,12 +68,12 @@ def user_register_view(request):
 
 
 # Create your views here.
-def about_user_view(request, user):
+def about_user_view(request, id):
     # Recuperar usuario y autor asociado
-    profile = get_object_or_404(UserProfile, user=user)
+    user = get_object_or_404(User, id=id)
     # Contexto y render
     context = {
-        'profile': profile,
+        'profile': user.userprofile,
     }
     return render(request, 'user/about_user.html', context)
 

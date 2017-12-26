@@ -11,7 +11,14 @@
             <img src='{% static "img/dummy-post.jpg" %}' alt="thumbnail" class="img-responsive img-rounded">
             {% endif %}
         </a>
-        <p>{{ post.title|title }}<a href='{{ post.get_absolute_url }}'>[...]</a></p>
+        <p>
+            <span>By
+                <a href="{{ post.author.user.userprofile.get_absolute_url }}">{{ post.author.user.first_name }}</a>
+                <small> {{ post.timestamp|timesince }} ago</small>
+            </span>
+        </p>
+        <a href='{{ post.get_absolute_url }}'><p>{{ post.title|title }}...</a>
+        </p>
     </div>
     {% endfor %}
 </div>

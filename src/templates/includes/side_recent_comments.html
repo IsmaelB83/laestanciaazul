@@ -2,16 +2,20 @@
 
 <h2 class="_titleSection">LAST COMMENTS</h2>
 <div class="_lastCommentsXS">
-    {% for comment in comments_recent %}
+    {% for post_comment in comments_recent %}
     <div class="_commentXS">
         <p>
-            {% if comment.user %}
-            <a href="{{ comment.user.profile.get_absolute_url }}"><span>{{ comment.user.first_name }}</span></a>
-            {% endif %}
-            <small> {{ comment.timestamp|timesince }} ago</small>
+            <a href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">
+                <span>{{ post_comment.comment.user.first_name }}</span>
+            </a>
+            <small> {{ post_comment.comment.timestamp|timesince }} ago</small>
         </p>
-        <h5><a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title|title }}</a></h5>
-        <p>{{ comment.comment }} </p>
+        <h5>
+            <a href="{{ post_comment.post.get_absolute_url }}">
+                {{ post_comment.post.title|title }}
+            </a>
+        </h5>
+        <p>{{ post_comment.comment.content }} </p>
     </div>
     {% endfor %}
 </div>

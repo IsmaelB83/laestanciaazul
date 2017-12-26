@@ -19,7 +19,8 @@ Blog - Post
                 <!-- .entry-header -->
                 <div class="_previewXL-Title">
                     <h3>{{ post.title }}</h3>
-                    <span>{{ post.author }} on {{ post.timestamp }}
+                    <a href="{{post.author.get_absolute_url}}">
+                    <span>{{ post.author }}</a> on {{ post.timestamp }}
                         <a href="#form_comments" class="" data-toggle="tooltip" data-placement="left" title="Comments">
                             <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
                         </a>
@@ -53,14 +54,17 @@ Blog - Post
                 <!-- .entry-content -->
                 <div class="_previewXL-Body">
                     {{ post.content|safe }}
+                    <div class="{% if not updated %}hidden{% endif %}">
+                        <p><small>Last edited {{ post.updated|timesince }} ago </small></p>
+                    </div>
                 </div>
                 <!-- .entry-footer -->
                 <div class="_previewXL-Footer _mt-10">
                     <a href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
                     <span><small> posted on {{ post.timestamp }}</small></span>
-                    <div class="_mt-5">
+                    <div class="_div-categories">
                         {% for post_category in post.postcategory_set.all %}
-                        <a href="{{post_category.category.get_absolute_url}}" style="text-decoration: none">
+                        <a class="_category" href="{{post_category.category.get_absolute_url}}">
                             <span class="label label-{{ post_category.category.css_class }}">
                                 {{post_category.category.name}}
                             </span>

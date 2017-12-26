@@ -938,3 +938,19 @@ button._pagination {
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+/*==> BOTON DE CATEGORIAS */
+._div-categories {
+    margin-top: 10px;
+}
+
+._div-categories a {
+    margin-left: 5px;
+    text-decoration: none !important;
+}
+
+._div-categories a:first-child {
+    margin-left: 0px;
+    text-decoration: none !important;
+}
+/*<== BOTON DE CATEGORIAS */

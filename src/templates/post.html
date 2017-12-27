@@ -16,90 +16,101 @@ Blog - Post
         <!-- Contenido del post -->
         <div class="col-xs-12 col-md-8 _mt-20 pull-left">
             <article class="_previewXL">
-                <!-- .entry-header -->
-                <div class="_previewXL-Title">
-                    <h3>{{ post.title }}</h3>
-                    <a href="{{post.author.get_absolute_url}}">
-                    <span>{{ post.author }}</a> on {{ post.timestamp }}
-                        <a href="#form_comments" class="" data-toggle="tooltip" data-placement="left" title="Comments">
-                            <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
-                        </a>
-                        <a id="id_like" href="#" class="" data-toggle="tooltip" data-placement="right" title="Loved">
+                <!-- entry-header -->
+                <div class="row">
+                    <div class="_previewXL-Title col-xs-12">
+                        <h3>{{post.title}}</h3>
+                        <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}">
+                            <span>{{post.author}}</span>
+                        </a> on {{post.timestamp}}
+                        <a href="#form_comments" class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Comments">
+                            <i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comments</a>
+                        <a id="id_like" href="#" class="_enlace_naranja" data-toggle="tooltip" data-placement="right" title="Loved">
                             <i class="fa fa-heart" style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}"></i>
-                            <input id="id_likes" value="{{ post.postlike_set.all.count }} likes"
-                                style="border:none; background-color: transparent;
-                                {%if already_like == True%} color: #15B23A; font-weight: bold;{%endif%}" readonly>
+                            {{post.postlike_set.all.count}} likes
+                            <!--<input id="id_likes" value="{{ post.postlike_set.all.count }} likes"-->
+                                <!--style=" border:none; background-color: transparent;-->
+                                <!--{%if already_like == True%} color: #15B23A; font-weight: bold;{%endif%}" readonly>-->
                         </a>
                         <script>
-                             $("#id_like").click(function(e) {
-                                e.preventDefault();
-                                var self = $(this);
-                                ajax_req = $.ajax({
-                                    url: self.attr("href"),
-                                    type: "POST",
-                                    data: {
-                                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                                    },
-                                    success: function(ctx) {console.log(ctx);}
-                                });
-                                $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
+                         $("#id_like").click(function(e) {
+                            e.preventDefault();
+                            var self = $(this);
+                            ajax_req = $.ajax({
+                                url: self.attr("href"),
+                                type: "POST",
+                                data: {
+                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                },
+                                success: function(ctx) {console.log(ctx);}
                             });
+                            $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
+                        });
                         </script>
-                    </span>
-                    <img class="img-responsive _mt-10" width="100%"
-                         {%if post.image %}
-                            src="{{ post.image.image.url }}" >
-                         {%endif%}
-                </div>
-                <!-- .entry-content -->
-                <div class="_previewXL-Body">
-                    {{ post.content|safe }}
-                    <div class="{% if not updated %}hidden{% endif %}">
-                        <p><small>Last edited {{ post.updated|timesince }} ago </small></p>
+                        <img class="img-responsive _mt-20" width="100%" {%if post.image %}src="{{ post.image.image.url }}"{%endif%}>
                     </div>
                 </div>
-                <!-- .entry-footer -->
-                <div class="_previewXL-Footer _mt-10">
+                <!-- entry-content -->
+                <div class="row _mt-10">
+                    <div class="_previewXL-Body col-xs-12">
+                        {{ post.content|safe }}
+                    </div>
+                </div>
+                <!-- entry-footer -->
+                <div class="row _mt-10">
+                    <div class="_previewXL-Footer col-xs-12">
+                    <!-- imagenes del post -->
                     <div class="row">
                         {% for post_image in post.postimage_set.all|slice:"0:6" %}
-                        <div class="col-xs-3 _mt-10 _pl-10 _pr-10">
+                        <div class="col-xs-2 _mt-10 _pl-10 _pr-10">
                             <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
                                 <img src="{{post_image.image.image.url}}" width="100%" style="height: 100px;" class="img-rounded img-responsive">
                             </a>
                         </div>
                         {% endfor %}
                         {% for post_image in post.postimage_set.all|slice:"6:12" %}
-                        <div class="col-xs-3 _mt-10 _pl-10 _pr-10">
+                        <div class="col-xs-2 _mt-10 _pl-10 _pr-10">
                             <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
                                 <img src="{{post_image.image.image.url}}" width="100%" style="height: 100px;" class="img-rounded img-responsive">
                             </a>
                         </div>
                         {% endfor %}
                     </div>
+                    <!-- firma del post -->
                     <div class="row _mt-20">
+                        <!-- edición -->
+                        <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
+                            <p><small>Last edited {{ post.updated|timesince }} ago </small></p>
+                        </div>
+                        <!-- autor -->
                         <div class="col-xs-12">
-                            <a href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
+                            <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
                             <span><small> posted on {{ post.timestamp }}</small></span>
-                            <div class="_div-categories">
-                                {% for post_category in post.postcategory_set.all %}
-                                <a class="_category" href="{{post_category.category.get_absolute_url}}">
-                                    <span class="label label-{{ post_category.category.css_class }}">
-                                        {{post_category.category.name}}
-                                    </span>
-                                </a>
-                                {% endfor %}
-                            </div>
+                        </div>                        <!-- autor -->
+                        <!-- categorias del post -->
+                        <div class="_div-categories col-xs-12">
+                            {% for post_category in post.postcategory_set.all %}
+                            <a class="_category" href="{{post_category.category.get_absolute_url}}">
+                                <span class="label label-{{ post_category.category.css_class }}">
+                                    {{post_category.category.name}}
+                                </span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- comentarios -->
+                    <div class="row _mt-20">
+                        <div class="dejarcomentario col-xs-12 _mt-10">
+                            {% include "includes/form_comments.html" with post=post %}
+                            {% include "includes/comments.html" with post=post %}
                         </div>
                     </div>
                 </div>
-                <div class="dejarcomentario col-xs-12 _pl-0 _pr-0 _mt-10">
-                    {% include "includes/form_comments.html" with post=post %}
-                    {% include "includes/comments.html" with post=post %}
                 </div>
             </article>
         </div>
         <!-- Sidebar derecha-->
-        <div class="col-xs-12 col-md-4 _pl-sm-30 pull-right _pl-0 _pl-sm-20">
+        <div class="col-xs-12 col-md-4 pull-right _pr-0 _pl-sm-30">
             <!-- Categorias-->
             <div class="col-xs-12 _mt-20">
                 {% include "includes/side_categories.html" %}
@@ -117,7 +128,7 @@ Blog - Post
 </div>
 
 {% for post_image in post.postimage_set.all %}
-{% include "includes/modal_image.html" with image=post_image.image %}
+{% include "includes/modal_image.html" with post_image=post_image %}
 {% endfor %}
 
 {% endblock %}

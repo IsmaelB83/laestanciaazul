@@ -1,56 +1,54 @@
 {% load staticfiles %}
 
-<div id="form_comments">
-    <h3>Dejar comentario</h3>
+<div id="col-xs-12 form_comments">
     <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group _mb-5">
-            {%if user.is_anonymous%}
-            <textarea class="form-control _aboutMessage" name="comment" id="comment" maxlength=275 placeholder="Log in to comment..."
-                      disabled></textarea>
+            {% if not user.is_anonymous %}
+            <div class="col-xs-12 _pl-0 _pr-0">
+                <textarea class="form-control _aboutMessage" name="comment" id="comment" maxlength=275 placeholder="Log in to comment..."></textarea>
+                <small class="form-text text-muted">Max. 275 characters</small>
+            </div>
             {%else%}
-            <textarea class="form-control _aboutMessage" name="comment" id="comment" maxlength=275 placeholder="Leave your comment..."></textarea>
+            <div class="col-xs-12 _pl-0 _pr-0" style="border: 1px solid #dcd9c6; background-color: #fffcdb;">
+                Haz login para iniciar la conversación
+                <ul class="list-inline _ml-10 _mt-10">
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-twitter">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-facebook">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-linkedin">
+                        <span class="fa fa-linkedin"></span>
+                    </a>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-instagram">
+                        <span class="fa fa-instagram"></span>
+                    </a>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-md btn-github">
+                        <span class="fa fa-github"></span>
+                    </a>
+                </li>
+            </ul>
+            </div>
             {%endif%}
         </div>
         <div class="form-group _mt-0">
-            <div class="pull-left">
-                <small class="form-text text-muted">Max. 275 characters</small>
-            </div>
+            {% if not user.is_anonymous %}
             <div class="pull-right ">
-                <ul class="list-inline _mt-5">
-                    {% if user.is_anonymous %}
-                    <li class="list-inline-item _pl-0 _pr-0">
-                        <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-twitter">
-                            <span class="fa fa-twitter"></span>
-                        </a>
-                    </li>
-                    <li class="list-inline-item _pl-0 _pr-0">
-                        <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-facebook">
-                            <span class="fa fa-facebook"></span>
-                        </a>
-                    </li>
-                    <li class="list-inline-item _pl-0 _pr-0">
-                        <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-linkedin">
-                            <span class="fa fa-linkedin"></span>
-                        </a>
-                    </li>
-                    <li class="list-inline-item _pl-0 _pr-0">
-                        <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-instagram">
-                            <span class="fa fa-instagram"></span>
-                        </a>
-                    </li>
-                    <li class="list-inline-item _pl-0 _pr-0">
-                        <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-md btn-github">
-                            <span class="fa fa-github"></span>
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li class="list-inline-item _pl-20 _pr-0">
-                        <button type='submit' class="btn btn-md _btnColor1">
-                            <i class="fa fa-comment" aria-hidden="true"></i> Send Comment
-                        </button>
-                    </li>
-                </ul>
+                <button type='submit' class="btn btn-md _btnColor1">
+                    <i class="fa fa-comment" aria-hidden="true"></i> Send Comment
+                </button>
             </div>
+            {% endif %}
         </div>
     </form>
 </div>

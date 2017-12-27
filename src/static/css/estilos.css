@@ -545,33 +545,6 @@ button._pagination {
 	padding-top: 0px;
 }
 
-._previewXL > span{
-	font-family: 'Monda', sans-serif;
-}
-
-._previewXL > span a {
-	color:#EB7F1A;
-	padding-left: 15px;
-	cursor:pointer;
-	display:inline;
-}
-
-._previewXL > span a:hover {
-	text-decoration:underline;
-}
-
-._previewXL-Title > span a {
-	color: #EB7F1A !important;
-}
-
-._previewXL-Title > span a:hover,
-._previewXL-Title > span a:active,
-._previewXL-Title > span a:focus {
-	color: #EB7F1A !important;
-	font-weight: bold;
-    text-decoration: none;
-}
-
 ._previewXL-Title h3 {
 	margin-top: 0px;
 }
@@ -594,11 +567,6 @@ button._pagination {
 	margin-bottom: 0px;
 	float: left;
 	position: relative;
-}
-
-._previewXL-comments span,
-._previewXL-comments span,{
-    color: #EB7F1A;
 }
 
 ._previewXL-comments a img:hover{
@@ -644,14 +612,7 @@ button._pagination {
 	line-height: 1.5em;
 	margin-bottom: 0px;
 }
-._previewXS p a{
-	font-family: Arial, Helvetica, sans-serif;
-	color:#EB7F1A;
-	line-height: 1.5em;
-}
-._previewXS p a:hover{
-	color:#888;
-}
+
 /*<== PREVIEW DE UN POST XS */
 
 /*==> PREVIEW DE COMENTARIOS */
@@ -659,7 +620,6 @@ button._pagination {
 	padding-top:15px;
 	padding-bottom: 5px;
 	border-bottom: 1px ridge #DADADA;
-    font-family: Arial, Helvetica, sans-serif !important;
 }
 
 ._commentXS:first-child { 
@@ -669,23 +629,21 @@ button._pagination {
 ._commentXS:last-child { 
 	border: none;
 } 
-._commentXS p{
-	font-size: 1em;
-	color:#444;
+
+._commentXS p {
 	margin-bottom: 0px;
 }
-._commentXS p span{
-	font-weight:bold;
-	color:#222;
-}
+
 ._commentXS h5{
 	padding:3px 0;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
 ._commentXS h5 a{
 	color:#EB7F1A !important;
 }
+
 ._commentXS h5 a:hover{
 	text-decoration:underline !important;
 }
@@ -953,3 +911,14 @@ button._pagination {
     text-decoration: none !important;
 }
 /*<== BOTON DE CATEGORIAS */
+
+/*==> ENLACES */
+._enlace_naranja {
+	color: #EB7F1A !important;
+}
+
+._enlace_negro_n {
+	color: #333 !important;
+	font-weight: bold;
+}
+/*<== ENLACES */

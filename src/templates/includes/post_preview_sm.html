@@ -8,7 +8,7 @@
             <a href="{{ post.author.user.userprofile.get_absolute_url }}">
                 <strong>{{ post.author.user.first_name }}</strong>
             </a>
-            <small> {{ post.timestamp|date:"M d, Y" }} ago</small>
+            <small> on {{ post.published_date|date:"M d, Y" }}</small>
             <a href='{{ post.get_absolute_url }}#form_comments'>
                 <span class="_previewXL-comments">{{ post.postcomment_set.all.count }} Comments</span></a>
             </a>
@@ -26,7 +26,7 @@
         {% for post_category in post.postcategory_set.all %}
         {% if post_category.post == post %}
         <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
-            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.category }}</span>
+            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.name }}</span>
         </a>
         {% endif %}
         {% endfor %}

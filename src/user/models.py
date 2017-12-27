@@ -24,6 +24,7 @@ class UserProfile(models.Model):
         null=True,
         blank=True)
     image_url = models.URLField(null=True, blank=True)
+    author = models.BooleanField(null=False, blank=False, default=False)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -33,9 +34,10 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         if instance.social_auth:
-            instance.userprofile.image_url = "https://twitter.com/" +\
-                                             instance.social_auth.instance.username +\
-                                             "/profile_image?size=original"
+            instance.userprofile.image_url = \
+                "https://twitter.com/" +\
+                instance.social_auth.instance.username +\
+                "/profile_image?size=original"
         instance.userprofile.save()
 
     def __unicode__(self):

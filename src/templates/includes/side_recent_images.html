@@ -5,7 +5,7 @@
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"0:4" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}'>
+            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
                 <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -14,7 +14,7 @@
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"4:8" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}'>
+            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
                 <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -23,10 +23,15 @@
     <div class="_lastPicturesRow">
         {% for picture in pictures_recent|slice:"8:12" %}
         <div class="_lastPicturesImage">
-            <a href='{{ picture.post.get_absolute_url }}'>
+            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
                 <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
         {% endfor %}
     </div>
+
+    {% for picture in pictures_recent %}
+    {% include "includes/modal_image.html" with image=picture %}
+    {% endfor %}
+
 </div>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+Blog - Gallery
+{% endblock %}
+
+{% block activo_gallery %}
+active
+{% endblock %}
+
+{% block main_content %}
+
+<!-- Bloque principal -->
+<div class="container _bgColor0 _pb-0">
+    <div class="row">
+        <div class="col-xs-12 _mt-20">
+            <h2 class="_titleSection _mb-0  ">GALLERY</h2>
+            <div class="row">
+                {% for image in images %}
+                <div class="col-xs-12 col-sm-3 _mt-20 _pl-10 _pr-10">
+                    <a href="#image_detail{{image.id}}" data-toggle="modal" data-target="#image_detail{{image.id}}">
+                        <img src="{{image.image.url}}" width="100%" height="150px;">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    {% include "includes/pagination.html" with paginator=images request=page_request %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana modal cerrar sesion -->
+    {% for image in images %}
+    {% include "includes/modal_image.html" with image=image %}
+    {% endfor %}
+
+</div>
+
+{% endblock %}

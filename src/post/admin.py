@@ -3,16 +3,16 @@
 from django.contrib import admin
 # Third party app imports
 # Local app imports
-from .models import Post, PostCategory, PostImage, PostComment
+from .models import Post, PostCategory, PostImage, PostComment, PostArchive
 
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
 class PostModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "content", "updated", "timestamp"]
+    list_display = ["title", "content", "published_date", "updated", "timestamp"]
     list_display_links = ["title"]
     list_editable = ["content"]
-    list_filter = ["updated", "timestamp"]
-    search_fields = ["title", "content"]
+    list_filter = ["published_date", "updated", "timestamp"]
+    search_fields = ["published_date", "title", "content"]
 
     class Meta:
         model = Post
@@ -51,10 +51,22 @@ class PostCommentAdmin(admin.ModelAdmin):
         model = PostComment
 
 
+class PostArchiveAdmin(admin.ModelAdmin):
+    list_display = ["id", "year", "month", "posts"]
+    list_display_links = ["id"]
+    list_editable = ["posts"]
+    list_filter = ["year", "month"]
+    search_fields = ["year", "month"]
+
+    class Meta:
+        model = PostArchive
+
+
 admin.site.register(Post, PostModelAdmin)
 admin.site.register(PostCategory, PostCategoryModelAdmin)
 admin.site.register(PostImage, PostImageModelAdmin)
 admin.site.register(PostComment, PostCommentAdmin)
+admin.site.register(PostArchive, PostArchiveAdmin)
 
 
 # Admin is very good to model the application because it

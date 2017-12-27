@@ -1,4 +1,5 @@
 # Python imports
+import re
 # Django imports
 from django.apps import apps
 from django.db.models import Count, Sum
@@ -37,7 +38,7 @@ def index_view(request):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = Image.objects.order_by('-timestamp')[:12]
+    pictures_recent = PostImage.objects.order_by('-image__timestamp')[:12]
 
     # Se genera el contexto con toda la información y se renderiza
     context = {
@@ -134,7 +135,7 @@ def search_view(request, filter):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = Image.objects.order_by('-timestamp')[:12]
+    pictures_recent = PostImage.objects.order_by('-image__timestamp')[:12]
 
     # Se genera el contexto y se renderiza
     context = {
@@ -143,28 +144,28 @@ def search_view(request, filter):
         'posts_popular': posts_popular,
         'comments_recent': comments_recent,
         'pictures_recent': pictures_recent,
-        'page_request': page_request_var
+        'page_request': page_request_var,
     }
     return render(request, 'search.html', context)
 
 
 def gallery_view(request):
     # Se recuperan todas las imagenes
-    images_all = Image.objects.all()
+    post_images_all = PostImage.objects.all()
     # Se genera el paginador para esos posts
-    paginator = Paginator(images_all, 12)
+    paginator = Paginator(post_images_all, 12)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
-        images_page = paginator.page(page)
+        post_images_page = paginator.page(page)
     except PageNotAnInteger:
-        images_page = paginator.page(1)
+        post_images_page = paginator.page(1)
     except EmptyPage:
-        images_page = paginator.page(paginator.num_pages)
+        post_images_page = paginator.page(paginator.num_pages)
 
     # Se genera el contexto y se renderiza
     context = {
-        'images': images_page,
+        'post_images': post_images_page,
         'page_request': page_request_var
     }
     return render(request, 'gallery.html', context)
@@ -175,9 +176,9 @@ def category_view(request, id):
     try:
         category = Category.objects.get(id=id)
         if id != 'all' and category:
-            posts_all = Post.objects.filter(postcategory__category=category)
+            posts_all = Post.objects.filter(postcategory__category=category).order_by('-published_date')
         else:
-            posts_all = Post.objects.all()
+            posts_all = Post.objects.all().order_by('-published_date')
     except ObjectDoesNotExist:
         messages.error(request, 'La categoría no existe')
         return redirect('blog:index')
@@ -199,7 +200,7 @@ def category_view(request, id):
     # Ultimas imagenes (TO-DO: deberían ser sólo la de esta categoría)
     pictures_recent = []
     for post_picture in PostImage.objects.filter(post__in=posts_all).order_by('-image__timestamp')[:12]:
-        pictures_recent.append(post_picture.image)
+        pictures_recent.append(post_picture)
 
     # Se genera el contexto con toda la información y se renderiza
     context = {

@@ -3,35 +3,35 @@
 <h2 class="_titleSection">LAST PICTURES</h2>
 <div class="_lastPictures">
     <div class="_lastPicturesRow">
-        {% for picture in pictures_recent|slice:"0:4" %}
+        {% for post_image in pictures_recent|slice:"0:4" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
-                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
-        {% for picture in pictures_recent|slice:"4:8" %}
+        {% for post_image in pictures_recent|slice:"4:8" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
-                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
-        {% for picture in pictures_recent|slice:"8:12" %}
+        {% for post_image in pictures_recent|slice:"8:12" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{picture.id}}" data-toggle="modal" data-target="#image_detail{{picture.id}}">
-                <img src='{{ picture.image.url }}' alt="" class="img-responsive img-rounded">
+            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
         {% endfor %}
     </div>
 
-    {% for picture in pictures_recent %}
-    {% include "includes/modal_image.html" with image=picture %}
+    {% for post_image in pictures_recent %}
+    {% include "includes/modal_image.html" with post_image=post_image %}
     {% endfor %}
 
 </div>

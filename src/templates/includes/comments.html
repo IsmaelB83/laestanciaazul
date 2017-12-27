@@ -1,8 +1,8 @@
 {% load staticfiles %}
 
 {% if post.postcomment_set.all.count > 0 %}
-<div id="comments" class="col-xs-12 _pl-0 _pr-0 _previewXL-comments">
-    <span style="color: #EB7F1A !important;">
+<div id="comments" class="col-xs-12 _pl-0 _pr-0 _mt-10 _previewXL-comments">
+    <span class="_enlace_naranja">
         <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
         <i class="fa fa-heart _ml-10"></i> {{ post.postlike_set.all.count }} likes
     </span>
@@ -27,7 +27,9 @@
         <div class="media-body col-xs-11 _pr-0">
             <p class="nombre">
                 {% if post_comment.comment.user %}
-                <a href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">{{ post_comment.comment.user.first_name }}</a>
+                <a  class="_enlace_negro_n" href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">
+                    {{ post_comment.comment.user.first_name }}
+                </a>
                 {% endif %}
                 <span><small>comment {{ post_comment.comment.timestamp|timesince }} ago</span></small>
             </p>

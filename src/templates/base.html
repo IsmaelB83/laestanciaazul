@@ -68,8 +68,8 @@
                                 {% endfor %}
                             </ul>
                         </li>
-                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2017 0%}">Archivo</a></li>
-                        <li class="{% block activo_gallery %} {% endblock %}"><a href="#">Galeria</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2017 13%}">Archivo</a></li>
+                        <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
                         {% if user.is_authenticated %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">Autor <span class="caret"></span></a>
@@ -85,11 +85,27 @@
                         <li>
                             <form class="navbar-form navbar-left" role="search">
                                 <div class="input-group form-group-sm">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Search">
+                                    <input id="id_search" type="text" class="form-control form-control-sm" placeholder="Search">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm _btnColor3" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                        <a id="id_search_a" class="btn btn-sm _btnColor3" href="#" onclick="redirectURL();return false;">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </a>
                                     </div>
                                 </div>
+                                <script>
+                                    $("#id_search").keyup(function(event) {
+                                        if (event.keyCode === 13) {
+                                            $("#id_search_a").click();
+                                        }
+                                    });
+
+                                    function redirectURL () {
+                                        filter = document.getElementById("id_search").value;
+                                        filter = filter.replace(/\s+/g, '-').toLowerCase();
+                                        if (filter != '')
+                                            window.location = "/search/" + filter;
+                                    }
+                                </script>
                             </form>
                         </li>
                         {% if user.is_authenticated %}
@@ -249,7 +265,7 @@
                                 <li><a href="{% url 'blog:index' %}" title="">Home</a></li>
                                 <li><a href="{% url 'blog:contact' %}" title="">Contact</a></li>
                                 <li><a href="{% url 'blog:category' id='all' %}" title="">Categories</a></li>
-                                <li><a href="{% url 'blog:archive' 2017 0 %}" title="">Archive</a></li>
+                                <li><a href="{% url 'blog:archive' 2017 13 %}" title="">Archive</a></li>
                             </ul>
                         </div>
                     </div>
@@ -284,27 +300,8 @@ $('.carousel-indicators  li').on('mouseover',function() {
 })
 
 jQuery(document).ready(function() {
-
     var divWidth = $('#powered').width();
     $('#powered').css('height', divWidth/6);
-
-    function close_accordion_section() {
-        jQuery('.accordion').removeClass('active');
-    }
-
-    jQuery('.accordion').click(function(e) {
-        // Grab current anchor value
-        var currentAttrValue = jQuery(this).attr('href');
-
-        if(jQuery(e.target).is('.active')) {
-            close_accordion_section();
-        }else {
-            close_accordion_section();
-            // Add active class to section title
-            jQuery(this).addClass('active');
-        }
-        e.preventDefault();
-    });
 });
 </script>
 {% block body_js %}

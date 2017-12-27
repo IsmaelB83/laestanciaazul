@@ -1,54 +1,59 @@
 {% load staticfiles %}
+{% load post_extras %}
 
 <h2 class="_titleSection">BUSQUEDA ARCHIVO</h2>
 <div class="panel-group _mt-0" id="accordion">
+    {% for item1 in archivo %}
     <div class="panel">
         <div class="panel-heading">
-            <button class="accordion _btnColor1 _pd-10 _w-100 _ft-15 {%if year == '2017'%}active{%endif%}"
-                    data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="false">2017
+            <button class="accordion _btnColor1 _pd-10 _w-100 _ft-15 {% if year == item1.0 %} active{%endif%}"
+                data-toggle="collapse" data-parent="#accordion" href="#collapse{{item1.0}}"
+                aria-expanded="false">{{item1.0}}
             </button>
         </div>
-        <div id="collapse1" class="panel-collapse collapse panel-last-post {% if year == '2017' %}active in{%endif%}">
+        <div id="collapse{{item1.0}}" class="panel-collapse collapse panel-last-post
+            {% if year == item1.0 %} active in {%endif%}">
             <div class="panel-body">
-                <a href="{% url 'blog:archive' 2017 0 %}">
-                    <h6>Todo <span class="badge badge-default badge-pill _ft-10 pull-right">40</span></h6>
+                {% for item2 in item1.1 %}
+                {% if item2 != 0 %}
+                <a href="{% url 'blog:archive' item1.0 forloop.counter|month_n_inverse %}">
+                    {%if year == item1.0 and month == forloop.counter|month_n_inverse %}
+                    <h6 class="_ftColor3" style="font-weight: bold;">
+                    {%else%}
+                    <h6>
+                    {%endif%}
+                    {% if forloop.counter == 1 %}Todo {%else%}{{forloop.counter|month_inverse}}{%endif%}
+                    <span class="badge badge-default badge-pill _ft-10 pull-right">{{ item2 }}</span>
+                    </h6>
+                    {% if forloop.counter == 1 %}<hr class="_mt-0 _mb-0">{%endif%}
                 </a>
-                <hr class="_mt-0 _mb-0">
-                <a href="{% url 'blog:archive' 2017 12 %}">
-                    <h6>Diciembre <span class="badge badge-default badge-pill _ft-10 pull-right">14</span></h6>
-                </a>
-                <a href="{% url 'blog:archive' 2017 11 %}">
-                    <h6>Noviembre <span class="badge badge-default badge-pill _ft-10 pull-right">7</span></h6>
-                </a>
-                <a href="{% url 'blog:archive' 2017 10 %}">
-                    <h6>Octubre <span class="badge badge-default badge-pill _ft-10 pull-right">1</span></h6>
-                </a>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
-    <div class="panel">
-        <div class="panel-heading">
-            <button class="accordion _btnColor1 _pd-10 _w-100 _ft-15 {%if year == '2016'%}active{%endif%}"
-                    data-toggle="collapse"
-                    data-parent="#accordion" href="#collapse2" aria-expanded="false">2016
-            </button>
-        </div>
-        <div id="collapse2" class="panel-collapse collapse panel-last-post {% if year == '2016' %}active in{%endif%}">
-            <div class="panel-body">
-                <a href="{% url 'blog:archive' 2016 0 %}">
-                    <h6>Todo <span class="badge badge-default badge-pill _ft-10 pull-right">40</span></h6>
-                </a>
-                <hr class="_mt-0 _mb-0">
-                <a href="{% url 'blog:archive' 2016 12 %}">
-                    <h6>Diciembre <span class="badge badge-default badge-pill _ft-10 pull-right">14</span></h6>
-                </a>
-                <a href="{% url 'blog:archive' 2016 11 %}">
-                    <h6>Noviembre <span class="badge badge-default badge-pill _ft-10 pull-right">7</span></h6>
-                </a>
-                <a href="{% url 'blog:archive' 2016 10 %}">
-                    <h6>Octubre <span class="badge badge-default badge-pill _ft-10 pull-right">1</span></h6>
-                </a>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
+
+    <!-- My scripts -->
+    <script>
+    jQuery(document).ready(function() {
+        function close_accordion_section() {
+            jQuery('.accordion').removeClass('active');
+        }
+
+        jQuery('.accordion').click(function(e) {
+            // Grab current anchor value
+            var currentAttrValue = jQuery(this).attr('href');
+
+            if(jQuery(e.target).is('.active')) {
+                close_accordion_section();
+            }else {
+                close_accordion_section();
+                // Add active class to section title
+                jQuery(this).addClass('active');
+            }
+            e.preventDefault();
+        });
+    });
+    </script>
 </div>

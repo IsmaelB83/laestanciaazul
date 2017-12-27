@@ -1,7 +1,9 @@
 # Python imports
+from datetime import datetime
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 # Third party app imports
 # Local app imports
 
@@ -56,3 +58,13 @@ class PostComment(models.Model):
 
     def __str__(self):
         return self.post.title + ": " + self.comment.content
+
+
+class PostArchive(models.Model):
+    year = models.PositiveIntegerField()
+    month = models.PositiveIntegerField()
+    posts = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = (('year', 'month'),)
+        ordering = ['-year']

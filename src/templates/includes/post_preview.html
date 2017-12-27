@@ -8,15 +8,15 @@
             <a href="{{ post.author.user.userprofile.get_absolute_url }}">
                 <strong style="color: black !important;">{{ post.author.user.first_name }}</strong>
             </a>
-            <small> {{ post.timestamp|date:"M d, Y" }}</small>
+            <small> {{ post.published_date|date:"M d, Y" }}</small>
             <a href='{{ post.get_absolute_url }}#form_comments'>
                 <span class="_previewXL-comments"> {{ post.postcomment_set.all.count }} Comments</span></a>
             </a>
         </span>
     </div>
     <div class="_previewXL-Body">
-        <a href=""><img src='{% static post.image %}' class="img-rounded" width="200px"></a>
-        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:75 }}
+        <!--<a href=""><img src='{{ post.image.image.url }}' class="img-rounded img-responsive" width="100%" style="max-height: 200px;"></a>-->
+        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:200 }}
             <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
         </p>
     </div>

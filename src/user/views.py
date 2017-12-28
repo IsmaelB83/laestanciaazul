@@ -70,7 +70,12 @@ def user_register_view(request):
 # Create your views here.
 def about_user_view(request, id):
     # Recuperar usuario y autor asociado
-    user = get_object_or_404(User, id=id)
+    try:
+        user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        messages.error(request, 'El usuario indicado no existe')
+        return redirect('blog:index')
+
     # Contexto y render
     context = {
         'profile': user.userprofile,

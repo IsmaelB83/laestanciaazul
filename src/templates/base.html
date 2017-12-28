@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/font-awesome.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-social.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/fileinput.css" %}'/>
+    {% block specific_css %} {% endblock %}
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Fonts -->
@@ -61,7 +62,7 @@
                         <li class="{% block activo_home %} {% endblock %}"><a class="_ftColor1" href="{% url 'blog:index' %}">Principal</a></li>
                         <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'blog:contact' %}">Acerca de</a></li>
                         <li class="{% block activo_category %} {% endblock %} dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">Categores <span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown">Categorias <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
                                 {% for category in categories %}
                                 <li><a class="_btnColor4" href='{{ category.get_absolute_url }}'>{{ category.name }}</a></li>

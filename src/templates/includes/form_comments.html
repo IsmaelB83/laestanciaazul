@@ -2,53 +2,48 @@
 
 <div id="col-xs-12 form_comments">
     <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
-        <div class="form-group _mb-5">
-            {% if not user.is_anonymous %}
-            <div class="col-xs-12 _pl-0 _pr-0">
-                <textarea class="form-control _aboutMessage" name="comment" id="comment" maxlength=275 placeholder="Log in to comment..."></textarea>
-                <small class="form-text text-muted">Max. 275 characters</small>
-            </div>
-            {%else%}
-            <div class="col-xs-12 _pl-0 _pr-0" style="border: 1px solid #dcd9c6; background-color: #fffcdb;">
-                Haz login para iniciar la conversación
-                <ul class="list-inline _ml-10 _mt-10">
+        {% if not user.is_anonymous %}
+        <div class="col-xs-12 _pl-0 _pr-0 _mb-0 form-group">
+            <textarea class="form-control _aboutMessage" name="comment" id="comment" maxlength=275
+                      placeholder="Escribe tu comentario... (máximo 275 caracteres)"></textarea>
+        </div>
+        <div class="form-group col-xs-12 _pl-0 _pr-0 _mt-5 _mb-0" style="text-align: right;">
+            <button type='submit' class="btn btn-md _btnColor1">
+                <i class="fa fa-comment" aria-hidden="true"></i> Send Comment
+            </button>
+        </div>
+        {%endif%}
+        {% if user.is_anonymous %}
+        <div class="form-group col-xs-12 _pl-0 _pr-0" style="border: 1px solid #dcd9c6; background-color: #fffcdb; text-align: center;">
+            <ul class="list-inline _mt-10">
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-twitter">
+                    <a href="{% url 'login' %}" class="btn btn-lg btn-success">Log In</a>
+                </li>
+                <li class="list-inline-item _pl-5 _pr-5">
+                    <h4>para comentar, o conecta a través de tu red social</h4>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-lg btn-twitter">
                         <span class="fa fa-twitter"></span>
                     </a>
                 </li>
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-facebook">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-lg btn-facebook">
                         <span class="fa fa-facebook"></span>
                     </a>
                 </li>
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-linkedin">
+                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-lg btn-linkedin">
                         <span class="fa fa-linkedin"></span>
                     </a>
                 </li>
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-social-icon btn-md btn-instagram">
-                        <span class="fa fa-instagram"></span>
-                    </a>
-                </li>
-                <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-md btn-github">
+                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-lg btn-github">
                         <span class="fa fa-github"></span>
                     </a>
                 </li>
             </ul>
-            </div>
-            {%endif%}
         </div>
-        <div class="form-group _mt-0">
-            {% if not user.is_anonymous %}
-            <div class="pull-right ">
-                <button type='submit' class="btn btn-md _btnColor1">
-                    <i class="fa fa-comment" aria-hidden="true"></i> Send Comment
-                </button>
-            </div>
-            {% endif %}
-        </div>
+        {%endif%}
     </form>
 </div>

@@ -7,7 +7,9 @@ Blog - Post
 {% endblock %}
 
 {% block edit_post %}
+{% if post.author == user.userprofile %}
 <li><a class="_btnColor4" href='{% url "blog:post_edit" id=post.id %}'>Edit Post</a></li>
+{% endif %}
 {% endblock %}
 
 {% block main_content %}
@@ -99,7 +101,7 @@ Blog - Post
                         </div>
                     </div>
                     <!-- comentarios -->
-                    <div class="row _mt-20">
+                    <div class="row _mt-10">
                         <div class="dejarcomentario col-xs-12 _mt-10">
                             {% include "includes/form_comments.html" with post=post %}
                             {% include "includes/comments.html" with post=post %}

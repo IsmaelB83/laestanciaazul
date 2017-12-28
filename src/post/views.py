@@ -1,7 +1,7 @@
 # Python imports
-import re
 # Django imports
 from django.apps import apps
+from django.contrib.auth.models import User
 from django.db.models import Count, Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -53,9 +53,17 @@ def index_view(request):
 
 
 def contact_view(request):
-    # Se genera el contexto con toda la información y se renderiza
-    return render(request, 'contact.html')
-
+    # Recuperar mi usuario
+    try:
+        user = User.objects.get(id=5)
+    except ObjectDoesNotExist:
+        messages.error(request, 'El usuario no existe')
+        return redirect('blog:index')
+    # Contexto y render
+    context = {
+        'profile': user.userprofile,
+    }
+    return render(request, 'user/about_user.html', context)
 
 def archive_view(request, year, month):
 

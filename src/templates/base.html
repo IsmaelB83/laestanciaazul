@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/font-awesome.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap-social.css" %}'/>
     <link rel="stylesheet" type="text/css" href='{% static "css/fileinput.css" %}'/>
-    {% block specific_css %} {% endblock %}
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Fonts -->
@@ -60,7 +59,7 @@
                     <!-- Menú izquierda: navegación por la web-->
                     <ul class="nav navbar-nav navbar-left">
                         <li class="{% block activo_home %} {% endblock %}"><a class="_ftColor1" href="{% url 'blog:index' %}">Principal</a></li>
-                        <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'blog:contact' %}">Acerca de</a></li>
+                        <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'user:profile' id=5%}">Acerca de</a></li>
                         <li class="{% block activo_category %} {% endblock %} dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">Categorias <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
@@ -129,7 +128,6 @@
                                                      {%else%}
                                                      src='{% static "img/dummy-user.png" %}'
                                                      {%endif%}>
-                                            {{profile.image_url}}
                                             </div>
                                             <div class="col-xs-8 ">
                                                 <p class="text-left">
@@ -138,7 +136,7 @@
                                                     <br>
                                                     <small>{{ user.userprofile.description }}</small>
                                                     <br>
-                                                    <small>{{ user.userprofile.location }}</small>
+                                                    <small>{{ user.userprofile.country }} ({{ user.userprofile.location }})</small>
                                                 </p>
                                             </div>
                                         </div>
@@ -264,7 +262,7 @@
                             <h2 class="footer-title">Navigation</h2>
                             <ul class="list-unstyled">
                                 <li><a href="{% url 'blog:index' %}" title="">Home</a></li>
-                                <li><a href="{% url 'blog:contact' %}" title="">Contact</a></li>
+                                <li><a href="{% url 'user:profile' id=5 %}" title="">Contact</a></li>
                                 <li><a href="{% url 'blog:category' id='all' %}" title="">Categories</a></li>
                                 <li><a href="{% url 'blog:archive' 2017 13 %}" title="">Archive</a></li>
                             </ul>

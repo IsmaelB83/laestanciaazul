@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-<div id="col-xs-12 form_comments">
+<div class="col-xs-12">
     <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
         {% if not user.is_anonymous %}
         <div class="col-xs-12 _pl-0 _pr-0 _mb-0 form-group">

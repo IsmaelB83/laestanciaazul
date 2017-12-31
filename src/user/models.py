@@ -17,8 +17,10 @@ def upload_location_author(instance, filename):
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    location = models.CharField(max_length=30, blank=False)
+    country = models.CharField(max_length=20, blank=False, null=False)
+    location = models.CharField(max_length=30, blank=False, null=False)
     description = models.CharField(max_length=100, blank=False, null=False)
+    introduction = models.TextField(blank=False, null=False)
     image = models.ImageField(
         upload_to=upload_location_author,
         null=True,
@@ -49,3 +51,17 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return reverse('user:profile', kwargs={'id': self.user.id})
 
+
+# Create your models here.
+class UserFollow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    follows = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follows')
+
+    class Meta:
+        unique_together = (('user', 'follows'),)
+
+    def __unicode__(self):
+        return self.user.username + " " + self.follow_user.username
+
+    def __str__(self):
+        return self.user.username + " " + self.follow_user.username

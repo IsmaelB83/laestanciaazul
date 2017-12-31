@@ -78,7 +78,7 @@
 ._bgImage1 { background-image: url("../img/escheresque.png"); }
 ._bgImage2 { background-image: url("../img/strange_bullseyes.png"); }
 
-._bgColor0 { background-color: #ECF0F1; } /* casi blanco */ 
+._bgColor0 { background-color: #ECF0F1; } /* casi blanco */
 ._bgColor1 { background-color: #243C4F; } /* azul verdoso oscuro */ 
 ._bgColor2 { background-color: #16A085; } /* azul verdoso */
 ._bgColor3 { background-color: #F39C12; } /* naranja */
@@ -922,3 +922,280 @@ button._pagination {
 	font-weight: bold;
 }
 /*<== ENLACES */
+
+/* USER PROFILE
+===========================*/
+
+#contact_side ._social_contact {
+	background-color: #243C4F;
+	margin-bottom: 35px;
+	padding: 20px;
+	color: #ecf0f1;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	   -moz-border-bottom-right-radius: 10px;
+	    -ms-border-bottom-right-radius: 10px;
+	     -o-border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	   -moz-border-bottom-left-radius: 10px;
+	    -ms-border-bottom-left-radius: 10px;
+	     -o-border-bottom-left-radius: 10px;
+	border: 1px solid #F39C12;
+	border-top: 0px;
+}
+
+#contact_side ._social_contact a{
+	color: #243C4F;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+#contact_side ._social_contact a i.fa {
+	background-color: #ecf0f1;
+	color: #243C4F;
+	width: 60px;
+	height: 60px;
+	border-radius: 100%;
+	-webkit-border-radius: 100%;
+	   -moz-border-radius: 100%;
+	    -ms-border-radius: 100%;
+	     -o-border-radius: 100%;
+	padding-top: 18px;
+}
+
+#contact_side ._social_contact a i.fa:hover {
+	background-color: #16A085;
+	color: white;
+	transition: all 1s ease;
+	-webkit-transition: all 1s ease;
+	   -moz-transition: all 1s ease;
+	    -ms-transition: all 1s ease;
+	     -o-transition: all 1s ease;
+}
+
+#contact_side ._user_foto img {
+	border: 10px solid #bdc3c7;
+}
+
+#contact_side ._user_foto ._user_head {
+	text-align: center;
+}
+
+#contact_side ._user_foto ._user_head h1{
+	color: #34495e;
+	font-weight: 600;
+}
+
+#contact_side ._user_foto ._user_head h5{
+	font-weight: 600;
+	color: #7f8c8d;
+	font-size: 18pt;
+}
+
+#contact_side ._user_foto ._user_head .hr-center{
+	height: 3px;
+	background-color: #16A085;
+	width: 40%;
+	display: block;
+	margin: 0 auto;
+}
+
+#sidebar .link-me{
+	margin-top: 30px;
+}
+
+#contact_side .link-me i.fa{
+	background-color: #16A085;
+	color: #ecf0f1;
+	width: 45px;
+	height: 45px;
+	padding-top: 13px;
+	border-radius: 10px;
+	font-size: 14pt;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	    -ms-border-radius: 10px;
+	     -o-border-radius: 10px;
+}
+
+#contact_side .link-me i.fa:hover{
+	background-color: #243C4F;
+	transition: all 1s ease;
+	-webkit-transition: all 1s ease;
+	   -moz-transition: all 1s ease;
+	    -ms-transition: all 1s ease;
+	     -o-transition: all 1s ease;
+}
+
+#contact_side .link-me .hr-center{
+	height: 3px;
+	background-color: #34495e;
+	margin: 0 auto;
+	width: 100px;
+	margin-top: 15px;
+}
+
+#contenido_contact {
+    background-color: white;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	   -moz-border-bottom-right-radius: 10px;
+	    -ms-border-bottom-right-radius: 10px;
+	     -o-border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	   -moz-border-bottom-left-radius: 10px;
+	    -ms-border-bottom-left-radius: 10px;
+	     -o-border-bottom-left-radius: 10px;
+}
+
+#contenido_contact .main-content{
+	padding: 0 20px;
+}
+
+._btn_contact_detail {
+	background-color: #16A085;
+	color: #fff;
+	border: 1px solid #16A085;
+}
+
+._contact_input {
+    margin-top: 22px;
+	border: 1px solid #16A085;
+}
+
+._timeline {
+  	list-style: none;
+  	padding: 20px 0 20px;
+  	position: relative;
+}
+
+._timeline:before {
+  	top: 0;
+  	bottom: 0;
+  	position: absolute;
+  	content: " ";
+  	width: 3px;
+  	background-color: #eeeeee;
+  	right: 25px;
+  	margin-left: -1.5px;
+}
+
+._timeline > li {
+  	margin-bottom: 20px;
+  	position: relative;
+}
+
+._timeline > li:before,
+._timeline > li:after {
+  	content: " ";
+  	display: table;
+}
+
+._timeline > li:after {
+  	clear: both;
+}
+
+._timeline > li:before,
+._timeline > li:after {
+  	content: " ";
+  	display: table;
+}
+
+._timeline > li:after {
+  	clear: both;
+}
+
+._timeline > li > ._timeline-panel {
+  	width: calc( 100% - 75px );
+  	float: left;
+  	color: #34495e;
+  	border: 1px solid #d4d4d4;
+  	border-radius: 2px;
+  	padding: 20px;
+  	position: relative;
+  	-webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+  	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+}
+
+._timeline > li > ._timeline-panel:before {
+  	position: absolute;
+  	top: 26px;
+  	right: -15px;
+  	display: inline-block;
+  	border-top: 15px solid transparent;
+  	border-left: 15px solid #ccc;
+  	border-right: 0 solid #ccc;
+  	border-bottom: 15px solid transparent;
+  	content: " ";
+}
+
+._timeline > li > ._timeline-panel:after {
+  	position: absolute;
+  	top: 27px;
+  	right: -14px;
+  	display: inline-block;
+  	border-top: 14px solid transparent;
+  	border-left: 14px solid #fff;
+  	border-right: 0 solid #fff;
+  	border-bottom: 14px solid transparent;
+  	content: " ";
+}
+
+._timeline > li > ._timeline-panel h1{
+	margin-top: 0;
+}
+
+._timeline > li > ._timeline-panel .hr-left{
+	height: 1px;
+	width: 100px;
+	margin-bottom: 20px;
+	background-color: #ddd;
+}
+
+._timeline .timeline-head{
+	text-align: right;
+	margin-right: 80px;
+	margin-top: 20px;
+}
+
+._timeline > li > ._timeline-badge {
+  	color: #fff;
+  	width: 50px;
+  	height: 50px;
+  	line-height: 50px;
+  	font-size: 1.4em;
+  	text-align: center;
+  	position: absolute;
+  	top: 16px;
+  	right: 0px;
+  	margin-left: -25px;
+  	background-color: #999999;
+  	z-index: 100;
+  	border-top-right-radius: 50%;
+  	border-top-left-radius: 50%;
+  	border-bottom-right-radius: 50%;
+  	border-bottom-left-radius: 50%;
+}
+
+._timeline-badge.default{
+	background-color: #34495e !important;
+}
+._timeline-badge.success {
+  	background-color: transparent !important;
+  	width: 20px !important;
+  	height: 20px !important;
+  	right: 16.5px !important;
+  	top: 32px !important;
+  	border: 2px solid #2ecc71;
+}
+
+._timeline-badge.warning {
+  	background-color: transparent !important;
+  	width: 20px !important;
+  	height: 20px !important;
+  	right: 16.5px !important;
+  	top: 32px !important;
+  	border: 2px solid #f1c40f;
+}

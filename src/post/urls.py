@@ -8,7 +8,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index_view, name='index'),
-    url(r'^contact/$', views.contact_view, name='contact'),
     url(r'^gallery/$', views.gallery_view, name='gallery'),
     url(r'^archive/(?P<year>\d+)/(?P<month>\d+)/$', views.archive_view, name='archive'),
     url(r'^category/(?P<id>[\w]+)/$', views.category_view, name='category'),

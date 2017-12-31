@@ -1,7 +1,6 @@
 # Python imports
 # Django imports
 from django.apps import apps
-from django.contrib.auth.models import User
 from django.db.models import Count, Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -51,19 +50,6 @@ def index_view(request):
     }
     return render(request, 'index.html', context)
 
-
-def contact_view(request):
-    # Recuperar mi usuario
-    try:
-        user = User.objects.get(id=5)
-    except ObjectDoesNotExist:
-        messages.error(request, 'El usuario no existe')
-        return redirect('blog:index')
-    # Contexto y render
-    context = {
-        'profile': user.userprofile,
-    }
-    return render(request, 'user/about_user.html', context)
 
 def archive_view(request, year, month):
 
@@ -299,7 +285,6 @@ def post_create_view(request):
     if not request.user.userprofile.author:
         messages.error(request, 'No está autorizado para crear posts')
         return redirect('blog:index')
-
     # Se ha hecho SUBMIT en el FORM?
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)

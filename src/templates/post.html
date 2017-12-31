@@ -18,7 +18,7 @@ Blog - Post
         <!-- Contenido del post -->
         <div class="col-xs-12 col-md-8 _mt-20 pull-left">
             <article class="_previewXL">
-                <!-- entry-header -->
+                <!-- entry header -->
                 <div class="row">
                     <div class="_previewXL-Title col-xs-12">
                         <h3>{{post.title}}</h3>
@@ -101,8 +101,8 @@ Blog - Post
                         </div>
                     </div>
                     <!-- comentarios -->
-                    <div class="row _mt-10">
-                        <div class="dejarcomentario col-xs-12 _mt-10">
+                    <div class="row _mt-10" id="form_comments">
+                        <div class="dejarcomentario col-xs-12 _mt-10 _pl-0 _pr-0">
                             {% include "includes/form_comments.html" with post=post %}
                             {% include "includes/comments.html" with post=post %}
                         </div>

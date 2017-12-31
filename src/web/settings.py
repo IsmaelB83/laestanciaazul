@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'discuss',
     'post',
     'like',
+    'history',
 ]
 
 MIDDLEWARE = [

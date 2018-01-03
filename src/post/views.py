@@ -52,7 +52,6 @@ def index_view(request):
 
 
 def archive_view(request, year, month):
-
     # Se generan todos los posts para el filtrado especificado
     if 1999 < int(year) < 2035:
         if 0 < int(month) < 13:
@@ -352,7 +351,6 @@ def post_edit_view(request, id):
     if not request.user.userprofile.author:
         messages.error(request, 'No está autorizado para editar posts')
         return redirect('blog:index')
-
     # Se obtiene el post a editar y si no existe se redirige al index
     try:
         post = get_object_or_404(Post, id=id)

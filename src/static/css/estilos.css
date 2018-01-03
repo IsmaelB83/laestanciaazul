@@ -1,11 +1,3 @@
-/*!
- * Bootstrap v3.3.0 (http://getbootstrap.com)
-     * Copyright 2011-2014 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
-
 /*>>==========================*
  *         genericas          *
  *============================*/
@@ -56,6 +48,10 @@
 
 @media (max-width:767px) { ._mt-xs-10 { margin-top: 10px !important; }}
 @media (max-width:767px) { ._mt-xs-20 { margin-top: 20px !important; }}
+@media (max-width:767px) { ._pl-xs-0  { padding-left: 0px !important; }}
+@media (max-width:767px) { ._pl-xs-5  { padding-left: 5px !important; }}
+@media (max-width:767px) { ._pr-xs-0  { padding-right: 0px !important; }}
+@media (max-width:767px) { ._pr-xs-5  { padding-right: 5px !important; }}
 
 @media (min-width:768px) { ._mt-sm-30 { margin-top: 30px !important; }}
 @media (min-width:768px) { ._pl-sm-20 { padding-left: 20px !important; }}
@@ -164,10 +160,15 @@ header ._logoHeader {
 header h1 {
 	font-size: 34px;
 	margin: 0px;
-	font-family: 'Permanent Marker', cursive;
+	font-family: 'Bungee', cursive;
 	margin-left:10px;
 	margin-top:3px;
 	float: left;
+}
+
+.logo {
+background-color: black;
+color: white;;
 }
 
 header h5 {
@@ -1198,4 +1199,51 @@ button._pagination {
   	right: 16.5px !important;
   	top: 32px !important;
   	border: 2px solid #f1c40f;
+}
+
+/* LOGIN PAGE
+===========================*/
+._login ._login_social a {
+	color: white;
+	opacity:0.9;
+}
+
+._login ._login_social a:hover {
+    color: white;
+	opacity:1;
+}
+
+._login ._loginOr {
+	position: relative;
+	font-size: 1.5em;
+	color: #aaa;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+._login ._loginOr hr {
+	background-color: #cdcdcd;
+	height: 1px;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
+
+._login ._loginOr span {
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: -0.6em;
+	margin-left: -1.5em;
+	background-color: white;
+	width: 3em;
+	text-align: center;
+}
+
+._login ._loginForm .input-group.i {
+	width: 2em;
+}
+._login ._loginForm .help-block {
+    color: red;
 }

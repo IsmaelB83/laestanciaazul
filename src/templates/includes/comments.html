@@ -8,7 +8,7 @@
     </span>
     {% for post_comment in post.postcomment_set.all %}
     <div class="media col-xs-12 _pl-0 _pr-0 _mt-5">
-        <div class="col-xs-1 _pl-0 _pr-0">
+        <div class="col-xs-2 col-sm-1 _pl-0 _pr-0">
             {% if post_comment.comment.user %}
             <a href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">
                 <img width="100%" class="img-responsive img-rounded"
@@ -24,7 +24,7 @@
             <img src='{% static "img/dummy-user.png" %}' width="100%" class="img-responsive img-rounded" alt="">
             {% endif %}
         </div>
-        <div class="media-body col-xs-11 _pr-0">
+        <div class="media-body col-xs-9 col-sm-10 _pr-0">
             <p class="nombre">
                 {% if post_comment.comment.user %}
                 <a  class="_enlace_negro_n" href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">

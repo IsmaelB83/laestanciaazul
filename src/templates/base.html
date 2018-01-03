@@ -16,7 +16,7 @@
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet">
     <!-- Blog title-->
     <title>{% block head %} {% endblock %}</title>
     <!-- Javascript files-->
@@ -37,8 +37,10 @@
         <!-- Barra superior con brand y usuario -->
         <div class="row">
             <div class="hidden-xs col-xs-12 pull-left">
-                <img class="_logoHeader" src='{% static "img/django_header.png" %}'/>
-                <h1>My first Django Web</h1>
+                <a href="/">
+                    <img class="_logoHeader" src='{% static "img/django_header.png" %}'/>
+                    <h1 class="_ftColor3 _logoTexto">La Estancia Azul</h1>
+                </a>
             </div>
         </div>
         <!-- Barra de navegación inicial -->
@@ -70,7 +72,7 @@
                         </li>
                         <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2017 13%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
-                        {% if user.is_authenticated %}
+                        {% if user.is_authenticated and user.userprofile.author %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">Autor <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
@@ -142,7 +144,7 @@
                                         </div>
                                         <div class="col-xs-12 _pd-0">
                                             {% if user.is_authenticated %}
-                                            {% if user.is_superuser %}
+                                            {% if user.is_staff %}
                                             <a class="btn btn btn-warning btn-block btn-sm" href="{% url 'admin:index' %}">
                                                 <span class="glyphicon glyphicon glyphicon-cog"></span> Admin
                                             </a>

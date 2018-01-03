@@ -80,12 +80,8 @@
                            value="{{profile.location}}"
                         {%endif%}>
                 </div>
-                <div class="form-group">
-                    <label for="id_author">Author</label>
-                    <input type="checkbox" id="id_author" name="author" maxlength="1" style="display: inline;" disabled {%if profile.author%}checked{%endif%}>
-                </div>
                 <div class="form-group pull-right _mt-0">
-                    <button type="submit" class="btn _btnColor1 submit">Save</button>
+                    <button type="submit" class="btn _btnColor1 btn-lg submit">Save</button>
                 </div>
             </div>
         </form>
@@ -142,6 +138,22 @@
             {% else %}
             <a href="{% url 'social:begin' 'facebook' %}">Connect to Facebook</a>
             {% endif %}
+
+        <h3>Google+</h3>
+        {% if facebook_login %}
+        <p>Connected as <a href="https://facebook.com/{{facebook_login.extra_data.id}}/" target="_blank">{{facebook_login.extra_data.id}}</a></p>
+        {% if can_disconnect %}
+        <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
+            {% csrf_token %}
+            <button type="submit">Disconnect from Google+</button>
+        </form>
+        {% else %}
+        <button type="button" disabled>Disconnect from Google+</button>
+        <p style="color: red">You must <a href="{% url 'user:password' %}">define a password</a> for your account before disconnecting from Google+.</p>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'social:begin' 'facebook' %}">Connect to Google+</a>
+        {% endif %}
         </div>
     </div>
 </div>

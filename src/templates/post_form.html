@@ -75,7 +75,6 @@ Blog - {{ title }}
                                     $('#fecha').datetimepicker({
                                         showClear: true,
                                         showClose: true,
-
                                         format: 'YYYY-MM-DD hh:mm',
                                         locale: 'es'
                                     });
@@ -92,7 +91,7 @@ Blog - {{ title }}
                                 <input type="file" id="id_image_file" name="image_file" accept=".jpg,.jpeg,.png" class="btn _btnColor1">
                             </div>
                             <script>
-                            {% if post %}
+                            {% if post.image %}
                                 var imagen_ppal = "{{post.image.image.url}}";
                             {% endif %}
                             $(document).on('ready', function(){
@@ -104,7 +103,7 @@ Blog - {{ title }}
                                     ],
                                     initialPreviewAsData: true,
                                     initialPreviewConfig: [
-                                         {%if post%}
+                                         {%if post.image%}
                                          {% verbatim %}{{% endverbatim %}
                                          caption: "{{post.image.caption}}",
                                          downloadUrl: "{{post.image.image.url}}",
@@ -131,7 +130,7 @@ Blog - {{ title }}
                             <input type="file" id="id_postimage" name="postimage" accept=".jpg,.jpeg,.png" class="btn _btnColor1" multiple>
                         </div>
                         <script>
-                            {% if post %}
+                            {% if post.postimage_set.all %}
                                 var
                                 {% for aux in post.postimage_set.all %}
                                     img{{aux.id}} = "{{aux.image.image.url}}"{%if forloop.last%};{%else%},{%endif%}
@@ -146,6 +145,7 @@ Blog - {{ title }}
                                     ],
                                     initialPreviewAsData: true,
                                     initialPreviewConfig: [
+                                        {% if post.postimage_set.all %}
                                         {% for aux in post.postimage_set.all %}
                                             {% verbatim %}{{% endverbatim %}
                                              caption: "{{aux.image.caption}}",
@@ -156,6 +156,7 @@ Blog - {{ title }}
                                              key: {{ forloop.counter }}
                                              {% verbatim %}}{% endverbatim %},
                                         {% endfor %}
+                                        {% endif %}
                                     ],
                                     overwriteInitial: true,
                                     maxFileSize: 1024,

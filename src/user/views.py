@@ -1,3 +1,4 @@
+# coding=utf-8
 # Python imports
 # Django imports
 from django.contrib import messages
@@ -35,14 +36,21 @@ def user_register_view(request):
         twitter_login = profile.user.social_auth.get(provider='twitter')
     except UserSocialAuth.DoesNotExist:
         twitter_login = None
-    # Sólo puede desconectar red social si ha introducido password
-    can_disconnect = (profile.user.social_auth.count() > 1 or profile.user  .has_usable_password())
+    try:
+        facebook_login = profile.user.social_auth.get(provider='facebook')
+    except UserSocialAuth.DoesNotExist:
+        facebook_login = None
+    try:
+        google_login = profile.user.social_auth.get(provider='google')
+    except UserSocialAuth.DoesNotExist:
+        google_login = None
+    # Sólo puede desconectar red social si ha introducido password o si tengo varios conec
+    can_disconnect = (profile.user.social_auth.count() > 1 or profile.user.has_usable_password())
     # Evento POST
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            image = profile.image
-            author = profile.author
+            old_image = profile.image
             profile = form.save(commit=False)
             profile.user = request.user
             profile.user.first_name = form.cleaned_data['first_name']
@@ -50,15 +58,17 @@ def user_register_view(request):
             profile.user.email = form.cleaned_data['email']
             profile.user.save()
             if not profile.image:
-                profile.image = image
-            profile.author = author
+                profile.image = old_image
             profile.save()
             messages.success(request, 'Tus datos de usuario han sido actualizados')
             return redirect('blog:index')
-        else:
-            messages.error(request, 'Corrige los errores indicados')
     else:
-        form = ProfileForm(instance=profile)
+        form = ProfileForm(instance=profile, initial={
+            'user_id': profile.user.username,
+            'first_name': profile.user.first_name,
+            'last_name': profile.user.last_name,
+            'email': profile.user.email,
+        })
 
     # Generamos el contexto
     context = {
@@ -66,6 +76,8 @@ def user_register_view(request):
         'profile': profile,
         'github_login': github_login,
         'twitter_login': twitter_login,
+        'facebook_login': facebook_login,
+        'google_login': google_login,
         'can_disconnect': can_disconnect
     }
 

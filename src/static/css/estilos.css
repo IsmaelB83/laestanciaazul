@@ -126,6 +126,35 @@
 .form-control { border-radius: 0px; }
 .input-group-addon { border-radius: 0px; }
 
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+  margin-top: .25rem;
+  font-size: 1rem;
+  color: #dc3545;
+}
+
+.invalid-tooltip {
+  position: absolute;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  width: 250px;
+  padding: .5rem;
+  margin-top: .1rem;
+  font-size: .875rem;
+  line-height: 1;
+  color: #fff;
+  background-color: rgba($form-feedback-invalid-color,.8);
+  border-radius: .2rem;
+}
+
 /*>>==========================*
  *            body            *
  *============================*/
@@ -143,12 +172,7 @@ main .container:first-child {
 
 /* BARRA SUPERIOR */
 header {
-	padding-top: 10px;
 	border-bottom: 1px solid #F39C12;
-}
-
-header .row:first-child {
-	padding-bottom: 10px;
 }
 
 header ._logoHeader {
@@ -157,18 +181,26 @@ header ._logoHeader {
 	width: 45px;
 }
 
-header h1 {
-	font-size: 34px;
+header ._logoTexto {
+	font-size: 40px;
 	margin: 0px;
 	font-family: 'Bungee', cursive;
-	margin-left:10px;
-	margin-top:3px;
+	padding-left:10px;
+	padding-right:10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 	float: left;
 }
 
-.logo {
-background-color: black;
-color: white;;
+header ._logoTexto:hover {
+    background-color: #16A085;
+    color: #ECF0F1;
+}
+
+header ._logoTextoXS {
+	font-size: 20px;
+	font-family: 'Bungee', cursive;
+	float: left;
 }
 
 header h5 {
@@ -369,8 +401,12 @@ footer .footer-powered {
 	height: 60px;
 }
 
-footer .footer-powered img {
+footer .footer-powered a {
 	width: 15%;
+}
+
+footer .footer-powered img {
+	width: 100%;
 	height: auto;
 }
 

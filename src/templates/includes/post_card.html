@@ -51,6 +51,7 @@
                 <i class="fa fa-heart"></i>{%if post%} {{post.postlike_set.all.count}}{%else%} 0{%endif%}
             </a>
         </span>
+        {% comment %}
         <div class="_preview-user _bgColor1">
             <img class="img-responsive"
                  {% if post.author.image %}
@@ -80,5 +81,6 @@
                 <a href="#"><i class="fa fa-github" data-toggle="tooltip" data-placement="bottom" title="Github"></i></a>
             </div>
         </div>
+        {% endcomment %}
     </div>
 </div>

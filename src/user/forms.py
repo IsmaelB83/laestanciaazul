@@ -12,12 +12,48 @@ class LoginForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=50)
-    last_name = forms.CharField(max_length=50, required=False)
-    user_id = forms.CharField(max_length=50)
-    email = forms.EmailField(max_length=50)
-
+    user_id = forms.CharField(
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': 'your username...', 'maxlength': '30'}),
+        max_length=150
+    )
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': "your name..."}),
+        max_length=30)
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': "your lastname..."}),
+        max_length=30,
+        required=False
+    )
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={'placeholder': "your e-mail..."}),
+        max_length=50,
+    )
+    country = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': "your country..."}),
+        max_length=20,
+        required=False
+    )
+    location = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': "your city..."}),
+        max_length=30,
+        required=False
+    )
+    description = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': "short description about you..."}),
+        max_length=100,
+        required=False
+    )
+    image = forms.ImageField(
+        required=False
+    )
+    
     class Meta:
         model = UserProfile
         fields = ('user_id', 'first_name', 'last_name', 'email', 'country', 'location',
-                  'description', 'introduction', 'image', 'image_url', 'author')
+                  'description', 'image')
+    
+    def clean(self):
+        cleaned_data = super(ProfileForm, self).clean()
+        description = cleaned_data.get('description')
+        if not description:
+            raise forms.ValidationError('You have to write something!')

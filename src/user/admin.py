@@ -8,9 +8,9 @@ from .models import UserProfile, UserFollow
 
 # Register your models here.
 class ProfileModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "country", "location", "introduction", "image"]
+    list_display = ["user", "country", "location", "description", "image"]
     list_display_links = ["user"]
-    list_editable = ["country", "location", "introduction"]
+    list_editable = ["country", "location", "description"]
     list_filter = ["user"]
     search_fields = ["user"]
     

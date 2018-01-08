@@ -1,10 +1,12 @@
 # Python imports
 # Django imports
+from django.core.files import File
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django import forms
 # Third party app imports
 # Local app imports
 
@@ -17,15 +19,13 @@ def upload_location_author(instance, filename):
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    country = models.CharField(max_length=20, blank=False, null=False)
-    location = models.CharField(max_length=30, blank=False, null=False)
-    description = models.CharField(max_length=100, blank=False, null=False)
-    introduction = models.TextField(blank=False, null=False)
+    country = models.CharField(max_length=20, blank=True, null=False)
+    location = models.CharField(max_length=30, blank=True, null=False)
+    description = models.CharField(max_length=100, blank=True, null=False)
     image = models.ImageField(
         upload_to=upload_location_author,
-        null=True,
-        blank=True)
-    image_url = models.URLField(null=True, blank=True)
+        null=False,
+        blank=False)
     author = models.BooleanField(null=False, blank=False, default=False)
 
     @receiver(post_save, sender=User)
@@ -35,11 +35,16 @@ class UserProfile(models.Model):
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        if instance.social_auth:
-            instance.userprofile.image_url = \
-                "https://twitter.com/" +\
-                instance.social_auth.instance.username +\
-                "/profile_image?size=original"
+        if instance.social_auth and not instance.userprofile.image:
+            # r = requests.get(staticfiles_storage.url('img/user_social.gif'))
+            # with open('/tmp/user_social.gif', 'wb') as f:
+            #     f.write(r.content)
+            # reopen = open('/tmp/user_social.gif', 'rb')
+            # django_file = File(reopen)
+            # instance.userprofile.image.save('user_social.gif', django_file, save=True)
+            reopen = open('static/img/user_social.gif', 'rb')
+            django_file = File(reopen)
+            instance.userprofile.image.save('user_social.gif', django_file, save=True)
         instance.userprofile.save()
 
     def __unicode__(self):

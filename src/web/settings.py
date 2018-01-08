@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'post',
     'like',
     'history',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
@@ -160,11 +160,6 @@ DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
-
-SOCIAL_AUTH_GITHUB_KEY = 'e783c1fbf581a979e01c'
-SOCIAL_AUTH_GITHUB_SECRET = 'e56ed15138b4ff99648e8d9ec120d6c15e859a5c'
-SOCIAL_AUTH_TWITTER_KEY = 'qaimVTiE9XJZ15GKhfYd2w8br'
-SOCIAL_AUTH_TWITTER_SECRET = 'F3YSB2DwW3E3h4yiPWebecBYdKVb4GRbCzQXQZkZzwkxA1akE6'
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'

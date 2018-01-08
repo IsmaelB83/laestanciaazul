@@ -1,0 +1,43 @@
+{% load widget_tweaks %}
+
+<!-- Campos no visibles del form -->
+{% for hidden_field in form.hidden_fields %}
+{{ hidden_field }}
+{% endfor %}
+<!-- Errores globales del form. No específicos de un campo concreto -->
+{% if form.non_field_errors %}
+<div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+    {{ error }}
+    {% endfor %}
+</div>
+{% endif %}
+<!-- Para todos los campos visibles -->
+{% for field in form.visible_fields %}
+<div class="form-group">
+    <!-- Se renderiza el label -->
+    {{ field.label_tag }}
+    <!-- Si NO se ha ejecutado submit todavía se renderizan los controles normalmente -->
+    {% if not form.is_bound %}
+    {% render_field field class="form-control" %}
+    <!-- Si SE ha ejecutado submit pero seguimos aquí es que ha habido algún error. Entonces se le da
+         formato mediante clases de validación. Estas clases son estándar en Bootstrap 4, pero en el 3.3
+         las he tenido que definir manualmente en la hoja de estilos -->
+    {% else %}
+    {% if field.errors %}
+    {% render_field field class="form-control is-invalid" %}
+    {% for error in field.errors %}
+    <div class="invalid-feedback">
+        {{ error }}
+    </div>
+    {% endfor %}
+    {% else %}
+    {% render_field field class="form-control is-valid" %}
+    {% endif %}
+    {% endif %}
+    <!-- Campos de ayuda -->
+    {% if field.help_text %}
+    <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+</div>
+{% endfor %}

@@ -1,4 +1,5 @@
-# Python imports
+# coding=utf-8
+#  Python imports
 # Django imports
 from django.apps import apps
 from django.db.models import Count, Sum
@@ -174,6 +175,10 @@ def category_view(request, id):
             posts_all = Post.objects.all().order_by('-published_date')
     except ObjectDoesNotExist:
         messages.error(request, 'La categoría no existe')
+        return redirect('blog:index')
+    # Si la categoria está vacia se redirige al index
+    if posts_all.count() == 0:
+        messages.warning(request, 'La categoría ' + category.name + '  no tiene posts')
         return redirect('blog:index')
     # Se crea un paginador de 5 posts por pagina
     paginator = Paginator(posts_all, 3)

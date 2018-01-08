@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load widget_tweaks %}
 
 {% block main_content %}
 <div class="container _bgColor0">
@@ -10,84 +11,67 @@
         <div class="col-sm-10 _pl-sm-30">
             <h2 class="_titleSection">USER PROFILE</h2>
         </div>
+    </div>
+    <div class="row">
         <form method="post" action="" id="user_form" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             <!-- Imagen usuaio-->
             <div class="col-xs-12 col-sm-2">
                 <div class="form-group">
                     <img id="id_avatar" class="img-responsive img-block img-rounded" alt=""
-                        {%if profile.image%}
-                        src='{{profile.image.url}}'
-                        {%else%}
-                        src='{{profile.image_url}}'
-                        {%endif%}
-                        style="margin: 0 auto; height: 132px;">
+                         {%if profile.image%}
+                         src='{{profile.image.url}}'
+                         {%else%}
+                         src='{% static "img/dummy-user.png" %}'
+                         {%endif%}
+                         style="margin: 0 auto; height: 132px;">
                     <br>
-                    <input id="id_image" name="image" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png"
-                           onchange="readURL(this);">
+                    <input id="id_image" name="image" type="file" class="hidden" accept=".gif,.jpg,.jpeg,.png" onchange="readURL(this);">
                     <button id="id_image_btn" class="btn btn-sm btn-block _btnColor1" type="button" data-title="Edit">
                         <i class="fa fa-edit"></i><span> Image profile</span>
                     </button>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-10 _pl-sm-30">
+                <!-- Errores globales del form. No específicos de un campo concreto -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <!-- Renderizado del formulario -->
                 <div class="form-group">
-                    <input class="form-control" type="text" name="user_id" id="id_user_id" placeholder="username..." required readonly maxlength="30"
-                        {%if profile%}
-                           value="{{profile.user}}"
-                        {%endif%}>
+                    {% include "utils/form_field_render.html" with field=form.user_id bound=form.is_bound %}
                 </div>
                 <div class="form-group form-inline">
-                        <input class="form-control" type="text" name="first_name" id="id_first_name" placeholder="your name..." required maxlength="30"
-                        {%if profile%}
-                           value="{{profile.user.first_name}}"
-                        {%endif%}>
-                        <input class="form-control" type="text" name="last_name" id="id_last_name" placeholder="your lastname..." required maxlength="30"
-                        {%if profile%}
-                           value="{{profile.user.last_name}}"
-                        {%endif%}>
+                    {% include "utils/form_field_render.html" with field=form.first_name bound=form.is_bound %}
+                    {% include "utils/form_field_render.html" with field=form.last_name bound=form.is_bound %}
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="email" id="id_email" placeholder="email address..." required maxlength="40"
-                        {%if profile%}
-                           value="{{profile.user.email}}"
-                        {%endif%}>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="description" id="id_description" placeholder="small description about you..." maxlength="100"
-                        {%if profile%}
-                           value="{{profile.description}}"
-                        {%endif%}>
-                </div>
-                <div class="form-group">
-                    <textarea name="introduction" id="id_introduction" class="form-control" style="height:150px; resize:none;"
-                              placeholder="Messages..." </textarea>{{profile.introduction|safe}}
-                    </textarea>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="image_url" id="id_image_url" placeholder="your image in a social network..." maxlength="150"
-                        {%if profile%}
-                           value="{{profile.image_url}}"
-                        {%endif%}>
+                    {% include "utils/form_field_render.html" with field=form.email bound=form.is_bound %}
                 </div>
                 <div class="form-group form-inline">
-                    <input class="form-control" type="text" name="country" id="id_country" placeholder="your country here..." required maxlength="40"
-                        {%if profile%}
-                           value="{{profile.country}}"
-                        {%endif%}>
-                    <input class="form-control" type="text" name="location" id="id_location" placeholder="your city here..." required maxlength="40"
-                        {%if profile%}
-                           value="{{profile.location}}"
-                        {%endif%}>
+                    {% include "utils/form_field_render.html" with field=form.country bound=form.is_bound %}
+                    {% include "utils/form_field_render.html" with field=form.location bound=form.is_bound %}
+                </div>
+                <div class="form-group">
+                    {% include "utils/form_field_render.html" with field=form.description bound=form.is_bound %}
+                </div>
+                <div class="form-group">
+                    {% render_field form.introduction placeholder="introduction about yourself..." class="form-control" style="height:150px; resize:none;" %}
                 </div>
                 <div class="form-group pull-right _mt-0">
                     <button type="submit" class="btn _btnColor1 btn-lg submit">Save</button>
                 </div>
             </div>
         </form>
+    </div>
+    <div class="row">
         <div class="col-xs-12 col-sm-2">
         </div>
-        <div class="col-xs-12 col-sm-10 _pl-sm-30"">
+        <div class="col-xs-12 col-sm-10 _pl-sm-30">
             <h2 class="_titleSection">OAUTH OPTIONS</h2>
             <h3>GitHub</h3>
             {% if github_login %}
@@ -139,21 +123,21 @@
             <a href="{% url 'social:begin' 'facebook' %}">Connect to Facebook</a>
             {% endif %}
 
-        <h3>Google+</h3>
-        {% if facebook_login %}
-        <p>Connected as <a href="https://facebook.com/{{facebook_login.extra_data.id}}/" target="_blank">{{facebook_login.extra_data.id}}</a></p>
-        {% if can_disconnect %}
-        <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
-            {% csrf_token %}
-            <button type="submit">Disconnect from Google+</button>
-        </form>
-        {% else %}
-        <button type="button" disabled>Disconnect from Google+</button>
-        <p style="color: red">You must <a href="{% url 'user:password' %}">define a password</a> for your account before disconnecting from Google+.</p>
-        {% endif %}
-        {% else %}
-        <a href="{% url 'social:begin' 'facebook' %}">Connect to Google+</a>
-        {% endif %}
+            <h3>Google+</h3>
+            {% if facebook_login %}
+            <p>Connected as <a href="https://facebook.com/{{facebook_login.extra_data.id}}/" target="_blank">{{facebook_login.extra_data.id}}</a></p>
+            {% if can_disconnect %}
+            <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
+                {% csrf_token %}
+                <button type="submit">Disconnect from Google+</button>
+            </form>
+            {% else %}
+            <button type="button" disabled>Disconnect from Google+</button>
+            <p style="color: red">You must <a href="{% url 'user:password' %}">define a password</a> for your account before disconnecting from Google+.</p>
+            {% endif %}
+            {% else %}
+            <a href="{% url 'social:begin' 'facebook' %}">Connect to Google+</a>
+            {% endif %}
         </div>
     </div>
 </div>

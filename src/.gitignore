@@ -64,3 +64,7 @@ target/
 #media
 static_cdn
 media_cdn
+
+# Specific files #
+##################
+web/settings.py

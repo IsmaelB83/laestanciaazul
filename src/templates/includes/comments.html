@@ -14,8 +14,6 @@
                 <img width="100%" class="img-responsive img-rounded"
                      {%if post_comment.comment.user.userprofile.image%}
                      src='{{ post_comment.comment.user.userprofile.image.url }}'
-                     {%elif post_comment.comment.user.userprofile.image_url%}
-                     src='{{ post_comment.comment.user.userprofile.image_url }}'
                      {%else%}
                      src='{% static "img/dummy-user.png" %}'
                      {%endif%} style="min-height: 52px;">

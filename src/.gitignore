@@ -69,3 +69,4 @@ media_cdn
 ##################
 web/settings.py
 web/settings.py
+src/web/settings.py

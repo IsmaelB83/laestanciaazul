@@ -15,12 +15,14 @@ active
 <!-- Container de bootstrap (centrar contenido en pantalla -->
 <div class="container _bgColor0">
     <!-- Row Carousel (sólo visible en "sm" en adelante-->
+    {% comment %}
     <section class="row">
         <!-- Una columna completa -->
         <div class="hidden-xs col-sm-12">
             {% include "includes/carousel.html" %}
         </div>
     </section>
+    {% endcomment %}
     <!-- Row principal por debajo del carousel -->
     <section class="row">
         <!-- Posts en portada  (main)-->
@@ -41,7 +43,7 @@ active
                 </aside>
             </div>
             <div class="col-xs-12 _mt-30">
-                <h2 class="_titleSection">RECENT POSTS</h2>
+                <h2 class="_titleSection">ÚLTIMOS POSTS</h2>
             </div>
             {% for post in posts %}
             <div class="col-xs-12 _mt-10">

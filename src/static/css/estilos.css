@@ -962,7 +962,6 @@ button._pagination {
 
 /* USER PROFILE
 ===========================*/
-
 #contact_side ._social_contact {
 	background-color: #243C4F;
 	margin-bottom: 35px;
@@ -1038,11 +1037,11 @@ button._pagination {
 	margin: 0 auto;
 }
 
-#sidebar .link-me{
+#contact_side ._link-me{
 	margin-top: 30px;
 }
 
-#contact_side .link-me i.fa{
+#contact_side ._link-me i.fa{
 	background-color: #16A085;
 	color: #ecf0f1;
 	width: 45px;
@@ -1056,7 +1055,7 @@ button._pagination {
 	     -o-border-radius: 10px;
 }
 
-#contact_side .link-me i.fa:hover{
+#contact_side ._link-me i.fa:hover{
 	background-color: #243C4F;
 	transition: all 1s ease;
 	-webkit-transition: all 1s ease;
@@ -1065,7 +1064,7 @@ button._pagination {
 	     -o-transition: all 1s ease;
 }
 
-#contact_side .link-me .hr-center{
+#contact_side ._link-me .hr-center{
 	height: 3px;
 	background-color: #34495e;
 	margin: 0 auto;

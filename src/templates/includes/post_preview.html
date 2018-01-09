@@ -4,13 +4,13 @@
 <div class="_previewXL">
     <div class="_previewXL-Title">
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title|title }}</a></h3>
-        <span>By
+        <span>Por
             <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
                 {{ post.author.user.first_name }}
             </a>
-            <small> {{ post.published_date|date:"M d, Y" }}</small>
+            <small> publicado el {{ post.published_date|date:"M d, Y" }}</small>
             <a href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left"
-               title="Comments"><i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comments
+               title="Comentarios"><i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios
             </a>
             <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip"
                data-placement="right" title="Loved"><i class="fa fa-heart"></i> {{post.postlike_set.all.count}} likes

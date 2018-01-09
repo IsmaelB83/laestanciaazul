@@ -35,7 +35,7 @@
              {% endif %}>
         <span>
             <a class="_ftColor0" href="{{post.author.get_absolute_url}}" data-toggle="tooltip" data-placement="left"
-               title="Author">
+               title="Autor">
                 {%if post%}
                 {{ post.author.user.first_name|truncatechars:12 }}
                 {%else%}
@@ -44,10 +44,10 @@
             </a>
         </span>
         <span class="pull-right">
-            <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="left" title="Comments">
+            <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="left" title="Comentarios">
                 <i class="fa fa-comments"></i>{%if post%} {{post.postcomment_set.all.count}}{%else%} 0{%endif%}
             </a>
-            <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="right" title="Loved">
+            <a class="_ftColor0" href='{{ post.get_absolute_url }}#form_comments' data-toggle="tooltip" data-placement="right" title="Likes">
                 <i class="fa fa-heart"></i>{%if post%} {{post.postlike_set.all.count}}{%else%} 0{%endif%}
             </a>
         </span>

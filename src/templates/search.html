@@ -13,7 +13,7 @@ Blog - Search
     <div class="row">
         <!-- Listado de POSTs de la selección izquierda -->
         <div class="col-xs-12 col-md-8 _mt-20 pull-left">
-            <h2 class="_titleSection">SEARCH</h2>
+            <h2 class="_titleSection">BÚSQUEDA</h2>
             <h4>{{posts|length}} resultados contienen <strong><i>'{{filter}}'</i></strong> en su titulo</h4>
             {% for post in posts %}
             {% include "includes/post_preview_sm.html" with post=post post_categories=post_categories%}

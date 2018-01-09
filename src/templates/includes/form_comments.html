@@ -9,7 +9,7 @@
         </div>
         <div class="form-group col-xs-12 _pl-0 _pr-0 _mt-5 _mb-0" style="text-align: right;">
             <button type='submit' class="btn btn-md _btnColor1">
-                <i class="fa fa-comment" aria-hidden="true"></i> Send Comment
+                <i class="fa fa-comment" aria-hidden="true"></i> Enviar comentario
             </button>
         </div>
         {%endif%}
@@ -28,18 +28,18 @@
                     </a>
                 </li>
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-social-icon btn-lg btn-facebook">
+                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-lg btn-github">
+                        <span class="fa fa-github"></span>
+                    </a>
+                </li>
+                <li class="list-inline-item _pl-0 _pr-0">
+                    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-social-icon btn-lg btn-facebook" disabled>
                         <span class="fa fa-facebook"></span>
                     </a>
                 </li>
                 <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'google' %}" class="btn btn-social-icon btn-lg btn-google">
+                    <a href="{% url 'social:begin' 'google' %}" class="btn btn-social-icon btn-lg btn-google" disabled>
                         <span class="fa fa-google"></span>
-                    </a>
-                </li>
-                <li class="list-inline-item _pl-0 _pr-0">
-                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-social-icon btn-lg btn-github">
-                        <span class="fa fa-github"></span>
                     </a>
                 </li>
             </ul>

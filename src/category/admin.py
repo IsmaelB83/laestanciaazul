@@ -1,4 +1,5 @@
-# Python imports
+# coding=utf-8
+#  Python imports
 # Django imports
 from django.contrib import admin
 # Third party app imports

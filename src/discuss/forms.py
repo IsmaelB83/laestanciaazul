@@ -1,3 +1,4 @@
+# coding=utf-8
 # Python imports
 # Django imports
 from django import forms

@@ -20,13 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_f^zdo16yjd8%%&ft@pizr7=4d2o(a!&o*=vzrur8gs(#v!ikk'
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['laestanciaazul.com']
-
 
 # Application definition
 
@@ -162,6 +162,19 @@ LOGIN_REDIRECT_URL = '/'
 # https://console.developers.google.com
 # https://github.com/settings/developers
 # https://apps.twitter.com
+with open('/etc/oauth_key.txt') as f:
+    f.readline()
+    SOCIAL_AUTH_GITHUB_KEY = f.readline().strip()
+    SOCIAL_AUTH_GITHUB_SECRET = f.readline().strip()
+    f.readline()
+    SOCIAL_AUTH_TWITTER_KEY = f.readline().strip()
+    SOCIAL_AUTH_TWITTER_SECRET = f.readline().strip()
+    f.readline()
+    SOCIAL_AUTH_FACEBOOK_KEY = f.readline().strip()
+    SOCIAL_AUTH_FACEBOOK_SECRET = f.readline().strip()
+    f.readline()
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = f.readline().strip()
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = f.readline().strip()
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'

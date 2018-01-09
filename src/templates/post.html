@@ -24,15 +24,14 @@ Blog - Post
                         <h3>{{post.title}}</h3>
                         <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}">
                             <span>{{post.author}}</span>
-                        </a> on {{post.timestamp}}
+                        </a> publicado el {{post.timestamp}}
                         <a href="#form_comments" class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Comments">
-                            <i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comments</a>
+                            <i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios</a>
                         <a id="id_like" href="#" class="_enlace_naranja" data-toggle="tooltip" data-placement="right" title="Loved">
                             <i class="fa fa-heart" style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}"></i>
-                            {{post.postlike_set.all.count}} likes
-                            <!--<input id="id_likes" value="{{ post.postlike_set.all.count }} likes"-->
-                                <!--style=" border:none; background-color: transparent;-->
-                                <!--{%if already_like == True%} color: #15B23A; font-weight: bold;{%endif%}" readonly>-->
+                            <span style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}">
+                                {{post.postlike_set.all.count}} likes
+                            </span>
                         </a>
                         <script>
                          $("#id_like").click(function(e) {
@@ -82,12 +81,14 @@ Blog - Post
                     <div class="row _mt-20">
                         <!-- edición -->
                         <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
-                            <p><small>Last edited {{ post.updated|timesince }} ago </small></p>
+                            <p>
+                                <small>Última edición hace {{ post.updated|timesince }}</small>
+                            </p>
                         </div>
                         <!-- autor -->
                         <div class="col-xs-12">
                             <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
-                            <span><small> posted on {{ post.timestamp }}</small></span>
+                            <span><small> publicado el {{ post.timestamp }}</small></span>
                         </div>                        <!-- autor -->
                         <!-- categorias del post -->
                         <div class="_div-categories col-xs-12">

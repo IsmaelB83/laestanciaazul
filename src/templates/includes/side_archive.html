@@ -22,7 +22,7 @@
                     {%else%}
                     <h6>
                     {%endif%}
-                    {% if forloop.counter == 1 %}Todo {%else%}{{forloop.counter|month_inverse}}{%endif%}
+                        {% if forloop.counter == 1 %}todo {%else%}{{forloop.counter|month_inverse}}{%endif%}
                     <span class="badge badge-default badge-pill _ft-10 pull-right">{{ item2 }}</span>
                     </h6>
                     {% if forloop.counter == 1 %}<hr class="_mt-0 _mb-0">{%endif%}

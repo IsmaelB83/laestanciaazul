@@ -3,7 +3,7 @@
 {% if post.postcomment_set.all.count > 0 %}
 <div id="comments" class="col-xs-12 _mt-10 _previewXL-comments">
     <span class="_enlace_naranja">
-        <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comments
+        <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comentarios
         <i class="fa fa-heart _ml-10"></i> {{ post.postlike_set.all.count }} likes
     </span>
     {% for post_comment in post.postcomment_set.all %}
@@ -29,7 +29,7 @@
                     {{ post_comment.comment.user.first_name }}
                 </a>
                 {% endif %}
-                <span><small>comment {{ post_comment.comment.timestamp|timesince }} ago</span></small>
+                <span><small>hace {{ post_comment.comment.timestamp|timesince }}</span></small>
             </p>
             <p class="comentario">
                 {{ post_comment.comment.content }}

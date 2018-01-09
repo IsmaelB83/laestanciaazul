@@ -12,11 +12,11 @@
             {% endif %}
         </a>
         <p>
-            <span>By
+            <span>Por
                 <strong><a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
                     {{ post.author.user.first_name }}</a>
                 </strong>
-                <small> {{ post.published_date|timesince }} ago</small>
+                <small> hace {{ post.published_date|timesince }} </small>
             </span>
         </p>
         <a href='{{ post.get_absolute_url }}' class='_enlace_naranja'><p>{{ post.title|title }}...</a>

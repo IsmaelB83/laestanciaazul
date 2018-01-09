@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-<h2 class="_titleSection">LAST COMMENTS</h2>
+<h2 class="_titleSection">COMENTARIOS RECIENTES</h2>
 <div class="_lastCommentsXS">
     {% for post_comment in comments_recent %}
     <div class="_commentXS">
@@ -8,7 +8,7 @@
             <a class="_enlace_negro_n" href="{{ post_comment.comment.user.userprofile.get_absolute_url }}">
                 <span>{{ post_comment.comment.user.first_name }}</span>
             </a>
-            <small> {{ post_comment.comment.timestamp|timesince }} ago</small>
+            <small> hace {{ post_comment.comment.timestamp|timesince }}</small>
         </p>
         <h5>
             <a href="{{ post_comment.post.get_absolute_url }}">

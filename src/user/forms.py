@@ -1,3 +1,4 @@
+# coding=utf-8
 # Python imports
 # Django imports
 from django import forms
@@ -56,4 +57,4 @@ class ProfileForm(forms.ModelForm):
         cleaned_data = super(ProfileForm, self).clean()
         description = cleaned_data.get('description')
         if not description:
-            raise forms.ValidationError('You have to write something!')
+            raise forms.ValidationError('You have a description!')

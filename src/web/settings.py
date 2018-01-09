@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 Django settings for web project.
 
@@ -9,7 +10,6 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,7 +25,7 @@ SECRET_KEY = '_f^zdo16yjd8%%&ft@pizr7=4d2o(a!&o*=vzrur8gs(#v!ikk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['laestanciaazul.com']
 
 
 # Application definition
@@ -83,6 +83,9 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
@@ -154,6 +157,11 @@ DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
+
+# https://developers.facebok.com/apps
+# https://console.developers.google.com
+# https://github.com/settings/developers
+# https://apps.twitter.com
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'

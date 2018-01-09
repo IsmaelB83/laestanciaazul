@@ -1,3 +1,4 @@
+# coding=utf-8
 # Python imports
 from datetime import datetime
 # Django imports

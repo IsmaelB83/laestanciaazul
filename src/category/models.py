@@ -1,4 +1,5 @@
-# Python imports
+# coding=utf-8
+#  Python imports
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse

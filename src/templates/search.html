@@ -18,7 +18,9 @@ Blog - Search
             {% for post in posts %}
             {% include "includes/post_preview_sm.html" with post=post post_categories=post_categories%}
             {% endfor %}
+            {% if posts %}
             {% include "includes/pagination.html" with paginator=posts request=page_request %}
+            {% endif %}
         </div>
         <!-- Barra de la derecha -->
         <div class="col-xs-12 col-md-4 _pr-0 pull-right">

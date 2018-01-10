@@ -416,3 +416,4 @@ def post_edit_view(request, id):
         'form': form,
     }
     return render(request, 'post_form.html', context)
+

@@ -60,55 +60,57 @@ Blog - Post
                 <!-- entry-footer -->
                 <div class="row _mt-10">
                     <div class="_previewXL-Footer col-xs-12">
-                    <!-- imagenes del post -->
-                    <div class="row">
-                        {% for post_image in post.postimage_set.all|slice:"0:6" %}
-                        <div class="col-xs-2 _mt-10 _pl-10 _pr-10">
-                            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
-                                <img src="{{post_image.image.image.url}}" width="100%" style="height: 100px;" class="img-rounded img-responsive">
-                            </a>
+                        <!-- imagenes del post -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {% for post_image in post.postimage_set.all|slice:"0:6" %}
+                                <div class="col-xs-2 _mt-10 _pl-0 _pr-10">
+                                    <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                                        <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                                {% for post_image in post.postimage_set.all|slice:"6:12" %}
+                                <div class="col-xs-2 _mt-10 _pl-0 _pr-10">
+                                    <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                                        <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        {% endfor %}
-                        {% for post_image in post.postimage_set.all|slice:"6:12" %}
-                        <div class="col-xs-2 _mt-10 _pl-10 _pr-10">
-                            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
-                                <img src="{{post_image.image.image.url}}" width="100%" style="height: 100px;" class="img-rounded img-responsive">
-                            </a>
+                        <!-- firma del post -->
+                        <div class="row _mt-20">
+                            <!-- edición -->
+                            <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
+                                <p>
+                                    <small>Última edición hace {{ post.updated|timesince }}</small>
+                                </p>
+                            </div>
+                            <!-- autor -->
+                            <div class="col-xs-12">
+                                <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
+                                <span><small> publicado el {{ post.timestamp }}</small></span>
+                            </div>                        <!-- autor -->
+                            <!-- categorias del post -->
+                            <div class="_div-categories col-xs-12">
+                                {% for post_category in post.postcategory_set.all %}
+                                <a class="_category" href="{{post_category.category.get_absolute_url}}">
+                                    <span class="label label-{{ post_category.category.css_class }}">
+                                        {{post_category.category.name}}
+                                    </span>
+                                </a>
+                                {% endfor %}
+                            </div>
                         </div>
-                        {% endfor %}
+                        <!-- comentarios -->
+                        <div class="row _mt-10" id="form_comments">
+                            <div class="dejarcomentario col-xs-12 _mt-10 _pl-0 _pr-0">
+                                {% include "includes/form_comments.html" with post=post %}
+                                {% include "includes/comments.html" with post=post %}
+                            </div>
+                        </div>
                     </div>
-                    <!-- firma del post -->
-                    <div class="row _mt-20">
-                        <!-- edición -->
-                        <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
-                            <p>
-                                <small>Última edición hace {{ post.updated|timesince }}</small>
-                            </p>
-                        </div>
-                        <!-- autor -->
-                        <div class="col-xs-12">
-                            <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
-                            <span><small> publicado el {{ post.timestamp }}</small></span>
-                        </div>                        <!-- autor -->
-                        <!-- categorias del post -->
-                        <div class="_div-categories col-xs-12">
-                            {% for post_category in post.postcategory_set.all %}
-                            <a class="_category" href="{{post_category.category.get_absolute_url}}">
-                                <span class="label label-{{ post_category.category.css_class }}">
-                                    {{post_category.category.name}}
-                                </span>
-                            </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <!-- comentarios -->
-                    <div class="row _mt-10" id="form_comments">
-                        <div class="dejarcomentario col-xs-12 _mt-10 _pl-0 _pr-0">
-                            {% include "includes/form_comments.html" with post=post %}
-                            {% include "includes/comments.html" with post=post %}
-                        </div>
-                    </div>
-                </div>
                 </div>
             </article>
         </div>

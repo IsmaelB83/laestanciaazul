@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
+{% load post_extras %}
 
 {% block head %}
 Blog - Archivo
@@ -18,10 +19,14 @@ active
         <!-- Listado de POSTs de la selección izquierda -->
         <div class="col-xs-12 col-md-8 _mt-20">
             <h2 class="_titleSection">ARCHIVO</h2>
+            <h4>{{posts|length}} posts publicados en {%if month != 13%}{{month|month_name}} de {%endif%}{{year}}</h4>
+            <hr>
             {% for post in posts %}
             {% include "includes/post_preview_sm.html" with post=post post_categories=post_categories%}
             {% endfor %}
+            {% if posts %}
             {% include "includes/pagination.html" with paginator=posts request=page_request %}
+            {% endif %}
         </div>
         <!-- Barra de la derecha -->
         <div class="col-xs-12 col-md-4 _mt-20">

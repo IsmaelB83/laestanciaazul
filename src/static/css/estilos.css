@@ -610,6 +610,13 @@ button._pagination {
     opacity:0.6; !important
 }
 
+._previewXL-Footer img {
+    width: 100%;
+    height: 100px;
+}
+
+@media (max-width:767px) { ._previewXL-Footer img { height: 60px; !important; }}
+
 /*<== PREVIEW DE UN POST XL*/
 
 /*==> PREVIEW DE UN POST XS */

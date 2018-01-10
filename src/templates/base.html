@@ -69,7 +69,7 @@
                                 {% endfor %}
                             </ul>
                         </li>
-                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2017 13%}">Archivo</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2018 13%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
                         {% if user.is_authenticated and user.userprofile.author %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">
@@ -214,15 +214,15 @@
                     <div class="col-xs-12 _pl-0 _pr-0">
                         <h2 class="footer-title">Sobre 'La Estancia Azul'</h2>
                         <p class="_textJustify">Jeffery Deaver acuña este término en su libro <a href="https://www.jefferydeaver.com/novel/the-blue-nowhere/">
-                            "The blue nowhere"</a>, describiendolo como el intangible mundo de la electricidad y la luz... el mundo de nunca jamas de los hackers.
-                            <br><br>En esta página publicaré artículos sobre tecnología, programación, mis propios hobbies, y en
-                            definitiva podeis tomarlo como una especie de diario personal sobre mis andanzas en la estancia azul.</p>
+                            "The blue nowhere"</a>, describiendolo como el intangible mundo de la electricidad y la luz... el neverland de los hackers.
+                            <br><br>En esta página publicaré artículos sobre tecnología, programación, mis propios hobbies, y en definitiva podeis tomarlo
+                            como una especie de diario personal sobre mis andanzas en la estancia azul.</p>
                     </div>
                     <div class="single col-xs-12 _pl-0 _pr-0 _mt-5">
                         <h6>Desarrollado por:
                             <p class="_ml-10 _mt-5">
                                 <i class="fa fa-envelope"></i>
-                                <a href="#" title="">Ismael</a> - info@laestanciaazul.com
+                                <a href="mailto:ismaelbernal83@gmail.com">Ismael</a> - ismaelbernal83@gmail.com
                             </p>
                         </h6>
                     </div>
@@ -287,7 +287,7 @@
                                 <li><a href="{% url 'blog:index' %}" title="">Principal</a></li>
                                 <li><a href="{% url 'user:profile' id=5 %}" title="">Contacto</a></li>
                                 <li><a href="{% url 'blog:category' id='all' %}" title="">Categorías</a></li>
-                                <li><a href="{% url 'blog:archive' 2017 13 %}" title="">Archivo</a></li>
+                                <li><a href="{% url 'blog:archive' 2018 13 %}" title="">Archivo</a></li>
                             </ul>
                         </div>
                     </div>

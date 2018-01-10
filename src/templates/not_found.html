@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+La Estancia Azul
+{% endblock %}
+
+{% block main_content %}
+<!-- Container de bootstrap (centrar contenido en pantalla -->
+<div class="container _bgColor0">
+    <div class="row">
+        <div class="col-xs-12 _mt-20" style="text-align: center;">
+            <img src='{% static "img/404.png" %}' alt="not_found">
+        </div>
+    </div>
+</div>
+{% endblock %}

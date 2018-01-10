@@ -5,6 +5,7 @@ Django==1.11
 django-ckeditor==5.4.0
 django-js-asset==0.1.1
 django-multiupload==0.5.2
+django-widget-tweaks==1.4.1
 django-wysiwyg==0.8.0
 idna==2.6
 oauthlib==2.0.6
@@ -18,4 +19,5 @@ requests-oauthlib==0.8.0
 six==1.11.0
 social-auth-app-django==2.1.0
 social-auth-core==1.6.0
+typing==3.6.2
 urllib3==1.22

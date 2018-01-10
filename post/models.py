@@ -19,14 +19,13 @@ class Post(models.Model):
     published_date = models.DateTimeField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    category = models.ManyToManyField('category.Category')
     image = models.ForeignKey('gallery.Image', null=True, on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return self.title
 
     def __str__(self):
-        return self.titlecd
+        return self.title
 
     def get_absolute_url(self):
         return reverse('blog:post', kwargs={'id': self.id})

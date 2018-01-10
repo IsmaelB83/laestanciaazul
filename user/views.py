@@ -56,9 +56,9 @@ def user_register_view(request):
             profile.user.first_name = form.cleaned_data['first_name']
             profile.user.last_name = form.cleaned_data['last_name']
             profile.user.email = form.cleaned_data['email']
-            profile.user.save()
             if not profile.image:
                 profile.image = old_image
+            profile.user.save()
             profile.save()
             messages.success(request, 'Tus datos de usuario han sido actualizados')
             return redirect('blog:index')

@@ -32,7 +32,7 @@
              src='{{ post.author.image_url }}'
              {% else %}
              src='{% static "img/dummy-user.png" %}'
-             {% endif %}>
+             {% endif %} onclick="javascript:location.href='{{post.author.get_absolute_url}}'">
         <span>
             <a class="_ftColor0" href="{{post.author.get_absolute_url}}" data-toggle="tooltip" data-placement="left"
                title="Autor">

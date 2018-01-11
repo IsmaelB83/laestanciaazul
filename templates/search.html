@@ -2,10 +2,6 @@
 
 {% load staticfiles %}
 
-{% block head %}
-Blog - Search
-{% endblock %}
-
 {% block main_content %}
 
 <!-- Bloque principal -->
@@ -23,7 +19,7 @@ Blog - Search
             {% endif %}
         </div>
         <!-- Barra de la derecha -->
-        <div class="col-xs-12 col-md-4 _pr-0 pull-right">
+        <div class="col-xs-12 col-md-4 _pl-0 _pr-0 pull-right">
             <!-- Popular posts-->
             <div class="col-xs-12 _mt-20">
                 {% include "includes/side_popular_posts.html" with posts_popular=posts_popular %}

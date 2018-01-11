@@ -42,7 +42,7 @@ class ProfileForm(forms.ModelForm):
     description = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': "short description about you..."}),
         max_length=100,
-        required=False
+        required=True
     )
     image = forms.ImageField(
         required=False
@@ -52,9 +52,9 @@ class ProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('user_id', 'first_name', 'last_name', 'email', 'country', 'location',
                   'description', 'image')
-    
-    def clean(self):
-        cleaned_data = super(ProfileForm, self).clean()
-        description = cleaned_data.get('description')
-        if not description:
-            raise forms.ValidationError('You have a description!')
+
+    # def clean(self):
+    #     cleaned_data = super(ProfileForm, self).clean()
+    #     description = cleaned_data.get('description')
+    #     if not description:
+    #         raise forms.ValidationError('You have a description!')

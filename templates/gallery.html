@@ -2,10 +2,6 @@
 
 {% load staticfiles %}
 
-{% block head %}
-Blog - Gallery
-{% endblock %}
-
 {% block activo_gallery %}
 active
 {% endblock %}
@@ -17,11 +13,11 @@ active
     <div class="row">
         <div class="col-xs-12 _mt-20">
             <h2 class="_titleSection _mb-0  ">GALLERY</h2>
-            <div class="row">
+            <div class="row _pb-20">
                 {% for post_image in post_images %}
-                <div class="col-xs-12 col-sm-3 _mt-20 _pl-10 _pr-10">
+                <div class="col-xs-12 col-sm-3 _mt-20">
                     <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
-                        <img src="{{post_image.image.image.url}}" width="100%" height="150px;">
+                        <img src="{{post_image.image.image.url}}" width="100%" height="150px;" class="img-rounded">
                     </a>
                 </div>
                 {% endfor %}

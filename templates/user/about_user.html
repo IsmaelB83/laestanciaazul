@@ -13,185 +13,169 @@ Blog - UserProfile
 	<!-- Fila -->
 	<div class="row">
 		<!-- Columna izquierda -->
-		<div class="col-xs-12 col-sm-3 pull-left">
-			<div id="contact_side">
-                {% if profile.user.username == "trama1983" %}
-                <div class="_social_contact">
-                    <div class="text-center">
-                        {%comment%}
-                        <a href="#"><i class="fa fa-linkedin fa-2x" data-toggle="tooltip" data-placement="top" title="Linkedin"></i></a>
-                        {%endcomment%}
-                        <a href="https://twitter.com/Ismab83"><i class="fa fa-twitter fa-2x" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
-                        <a href="https://github.com/IsmaelB83"><i class="fa fa-github fa-2x" data-toggle="tooltip" data-placement="top" title="GitHub"></i></a>
-                    </div>
-                </div>
-                {% endif %}
-                <div class="_user_foto _mt-30 _mb-30">
+		<div id="contact_left" class="col-xs-12 col-sm-4 col-md-3 _mt-30 pull-left">
+			<div class="text-center">
+				<img class="img-circle img-responsive" style="border: 10px solid #bdc3c7; display: inline;"
+					 {%if profile.image%}
+					 src='{{ profile.image.url }}'
+					 {%else%}
+					 src='{% static "img/dummy-user.png" %}'
+					 {%endif%}>
+			</div>
+			<div class="text-center">
+				<h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+				<h5 class="_mt-20">{{ profile.description }}</h5>
+				<div class="hr-center"></div>
+				{% if profile.user.username == "trama1983" %}
+				<div class="_social_contact">
 					<div class="text-center">
-						<img class="img-circle img-responsive"
-							 {%if profile.image%}
-							 src='{{ profile.image.url }}'
-							 {%else%}
-							 src='{% static "img/dummy-user.png" %}'
-							 {%endif%}>
-					</div>
-					<div class="_user_head">
-						<h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
-						<div class="hr-center"></div>
-						<h5>{{ profile.description }}</h5>
+						{%comment%}
+						<a href="https://www.linkedin.com/in/ismael-bernal-10497a51/"><i class="fa fa-linkedin fa-2x" data-toggle="tooltip" data-placement="top" title="Linkedin"></i></a>
+						{%endcomment%}
+						<a href="https://twitter.com/Ismab83"><i class="fa fa-twitter fa-2x" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+						<a href="https://github.com/IsmaelB83"><i class="fa fa-github fa-2x" data-toggle="tooltip" data-placement="top" title="GitHub"></i></a>
 					</div>
 				</div>
-                <div class="_link-me">
-					<div class="text-center">
-						<a href="#id-blog"><i class="fa fa-history fa-2x" data-toggle="tooltip" data-placement="top" title="Log actividades"></i></a>
-						<a href="#id-contact"><i class="fa fa-flag fa-2x" data-toggle="tooltip" data-placement="top" title="Ponerse en contacto"></i></a>
-					</div>
-					<div class="hr-center"></div>
-				</div>
+				{% endif %}
 			</div>
 		</div>
 		<!-- Columna derecha -->
-		<div class="col-xd-12 col-sm-9 pull-right">
-			<div id="contenido_contact">
-				<!-- start:main content -->
-				<div class="main-content">
+		<div id="contact_right" class="col-xd-12 col-sm-8 col-md-9 _pl-sm-30 _mt-30 pull-right">
+			<div class="row">
+				<div class="col-xs-12">
+					<h1 class="_mt-0">Hola, soy <strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></h1>
+					<h4>{{ profile.description }}</h4>
+					<div class="hr-left"></div>
+					<p>    <!--{{ profile.introduction }}-->
+						Lorem ipsum dolor sit amet, modo decore sea ex, quo in novum forensibus. No quando legendos repudiandae sit. Ex his sanctus nonumes,
+						ne sea eirmod eleifend comprehensam. Cum te rebum illum suscipit, vivendo insolens mel ne. Sea veri ipsum complectitur te, ut sed
+						consul philosophia comprehensam, iudico imperdiet adipiscing at eam. An mea veri virtute, ne mel summo principes consequat.
+						<br><br>
+						Labitur petentium eos cu. Dicit liberavisse eos ea, ei illud nihil debitis vim. Adhuc salutatus mel id, has wisi mazim bonorum te.
+						Malis iisque constituto per ex, duo ut appetere reprimique dissentiunt. Eius summo offendit cu pri. An qui nibh fabellas molestiae,
+						quo ut veri saperet intellegat, nostrud indoctum usu ex.
+						<br><br>
+						Est an populo debitis. Explicari scripserit ut duo. Mei tritani ornatus accusam et. Epicurei expetenda eu eam. An natum
+						corpora imperdiet eam, ea partem efficiendi dissentiunt has. Id impedit detraxit his, vim tollit nominati ne, quo dico
+						iudico in. Sit ut vitae semper phaedrum, pri purto facilis atomorum te, mutat brute ut has.
+					</p>
+				</div>
+				<div class="col-xs-12">
 					<ul class="_timeline">
-						<!-- start:profile -->
-						<li id="id-profile">
+						{% if request.user.is_staff %}
+						<!-- start:blog -->
+						<li>
 							<div class="_timeline-badge default"><i class="fa fa-user"></i></div>
-                            <h1 class="timeline-head">PERFIL</h1>
+							<h1 class="timeline-head">USUARIO</h1>
 						</li>
 						<li>
-							<div class="_timeline-badge success"></div>
+							<div class="hidden-xs hidden-sm _timeline-badge success"></div>
 							<div class="_timeline-panel">
-                                <h1>Hola, soy <strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></h1>
-								<h4>{{ profile.description }}</h4>
-								<div class="hr-left"></div>
-								<p>{{ profile.introduction }}</p>
-							</div>
-						</li>
-						<li>
-							<div class="_timeline-badge success"></div>
-							<div class="_timeline-panel">
-                                <h1>Información usuario</h1>
-								<div class="hr-left"></div>
-								<div class="btn-group _mr-20 _mb-10">
-									<button type="button" disabled class="btn _btn_contact_detail">nombre</button>
+								<div class="btn-group btn-block">
+									<button type="button" disabled class="btn _btn_contact">nombre</button>
 									<button type="button" disabled class="btn btn-default">{{profile.user.first_name}} {{profile.user.last_name}}</button>
 								</div>
-								<div class="btn-group _mr-20 _mb-10">
-									<button type="button" disabled class="btn _btn_contact_detail">usuario</button>
+								<div class="btn-group btn-block">
+									<button type="button" disabled class="btn _btn_contact">usuario</button>
 									<button type="button" disabled class="btn btn-default">{{profile.user.username}}</button>
 								</div>
-								<div class="btn-group _mr-20 _mb-10">
-									<button type="button" disabled class="btn _btn_contact_detail">email</button>
+								<div class="btn-group btn-block">
+									<button type="button" disabled class="btn _btn_contact">email</button>
 									<button type="button" disabled class="btn btn-default">{{ profile.user.email }}</button>
 								</div>
-								<div class="btn-group _mr-20 _mb-10">
-									<button type="button" disabled class="btn _btn_contact_detail">país</button>
+								<div class="btn-group btn-block">
+									<button type="button" disabled class="btn _btn_contact">país</button>
 									<button type="button" disabled class="btn btn-default">{{ profile.country }}</button>
 								</div>
-								<div class="btn-group _mr-20 _mb-10">
-									<button type="button" disabled class="btn _btn_contact_detail">ubicación</button>
+								<div class="btn-group btn-block">
+									<button type="button" disabled class="btn _btn_contact">ubicación</button>
 									<button type="button" disabled class="btn btn-default">{{ profile.location }}</button>
 								</div>
 							</div>
 						</li>
 						<!-- start:blog -->
-                        {% if request.user.is_staff %}
-						<li id="id-blog">
+						<li>
 							<div class="_timeline-badge default"><i class="fa fa-comments"></i></div>
-                            <h1 class="timeline-head">ACTIVIDAD</h1>
+							<h1 class="timeline-head">ACTIVIDAD</h1>
 						</li>
 						<li>
-							<div class="_timeline-badge success"></div>
+							<div class="hidden-xs hidden-sm _timeline-badge success"></div>
 							<ul class="_timeline-panel list-unstyled _pr-30">
 								<li>
-                                    <h2>Resumen</h2>
-									<div class="hr-left"></div>
-								    <div class="btn-group _mr-20 _mb-10">
-										<button type="button" disabled class="btn _btn_contact_detail">posts</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">posts</button>
 										<button type="button" disabled class="btn btn-default">{{posts_user|length}}</button>
 									</div>
-								    <div class="btn-group _mr-20 _mb-10">
-										<button type="button" disabled class="btn _btn_contact_detail">comentarios</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">comentarios</button>
 										<button type="button" disabled class="btn btn-default">{{comments_user|length}}</button>
 									</div>
-								    <div class="btn-group _mr-20 _mb-10">
-										<button type="button" disabled class="btn _btn_contact_detail">likes</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">likes</button>
 										<button type="button" disabled class="btn btn-default">{{post_likes|length}}</button>
 									</div>
-								    <div class="btn-group _mr-20 _mb-10">
-										<button type="button" disabled class="btn _btn_contact_detail">follows</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">follows</button>
 										<button type="button" disabled class="btn btn-default">{{follows|length}}</button>
 									</div>
-								    <div class="btn-group _mr-20 _mb-10">
-										<button type="button" disabled class="btn _btn_contact_detail">followers</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">followers</button>
 										<button type="button" disabled class="btn btn-default">{{followers|length}}</button>
 									</div>
-                                    <div class="btn-group _mr-20 _mb-10">
-                                        <button type="button" disabled class="btn _btn_contact_detail">fecha alta</button>
-										<button type="button" disabled class="btn btn-default">{{profile.user.date_joined}}</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">fecha alta</button>
+										<button type="button" disabled class="btn btn-default">{{profile.user.date_joined|date:"M d, Y"}}</button>
 									</div>
-                                    <div class="btn-group _mr-20 _mb-10">
-                                        <button type="button" disabled class="btn _btn_contact_detail">último login</button>
-										<button type="button" disabled class="btn btn-default">{{profile.user.last_login}}</button>
+									<div class="btn-group btn-block">
+										<button type="button" disabled class="btn _btn_contact">último login</button>
+										<button type="button" disabled class="btn btn-default">{{profile.user.last_login|date:"M d, Y"}}</button>
 									</div>
 								</li>
-                                {% comment %}
+								{% comment %}
 								<li class="_mt-30">
-                                    <h2>Actividad reciente</h2>
+									<h2>Actividad reciente</h2>
 									<div class="hr-left"></div>
 								</li>
-                                {% for log in log_user %}
+								{% for log in log_user %}
 								<li class="_mt-10">
 									<div class="pull-left">
 										<span class="_ml-10"><i class="{{log.activity.icon}}"></i></span>
 										<span class="_ml-10">{{log.description|safe}}</span>
 									</div>
 									<div class="pull-right">
-                                        <span class="_ml-10"><i class="fa fa-calendar"></i> {{log.timestamp}}</span>
+										<span class="_ml-10"><i class="fa fa-calendar"></i> {{log.timestamp}}</span>
 									</div>
 								</li>
-                                <br>
-                                {% endfor %}
-                                {% endcomment %}
+								<br>
+								{% endfor %}
+								{% endcomment %}
 							</ul>
 						</li>
-                        {% endif %}
+						{% endif %}
 						<!-- start:contact -->
-						<li id="id-contact">
+						<li>
 							<div class="_timeline-badge default"><i class="fa fa-envelope"></i></div>
-                            <h1 class="timeline-head">CONTACTO</h1>
+							<h1 class="timeline-head">CONTACTO</h1>
 						</li>
 						<li>
-							<div class="_timeline-badge success"></div>
+							<div class="hidden-xs hidden-sm hidden-md _timeline-badge success"></div>
 							<div class="_timeline-panel">
-                                <h1>Contacta conmigo</h1>
-								<div class="hr-left"></div>
-								<p>Excepteur sint occaecat cupidatat non
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+								<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 								<form>
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
-                                                <input class="form-control input-lg _contact_input" placeholder="Nombre...">
-											</div>
-											<div class="form-group">
-												<input class="form-control input-lg _contact_input" placeholder="E-mail...">
-											</div>
-											<div class="form-group">
-                                                <input class="form-control input-lg _contact_input" placeholder="Asunto...">
-											</div>
+											<div class="form-group"><input class="form-control input-lg _contact_input" placeholder="Nombre..."></div>
+											<div class="form-group"><input class="form-control input-lg _contact_input" placeholder="E-mail..."></div>
+											<div class="form-group"><input class="form-control input-lg _contact_input" placeholder="Asunto..."></div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-                                                <textarea class="form-control input-lg _contact_input" style="height:182px; resize:none;" placeholder="Mensaje..."></textarea>
+												<textarea class="form-control input-lg _contact_input" style="height:182px; resize:none;" placeholder="Mensaje..."></textarea>
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-                                        <button class="btn btn-lg _btnColor1 btn-block">ENVIAR</button>
+									<div class="form-group _mt-10">
+										<button class="btn btn-lg _btnColor1 btn-block">ENVIAR</button>
 									</div>
 								</form>
 							</div>

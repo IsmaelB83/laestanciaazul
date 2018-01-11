@@ -51,6 +51,7 @@ def user_register_view(request):
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             old_image = profile.image
+            old_author = profile.author
             profile = form.save(commit=False)
             profile.user = request.user
             profile.user.first_name = form.cleaned_data['first_name']
@@ -58,6 +59,7 @@ def user_register_view(request):
             profile.user.email = form.cleaned_data['email']
             if not profile.image:
                 profile.image = old_image
+            profile.author = old_author
             profile.user.save()
             profile.save()
             messages.success(request, 'Tus datos de usuario han sido actualizados')

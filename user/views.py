@@ -41,7 +41,7 @@ def user_register_view(request):
     except UserSocialAuth.DoesNotExist:
         facebook_login = None
     try:
-        google_login = profile.user.social_auth.get(provider='google')
+        google_login = profile.user.social_auth.get(provider='google-oauth2')
     except UserSocialAuth.DoesNotExist:
         google_login = None
     # Sólo puede desconectar red social si ha introducido password o si tengo varios conec

@@ -43,7 +43,7 @@ class UserProfile(models.Model):
             # reopen = open('/tmp/user_social.gif', 'rb')
             # django_file = File(reopen)
             # instance.userprofile.image.save('user_social.gif', django_file, save=True)
-            reopen = open('static/img/user_social.gif', 'rb')
+            reopen = open('/home/trama/static_cdn/img/user_social.gif', 'rb')
             django_file = File(reopen)
             instance.userprofile.image.save('user_social.gif', django_file, save=True)
         instance.userprofile.save()

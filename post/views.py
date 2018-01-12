@@ -20,7 +20,7 @@ from like.models import PostLike
 
 def index_view(request):
     # Se obtienen los primeros 15 posts, y se crea un paginador de 5 posts por pagina
-    posts_all = Post.objects.all().order_by('-published_date')[:15]
+    posts_all = Post.objects.filter(status='PB').order_by('-published_date')[:15]
     paginator = Paginator(posts_all, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
@@ -30,15 +30,14 @@ def index_view(request):
         posts_page = paginator.page(1)
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
-
     # Los posts tipo carta son siempre 3. Ahora mismo se muestran los 3 más recientes
-    posts_cards = Post.objects.order_by('-published_date')[:3]
+    posts_cards = Post.objects.filter(status='PB').order_by('-published_date')[:3]
     # Se devuelven los 5 postst más populares. Ahora mismo son los que más comentarios tienen
-    posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
+    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImage.objects.order_by('-image__timestamp')[:12]
+    pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
 
     # Se genera el contexto con toda la información y se renderiza
     context = {
@@ -56,9 +55,9 @@ def archive_view(request, year, month):
     # Se generan todos los posts para el filtrado especificado
     if 1999 < int(year) < 2035:
         if 0 < int(month) < 13:
-            posts_filtered = Post.objects.filter(published_date__year=int(year), published_date__month=int(month))
+            posts_filtered = Post.objects.filter(status='PB', published_date__year=int(year), published_date__month=int(month))
         elif int(month) == 13:
-            posts_filtered = Post.objects.filter(published_date__year=int(year))
+            posts_filtered = Post.objects.filter(status='PB', published_date__year=int(year))
         else:
             messages.error(request, 'El mes indicado es incorrecto')
             return redirect('blog:index')
@@ -109,10 +108,16 @@ def archive_view(request, year, month):
 
 
 def search_view(request, filter):
-
     # Se generan todos los posts para el filtrado especificado
     filter = filter.replace('-', ' ')
-    posts_filtered = Post.objects.filter(title__icontains=filter)
+    if filter == '_not_published_':
+        if not request.user.is_authenticated:
+            messages.error(request, 'Buen intento :). Debes loguearte para editar tus post en draft o inactivos')
+            return redirect('blog:index')
+        if request.user.userprofile:
+            posts_filtered = Post.objects.filter(status__in=['IN', 'DR'], author=request.user.userprofile).order_by('-published_date')
+    else:
+        posts_filtered = Post.objects.filter(status='PB', title__icontains=filter).order_by('-published_date')
     # Se genera el paginador para esos posts
     paginator = Paginator(posts_filtered, 12)
     page_request_var = 'page'
@@ -125,11 +130,11 @@ def search_view(request, filter):
         posts_page = paginator.page(paginator.num_pages)
 
     # Se devuelven los 5 postst más populares. Ahora mismo son los que más comentarios tienen
-    posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
+    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImage.objects.order_by('-image__timestamp')[:12]
+    pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
 
     # Se genera el contexto y se renderiza
     context = {
@@ -145,7 +150,7 @@ def search_view(request, filter):
 
 def gallery_view(request):
     # Se recuperan todas las imagenes
-    post_images_all = PostImage.objects.all()
+    post_images_all = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')
     # Se genera el paginador para esos posts
     paginator = Paginator(post_images_all, 12)
     page_request_var = 'page'
@@ -170,9 +175,9 @@ def category_view(request, id):
     try:
         category = Category.objects.get(id=id)
         if id != 'all' and category:
-            posts_all = Post.objects.filter(postcategory__category=category).order_by('-published_date')
+            posts_all = Post.objects.filter(status='PB', postcategory__category=category).order_by('-published_date')
         else:
-            posts_all = Post.objects.all().order_by('-published_date')
+            posts_all = Post.objects.filter(status='PB').order_by('-published_date')
     except ObjectDoesNotExist:
         messages.error(request, 'La categoría no existe')
         return redirect('blog:index')
@@ -190,7 +195,6 @@ def category_view(request, id):
         posts_page = paginator.page(1)
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
-
     # Posts populares (sólo de posts de esta categoría)
     posts_popular = posts_all.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
     # Últimos comentarios (sólo de posts de esta categoría)
@@ -199,7 +203,6 @@ def category_view(request, id):
     pictures_recent = []
     for post_picture in PostImage.objects.filter(post__in=posts_all).order_by('-image__timestamp')[:12]:
         pictures_recent.append(post_picture)
-
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'category': category,
@@ -215,7 +218,13 @@ def category_view(request, id):
 def post_view(request, id):
     # Se obtiene el post a visualizar y si no existe se redirige al index
     try:
-        post = get_object_or_404(Post, id=id)
+        post = Post.objects.get(id=id)
+        if post.status != 'PB':
+            if (post.status != 'PB' and not request.user.is_authenticated) or \
+                    (post.status != 'PB' and post.author != request.user.userprofile):
+                messages.error(request, 'El post indicado no existe')
+                return redirect('blog:index')
+
     except ObjectDoesNotExist:
         messages.error(request, 'El post indicado no existe')
         return redirect('blog:index')
@@ -256,11 +265,11 @@ def post_view(request, id):
             messages.error(request, 'Es necesario hacer log in para dar un like')
 
     # Se recuperan los posts más populares
-    posts_popular = Post.objects.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
+    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
     # Se devuelven los 5 últimos comentarios de la web
-    comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
-
-    # El usuario logueadoha hecho ya Like en este post?
+    comments_recent = PostComment.objects.filter(post__status='PB').order_by('-comment__timestamp')[:5]
+    
+    # El usuario logueado ha hecho ya Like en este post?
     already_like = "False"
     if request.user.is_authenticated:
         already_like = PostLike.objects.filter(post=post, user=request.user).exists()
@@ -305,17 +314,18 @@ def post_create_view(request):
             post.author = UserProfile.objects.get(user=request.user)
             # Se graba el post ya que es necesario para seguir trabajando con los objetos relacionados
             post.save()
-            # Se actualiza la tabla de archivo de posts
-            try:
-                post_archive = PostArchive.objects.get(year=post.published_date.year, month=post.published_date.month)
-                post_archive.posts += 1
-                post_archive.save(force_update=True)
-            except ObjectDoesNotExist:
-                post_archive = PostArchive()
-                post_archive.year = post.published_date.year
-                post_archive.month = post.published_date.month
-                post_archive.posts = 1
-                post_archive.save()
+            # Se actualiza la tabla de archivo de posts sólo si es un post publicado
+            if post.status == 'PB':
+                try:
+                    post_archive = PostArchive.objects.get(year=post.published_date.year, month=post.published_date.month)
+                    post_archive.posts += 1
+                    post_archive.save(force_update=True)
+                except ObjectDoesNotExist:
+                    post_archive = PostArchive()
+                    post_archive.year = post.published_date.year
+                    post_archive.month = post.published_date.month
+                    post_archive.posts = 1
+                    post_archive.save()
             # Se graban las categorías a las que está asignado el post
             for category in form.cleaned_data['postcategory']:
                 post_category = PostCategory()
@@ -358,7 +368,7 @@ def post_edit_view(request, id):
         return redirect('blog:index')
     # Se obtiene el post a editar y si no existe se redirige al index
     try:
-        post = get_object_or_404(Post, id=id)
+        post = Post.objects.get(id=id)
     except ObjectDoesNotExist:
         messages.error(request, 'El post indicado no existe')
         return redirect('blog:index')
@@ -372,6 +382,7 @@ def post_edit_view(request, id):
     if request.method == 'POST':
         # Está correcta la información del form?
         if form.is_valid():
+            status_old = post.status
             post = form.save(commit=False)
             # Sólo si se selecciona una nueva imagen de cabecera se borra la antigua y se asigna la nueva
             if form.cleaned_data['image_file']:
@@ -383,6 +394,18 @@ def post_edit_view(request, id):
                 post.image = image
             # Se graban los cambios del post, para poder seguir con el resto de datos
             post.save()
+            # Si ha pasado a status publicado en este momento se actualizan los contadores del archivo
+            if status_old != 'PB' and post.status == 'PB':
+                try:
+                    post_archive = PostArchive.objects.get(year=post.published_date.year, month=post.published_date.month)
+                    post_archive.posts += 1
+                    post_archive.save(force_update=True)
+                except ObjectDoesNotExist:
+                    post_archive = PostArchive()
+                    post_archive.year = post.published_date.year
+                    post_archive.month = post.published_date.month
+                    post_archive.posts = 1
+                    post_archive.save()
             # Se borran las categorías a las que estuviese asignado el post antteriormente y se crean y asocian
             # las nuevas categorías asignadas al post al editarlo
             for postC in PostCategory.objects.filter(post=post):

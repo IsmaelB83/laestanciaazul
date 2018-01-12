@@ -9,7 +9,7 @@ from .models import Post, PostCategory, PostImage, PostComment, PostArchive
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
 class PostModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "content", "published_date", "updated", "timestamp"]
+    list_display = ["id", "title", "content", "published_date", "updated", "timestamp"]
     list_display_links = ["title"]
     list_editable = ["content"]
     list_filter = ["published_date", "updated", "timestamp"]

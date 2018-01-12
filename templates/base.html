@@ -77,6 +77,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown">Autor <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
                                 <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Crear post</a></li>
+                                <li><a class="_btnColor4" href='{% url "blog:search" "_not_published_" %}'>Drafts</a></li>
                                 {% block edit_post %} {% endblock %}
                             </ul>
                         </li>

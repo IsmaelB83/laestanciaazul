@@ -44,7 +44,7 @@
                             $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
                         });
                         </script>
-                        <img class="img-responsive _mt-20" width="100%" {%if post.image %}src="{{ post.image.image.url }}"{%endif%}>
+                        <img class="img-responsive img-rounded _mt-20" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
                     </div>
                 </div>
                 <!-- entry-content -->
@@ -100,12 +100,14 @@
                             </div>
                         </div>
                         <!-- comentarios -->
+                        {% if post.status == 'PB' %}
                         <div class="row _mt-10" id="form_comments">
                             <div class="dejarcomentario col-xs-12 _mt-10 _pl-0 _pr-0">
                                 {% include "includes/form_comments.html" with post=post %}
                                 {% include "includes/comments.html" with post=post %}
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </article>

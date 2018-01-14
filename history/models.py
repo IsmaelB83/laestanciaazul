@@ -16,13 +16,10 @@ class Activity(models.Model):
 
 
 class LogUser(models.Model):
-    PERMISSONS = (('*', 'Todos'), ('+', 'Friends'), ('-', 'Only me'),)
-
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=200, null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    visibility = models.CharField(max_length=1, choices=PERMISSONS, default='-')
 
     def __str__(self):
         return self.user.username + ": " + self.activity.activity + " - " + self.description

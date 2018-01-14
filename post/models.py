@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 # Third party app imports
 # Local app imports
+from history.models import LogUser, Activity
 
 
 class Post(models.Model):
@@ -21,6 +22,20 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     image = models.ForeignKey('gallery.Image', null=True, on_delete=models.SET_NULL)
 
+    def add_log(self, user, operation):
+        log = LogUser()
+        log.user = user
+        if operation == "create":
+            log.activity = Activity.objects.get(activity="post_create")
+            log.description = "Ha creado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+        elif operation == "edit":
+            log.activity = Activity.objects.get(activity="post_edit")
+            log.description = "Ha editado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+        elif operation == "view":
+            log.activity = Activity.objects.get(activity="post_visit")
+            log.description = "Ha visitado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+        log.save()
+        
     def __unicode__(self):
         return self.title
 
@@ -57,6 +72,14 @@ class PostComment(models.Model):
     class Meta:
         ordering = ['-post', '-comment__timestamp']
 
+    def add_log(self, operation):
+        log = LogUser()
+        log.user = self.comment.user
+        if operation == "create":
+            log.activity = Activity.objects.get(activity="comment_post_create")
+            log.description = "Ha creado el comentario <a href='" + self.post.get_absolute_url() + "#form_comments'>" + self.comment.content[:15] + "...</a>"
+        log.save()
+        
     def __str__(self):
         return self.post.title + ": " + self.comment.content
 

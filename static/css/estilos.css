@@ -160,8 +160,8 @@
 main .container:first-child { 
 /*	border-right: 1px solid #DDDDDD;
 	border-left: 1px solid #DDDDDD;*/
-	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-top: 15px !important;
+	padding-bottom: 15px !important;
 }
 /*<<==========================*/
 
@@ -325,26 +325,26 @@ nav.navbar-brand {
 /*>>==========================*
  *   FOOTER                   *
  *============================*/
-footer {
+#footer {
 	border-top: 1px solid #F39C12;
 }
 
-footer a {
+#footer a {
 	color: #3ac341;
 }
 
-footer a:hover {
+#footer a:hover {
 	color: #3ac341;
 }
 
-footer .footer-title {
+#footer .footer-title {
 	position: relative;
 	font-size: 18px;
 	text-transform: uppercase;
 	color: white; 
 }
 
-footer .footer-title:after {
+#footer .footer-title:after {
 	content: '';
 	display: block;
 	width: 60px;
@@ -354,29 +354,29 @@ footer .footer-title:after {
 }
 
 @media (min-width: 1024px) {
-	footer .right-border {
+	#footer .right-border {
 		border-right: 1px solid rgba(255, 255, 255, 0.1); 
 	}
-	footer .left-border {
+	#footer .left-border {
 		border-left: 1px solid rgba(255, 255, 255, 0.1); 
 	}	
 }
 
-footer .container {
+#footer .container {
 	padding-bottom: 20px;
 }	
 
 @media (min-width: 1170px) {
-	footer .row {
+	#footer .row {
 		display: flex;
 	}
 }
 
-footer .footer-about h2 {
+#footer .footer-about h2 {
 	margin-top: 30px;
 }
 
-footer .footer-about .single i {
+#footer .footer-about .single i {
 	display: block;
 	float: left;
 	color: #3ac341;
@@ -384,7 +384,7 @@ footer .footer-about .single i {
 	line-height: 22px; 
 }
 
-footer .footer-about .single h6 {
+#footer .footer-about .single h6 {
 	margin: 0;
 	font-size:14px;
 	line-height:24px;
@@ -393,30 +393,30 @@ footer .footer-about .single h6 {
 	overflow: hidden; 
 }
 
-footer .footer-powered {
+#footer .footer-powered {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
 	height: 60px;
 }
 
-footer .footer-powered a {
+#footer .footer-powered a {
 	width: 15%;
 }
 
-footer .footer-powered img {
+#footer .footer-powered img {
 	width: 100%;
 	height: auto;
 }
 
-footer .navigation li a {
+#footer .navigation li a {
 	color: rgba(255, 255, 255, 0.6);
 	text-transform: uppercase;
 	line-height: 30px;
 	text-decoration: none; 
 }
 
-footer .navigation li a:hover {
+#footer .navigation li a:hover {
 	color: #3ac341; 
 }
 /*<<======FOOTER==============*
@@ -1116,8 +1116,8 @@ button._pagination {
         right: -14px;
         display: inline-block;
         border-top: 14px solid transparent;
-        border-left: 14px solid #fff;
-        border-right: 0 solid #fff;
+        border-left: 14px solid #ECF0F1;
+        border-right: 0 solid #ECF0F1;
         border-bottom: 14px solid transparent;
         content: " ";
     }
@@ -1204,7 +1204,7 @@ button._pagination {
 	left: 50%;
 	top: -0.6em;
 	margin-left: -1.5em;
-	background-color: white;
+	background-color: #ECF0F1;
 	width: 3em;
 	text-align: center;
 }

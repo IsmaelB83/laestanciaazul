@@ -62,6 +62,7 @@ def user_register_view(request):
             profile.author = old_author
             profile.user.save()
             profile.save()
+            profile.add_log(profile, "edit")
             messages.success(request, 'Tus datos de usuario han sido actualizados')
             return redirect('blog:index')
     else:
@@ -95,13 +96,16 @@ def about_user_view(request, id):
     except ObjectDoesNotExist:
         messages.error(request, 'El usuario no existe')
         return redirect('blog:index')
+    # Registro la visita del usuario
+    if request.user.is_authenticated and request.user.userprofile:
+        request.user.userprofile.add_log(user.userprofile, "visit")
     # Recuperar datos adicionales del usuario
     posts_user = Post.objects.filter(author__user=user)
     comments_user = Comment.objects.filter(user=user)
     post_likes = PostLike.objects.filter(user=user)
     follows = UserFollow.objects.filter(user=user)
     followers = UserFollow.objects.filter(follows=user)
-    log_user = LogUser.objects.filter(user=user)
+    log_user = LogUser.objects.filter(user=user).order_by('-timestamp')
     # Contexto y render
     context = {
         'profile': user.userprofile,

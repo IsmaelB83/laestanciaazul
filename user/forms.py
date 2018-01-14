@@ -14,33 +14,33 @@ class LoginForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
     user_id = forms.CharField(
-        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': 'your username...', 'maxlength': '30'}),
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': 'tu usuario...'}),
         max_length=150
     )
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "your name..."}),
+        widget=forms.TextInput(attrs={'placeholder': "tu nombre..."}),
         max_length=30)
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "your lastname..."}),
+        widget=forms.TextInput(attrs={'placeholder': "tu apellido..."}),
         max_length=30,
         required=False
     )
     email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': "your e-mail..."}),
+        widget=forms.TextInput(attrs={'placeholder': "tu e-mail..."}),
         max_length=50,
     )
     country = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "your country..."}),
+        widget=forms.TextInput(attrs={'placeholder': "país donde vives..."}),
         max_length=20,
         required=False
     )
     location = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "your city..."}),
+        widget=forms.TextInput(attrs={'placeholder': "ciudad donde vives..."}),
         max_length=30,
         required=False
     )
     description = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': "short description about you..."}),
+        widget=forms.TextInput(attrs={'placeholder': "una frase que te describa..."}),
         max_length=100,
         required=True
     )
@@ -51,7 +51,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('user_id', 'first_name', 'last_name', 'email', 'country', 'location',
-                  'description', 'image')
+                  'description', 'introduction', 'image')
 
     # def clean(self):
     #     cleaned_data = super(ProfileForm, self).clean()

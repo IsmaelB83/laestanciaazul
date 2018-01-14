@@ -224,10 +224,14 @@ def post_view(request, id):
                     (post.status != 'PB' and post.author != request.user.userprofile):
                 messages.error(request, 'El post indicado no existe')
                 return redirect('blog:index')
-
     except ObjectDoesNotExist:
         messages.error(request, 'El post indicado no existe')
         return redirect('blog:index')
+
+    # Añadir log de la visita
+    if request.user.is_authenticated:
+        post.add_log(request.user, "view")
+        
     # POST en esta vista significa nuevos comentarios o likes
     if request.method == 'POST':
         # Es necesario estar logueado
@@ -245,10 +249,12 @@ def post_view(request, id):
                     like.post = post
                     like.user = request.user
                     like.ip = ip
+                    like.add_log(True)
                     like.save()
                 # Si llegamos aquí es que el usuario ya no quiere dar like. Lo eliminamos en ese caso
                 else:
-                    like = PostLike.objects.filter(post=post, user=request.user, ip=ip)
+                    like = PostLike.objects.filter(post=post, user=request.user, ip=ip)[0]
+                    like.add_log(False)
                     like.delete()
             # Se añade un nuevo comentario a la base de datos y se asocia al post
             else:
@@ -260,9 +266,8 @@ def post_view(request, id):
                 post_comment.post = post
                 post_comment.comment = comment
                 post_comment.save()
+                post_comment.add_log("create")
                 messages.success(request, 'Comentario añadido')
-        else:
-            messages.error(request, 'Es necesario hacer log in para dar un like')
 
     # Se recuperan los posts más populares
     posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
@@ -290,14 +295,17 @@ def post_view(request, id):
 
 
 def post_create_view(request):
+
     # Es obligatorio estar loguedo
     if not request.user.is_authenticated:
         messages.error(request, 'Es necesario estar autenticado para crear posts')
         return redirect('blog:index')
+
     # Es obligatorio ser editor para crear un post
     if not request.user.userprofile.author:
         messages.error(request, 'No está autorizado para crear posts')
         return redirect('blog:index')
+
     # Se ha hecho SUBMIT en el FORM?
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -314,6 +322,7 @@ def post_create_view(request):
             post.author = UserProfile.objects.get(user=request.user)
             # Se graba el post ya que es necesario para seguir trabajando con los objetos relacionados
             post.save()
+            post.add_log(request.user, "create")
             # Se actualiza la tabla de archivo de posts sólo si es un post publicado
             if post.status == 'PB':
                 try:
@@ -343,7 +352,7 @@ def post_create_view(request):
                 post_image.image = image
                 post_image.save()
             # Mensaje de OK y se redirige al index
-            messages.success(request, 'Successfully created')
+            messages.success(request, 'Post creado correctamente')
             return redirect('blog:index')
     else:
         # No es un SUBMIT, en ese caso se genera un form vacio
@@ -362,16 +371,19 @@ def post_edit_view(request, id):
     if not request.user.is_authenticated:
         messages.error(request, 'Es necesario estar autenticado para editar posts')
         return redirect('blog:index')
+    
     # Es obligatorio ser editor para tocar un post
     if not request.user.userprofile.author:
         messages.error(request, 'No está autorizado para editar posts')
         return redirect('blog:index')
+    
     # Se obtiene el post a editar y si no existe se redirige al index
     try:
         post = Post.objects.get(id=id)
     except ObjectDoesNotExist:
         messages.error(request, 'El post indicado no existe')
         return redirect('blog:index')
+    
     # Sólo se pueden editar posts propios
     if request.user != post.author.user:
         messages.error(request, 'Sólo pueden editarse los posts propios')
@@ -394,6 +406,7 @@ def post_edit_view(request, id):
                 post.image = image
             # Se graban los cambios del post, para poder seguir con el resto de datos
             post.save()
+            post.add_log(request.user, "edit")
             # Si ha pasado a status publicado en este momento se actualizan los contadores del archivo
             if status_old != 'PB' and post.status == 'PB':
                 try:
@@ -429,7 +442,7 @@ def post_edit_view(request, id):
                     post_image.image = image
                     post_image.save()
             # Datos grabados y se redirige al index
-            messages.success(request, 'Successfully created')
+            messages.success(request, 'Post editado correctamente')
             return redirect('blog:index')
 
     # Se genera el contexto y se renderiza

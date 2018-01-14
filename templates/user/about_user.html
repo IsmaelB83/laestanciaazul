@@ -9,11 +9,11 @@ Blog - UserProfile
 {% block main_content %}
 
 <!-- Container de bootstrap (centrar contenido en pantalla -->
-<div class="container _bgColor0 _pt-0">
+<div class="container _bgColor0">
 	<!-- Fila -->
 	<div class="row">
 		<!-- Columna izquierda -->
-		<div id="contact_left" class="col-xs-12 col-sm-4 col-md-3 _mt-30 pull-left">
+        <div id="contact_left" class="col-xs-12 col-sm-4 col-md-3 _mt-20 pull-left">
 			<div class="text-center">
 				<img class="img-circle img-responsive" style="border: 10px solid #bdc3c7; display: inline;"
 					 {%if profile.image%}
@@ -40,30 +40,31 @@ Blog - UserProfile
 			</div>
 		</div>
 		<!-- Columna derecha -->
-		<div id="contact_right" class="col-xd-12 col-sm-8 col-md-9 _pl-sm-30 _mt-30 pull-right">
+        <div id="contact_right" class="col-xd-12 col-sm-8 col-md-9 _pl-sm-30 _mt-20 pull-right">
 			<div class="row">
 				<div class="col-xs-12">
-					<h1 class="_mt-0">Hola, soy <strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></h1>
-					<h4>{{ profile.description }}</h4>
-					<div class="hr-left"></div>
-					<p>    <!--{{ profile.introduction }}-->
-						Lorem ipsum dolor sit amet, modo decore sea ex, quo in novum forensibus. No quando legendos repudiandae sit. Ex his sanctus nonumes,
-						ne sea eirmod eleifend comprehensam. Cum te rebum illum suscipit, vivendo insolens mel ne. Sea veri ipsum complectitur te, ut sed
-						consul philosophia comprehensam, iudico imperdiet adipiscing at eam. An mea veri virtute, ne mel summo principes consequat.
-						<br><br>
-						Labitur petentium eos cu. Dicit liberavisse eos ea, ei illud nihil debitis vim. Adhuc salutatus mel id, has wisi mazim bonorum te.
-						Malis iisque constituto per ex, duo ut appetere reprimique dissentiunt. Eius summo offendit cu pri. An qui nibh fabellas molestiae,
-						quo ut veri saperet intellegat, nostrud indoctum usu ex.
-						<br><br>
-						Est an populo debitis. Explicari scripserit ut duo. Mei tritani ornatus accusam et. Epicurei expetenda eu eam. An natum
-						corpora imperdiet eam, ea partem efficiendi dissentiunt has. Id impedit detraxit his, vim tollit nominati ne, quo dico
-						iudico in. Sit ut vitae semper phaedrum, pri purto facilis atomorum te, mutat brute ut has.
-					</p>
+                    <h1 class="_mt-0"><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></h1>
+                    <h4>{{ profile.description }}</h4>
+                    <div class="hr-left"></div>
+                    <blockquote>
+                        <p>Vive como si fueras a morir mañana. Aprende como si fueras a vivir siempre.</p>
+                        <footer>Mahatma Gandhi</footer>
+                    </blockquote>
+                    {% if profile.author %}
+                    {{ profile.introduction|safe }}
+                    {% else %}
+                    <h4>
+                        <p>
+                            Si quiere ponerse en contacto con el usuario <strong>"{{ profile.user.first_name}} {{ profile.user.last_name}}"</strong>
+                            rellene el siguiente formulario y haga click en enviar. La Estancia Azul se encargará de enviar un mail automáticamente
+                            a la dirección de correo electrónico del usuario para que pueda recibir su mensaje.
+                        </p>
+                    </h4>
+                    {% endif %}
 				</div>
 				<div class="col-xs-12">
 					<ul class="_timeline">
 						{% if request.user.is_staff %}
-						<!-- start:blog -->
 						<li>
 							<div class="_timeline-badge default"><i class="fa fa-user"></i></div>
 							<h1 class="timeline-head">USUARIO</h1>
@@ -93,7 +94,6 @@ Blog - UserProfile
 								</div>
 							</div>
 						</li>
-						<!-- start:blog -->
 						<li>
 							<div class="_timeline-badge default"><i class="fa fa-comments"></i></div>
 							<h1 class="timeline-head">ACTIVIDAD</h1>
@@ -115,14 +115,6 @@ Blog - UserProfile
 										<button type="button" disabled class="btn btn-default">{{post_likes|length}}</button>
 									</div>
 									<div class="btn-group btn-block">
-										<button type="button" disabled class="btn _btn_contact">follows</button>
-										<button type="button" disabled class="btn btn-default">{{follows|length}}</button>
-									</div>
-									<div class="btn-group btn-block">
-										<button type="button" disabled class="btn _btn_contact">followers</button>
-										<button type="button" disabled class="btn btn-default">{{followers|length}}</button>
-									</div>
-									<div class="btn-group btn-block">
 										<button type="button" disabled class="btn _btn_contact">fecha alta</button>
 										<button type="button" disabled class="btn btn-default">{{profile.user.date_joined|date:"M d, Y"}}</button>
 									</div>
@@ -131,7 +123,6 @@ Blog - UserProfile
 										<button type="button" disabled class="btn btn-default">{{profile.user.last_login|date:"M d, Y"}}</button>
 									</div>
 								</li>
-								{% comment %}
 								<li class="_mt-30">
 									<h2>Actividad reciente</h2>
 									<div class="hr-left"></div>
@@ -148,11 +139,9 @@ Blog - UserProfile
 								</li>
 								<br>
 								{% endfor %}
-								{% endcomment %}
 							</ul>
 						</li>
 						{% endif %}
-						<!-- start:contact -->
 						<li>
 							<div class="_timeline-badge default"><i class="fa fa-envelope"></i></div>
 							<h1 class="timeline-head">CONTACTO</h1>

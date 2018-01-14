@@ -7,12 +7,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django import forms
 # Third party app imports
 # Local app imports
+from history.models import LogUser, Activity
 
 
-# Common methods
 def upload_location_author(instance, filename):
     return 'profiles/%s/%s' % (instance.user, filename)
 
@@ -23,6 +22,7 @@ class UserProfile(models.Model):
     country = models.CharField(max_length=20, blank=True, null=False)
     location = models.CharField(max_length=30, blank=True, null=False)
     description = models.CharField(max_length=100, blank=True, null=False)
+    introduction = models.TextField(blank=True, null=False)
     image = models.ImageField(
         upload_to=upload_location_author,
         null=False,
@@ -48,6 +48,18 @@ class UserProfile(models.Model):
             instance.userprofile.image.save('user_social.gif', django_file, save=True)
         instance.userprofile.save()
 
+    def add_log(self, visited_user, operation):
+        log = LogUser()
+        if operation == "edit":
+            log.user = self.user
+            log.activity = Activity.objects.get(activity="user_edit")
+            log.description = "Ha editado el usuario <a href='" + self.get_absolute_url() + "'>" + self.user.first_name + " " + self.user.last_name + "</a>"
+        if operation == "visit":
+            log.user = self.user
+            log.activity = Activity.objects.get(activity="user_visit")
+            log.description = "Ha visitado el perfil del usuario <a href='" + visited_user.get_absolute_url() + "'>" + visited_user.user.first_name + " " + visited_user.user.last_name + "</a>"
+        log.save()
+        
     def __unicode__(self):
         return self.user.first_name + " " + self.user.last_name
     

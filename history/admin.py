@@ -19,9 +19,9 @@ class ActivityAdmin(admin.ModelAdmin):
 
 
 class LogUserAdmin(admin.ModelAdmin):
-    list_display = ["id", "activity", "user", "description", "timestamp", "visibility"]
+    list_display = ["id", "activity", "user", "description", "timestamp"]
     list_display_links = ["id"]
-    list_editable = ["activity", "user", "description", "visibility"]
+    list_editable = ["activity", "user", "description"]
     list_filter = ["activity", "user"]
     search_fields = ["activity", "user"]
 

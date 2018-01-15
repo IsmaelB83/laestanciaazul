@@ -3,6 +3,7 @@
 # Django imports
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
@@ -96,6 +97,10 @@ def about_user_view(request, id):
     except ObjectDoesNotExist:
         messages.error(request, 'El usuario no existe')
         return redirect('blog:index')
+    # Sólo pueden verse perfiles si estás logueado
+    if not request.user.is_authenticated and user.username != 'trama1983':
+        messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
+        return redirect('blog:index')
     # Registro la visita del usuario
     if request.user.is_authenticated and request.user.userprofile:
         request.user.userprofile.add_log(user.userprofile, "visit")
@@ -105,7 +110,16 @@ def about_user_view(request, id):
     post_likes = PostLike.objects.filter(user=user)
     follows = UserFollow.objects.filter(user=user)
     followers = UserFollow.objects.filter(follows=user)
-    log_user = LogUser.objects.filter(user=user).order_by('-timestamp')
+    log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
+    paginator = Paginator(log_user_all, 25)
+    page_request_var = 'page'
+    page = request.GET.get('page')
+    try:
+        log_user_page = paginator.page(page)
+    except PageNotAnInteger:
+        log_user_page = paginator.page(1)
+    except EmptyPage:
+        log_user_page = paginator.page(paginator.num_pages)
     # Contexto y render
     context = {
         'profile': user.userprofile,
@@ -114,7 +128,8 @@ def about_user_view(request, id):
         'post_likes': post_likes,
         'follows': follows,
         'followers': followers,
-        'log_user': log_user,
+        'log_user': log_user_page,
+        'page_request': page_request_var,
     }
     return render(request, 'user/about_user.html', context)
 

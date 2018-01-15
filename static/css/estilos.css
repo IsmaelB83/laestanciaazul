@@ -329,11 +329,7 @@ nav.navbar-brand {
 	border-top: 1px solid #F39C12;
 }
 
-#footer a {
-	color: #3ac341;
-}
-
-#footer a:hover {
+#footer ._a-verde {
 	color: #3ac341;
 }
 
@@ -520,7 +516,17 @@ button._noRadious {
 .pagination > li > a, .pagination > li > span {
     border: none;
     background-color: transparent;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
 }
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+    padding-right: 6px !important;
+}
+
 
 button._pagination {
 	cursor: pointer;
@@ -1032,8 +1038,12 @@ button._pagination {
 #contact_right .hr-left{
 	height: 5px;
 	width: 100%;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	background-color: #ddd;
+}
+
+#contact_right blockquote {
+    margin-bottom: 10px important;
 }
 
 #contact_right ._btn_contact {

@@ -38,7 +38,6 @@ def index_view(request):
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
     pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
-
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'posts': posts_page,

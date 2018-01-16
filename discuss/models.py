@@ -5,7 +5,6 @@ from django.db import models
 from django.contrib.auth.models import User
 # Third party app imports
 # Local app imports
-from history.models import LogUser, Activity
 
 
 class Comment(models.Model):

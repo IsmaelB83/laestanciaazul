@@ -103,7 +103,7 @@ def about_user_view(request, id):
         return redirect('blog:index')
     # Registro la visita del usuario
     if request.user.is_authenticated and request.user.userprofile:
-        request.user.userprofile.add_log(user.userprofile, "visit")
+        request.user.userprofile.add_log(user.userprofile, "view")
     # Recuperar datos adicionales del usuario
     posts_user = Post.objects.filter(author__user=user)
     comments_user = Comment.objects.filter(user=user)

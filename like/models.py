@@ -24,7 +24,7 @@ class PostLike(models.Model):
             log.description = "Le gusta el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
         else:
             log.description = "Ha dejado de gustarle el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
-        log.save()
+        log.pre_save()
         
     def __str__(self):
         return self.post.title + " " + self.user.username
@@ -44,7 +44,7 @@ class CommentLike(models.Model):
             log.description = "Le gusta el comentario <a href='" + self.comment.get_absolute_url() + "'>"
         else:
             log.description = "Ha dejado de gustarle el comentario <a href='" + self.comment.get_absolute_url() + "'>"
-        log.save()
+        log.pre_save()
 
     def __str__(self):
         return self.comment.content + " " + self.user.username

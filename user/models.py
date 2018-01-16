@@ -49,16 +49,17 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
     def add_log(self, visited_user, operation):
-        log = LogUser()
-        if operation == "edit":
-            log.user = self.user
-            log.activity = Activity.objects.get(activity="user_edit")
-            log.description = "Ha editado el usuario <a href='" + self.get_absolute_url() + "'>" + self.user.first_name + " " + self.user.last_name + "</a>"
-        if operation == "visit":
-            log.user = self.user
-            log.activity = Activity.objects.get(activity="user_visit")
-            log.description = "Ha visitado el perfil del usuario <a href='" + visited_user.get_absolute_url() + "'>" + visited_user.user.first_name + " " + visited_user.user.last_name + "</a>"
-        log.save()
+        if self.user != visited_user.user:
+            log = LogUser()
+            if operation == "edit":
+                log.user = self.user
+                log.activity = Activity.objects.get(activity="user_edit")
+                log.description = "Ha editado el usuario <a href='" + self.get_absolute_url() + "'>" + self.user.first_name + " " + self.user.last_name + "</a>"
+            if operation == "view":
+                log.user = self.user
+                log.activity = Activity.objects.get(activity="user_visit")
+                log.description = "Ha visitado el perfil del usuario <a href='" + visited_user.get_absolute_url() + "'>" + visited_user.user.first_name + " " + visited_user.user.last_name + "</a>"
+            log.pre_save()
         
     def __unicode__(self):
         return self.user.first_name + " " + self.user.last_name

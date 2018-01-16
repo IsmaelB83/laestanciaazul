@@ -9,8 +9,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 # Third party app imports
 # Local app imports
+import gallery
 from .forms import PostForm, PostFormEdit
-from .models import Post, PostImage, PostCategory, PostComment, PostArchive
+from .models import Post, PostImage, PostCategory, PostComment, PostArchive, add_log_archive, add_log_search
 from discuss.models import Comment
 from gallery.models import Image
 from user.models import UserProfile
@@ -94,6 +95,9 @@ def archive_view(request, year, month):
             j -= 1
         months_list.append(aux_list)
     archivo = zip(years_list, months_list)
+    # Añadir log
+    if request.user.is_authenticated:
+        add_log_archive(request.user, year + "/" + month)
 
     # Se genera el contexto y se renderiza
     context = {
@@ -134,6 +138,9 @@ def search_view(request, filter):
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
     pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
+    # Añadir log
+    if request.user.is_authenticated:
+        add_log_search(request.user, filter)
 
     # Se genera el contexto y se renderiza
     context = {
@@ -160,7 +167,10 @@ def gallery_view(request):
         post_images_page = paginator.page(1)
     except EmptyPage:
         post_images_page = paginator.page(paginator.num_pages)
-
+    # Se genera el log
+    if request.user.is_authenticated:
+        gallery.models.add_log(request.user)
+    
     # Se genera el contexto y se renderiza
     context = {
         'post_images': post_images_page,
@@ -202,6 +212,10 @@ def category_view(request, id):
     pictures_recent = []
     for post_picture in PostImage.objects.filter(post__in=posts_all).order_by('-image__timestamp')[:12]:
         pictures_recent.append(post_picture)
+    # Se añade un log de la visita a esta categoría
+    if request.user.is_authenticated:
+        category.add_log(request.user, "view")
+        
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'category': category,

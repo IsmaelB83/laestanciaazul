@@ -21,5 +21,11 @@ class LogUser(models.Model):
     description = models.CharField(max_length=200, null=False, blank=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 
+    def pre_save(self):
+        latest_log = LogUser.objects.filter(user=self.user).latest('timestamp')
+        if latest_log.activity != self.activity or \
+                (latest_log.activity == self.activity and latest_log.description != self.description):
+            self.save()
+    
     def __str__(self):
         return self.user.username + ": " + self.activity.activity + " - " + self.description

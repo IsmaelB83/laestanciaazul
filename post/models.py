@@ -10,6 +10,22 @@ from django.core.exceptions import ObjectDoesNotExist
 from history.models import LogUser, Activity
 
 
+def add_log_search(user, search):
+    log = LogUser()
+    log.user = user
+    log.activity = Activity.objects.get(activity="search")
+    log.description = "Se ha realizado la siguiente búsqueda: " + search
+    log.pre_save()
+
+
+def add_log_archive(user, archive):
+    log = LogUser()
+    log.user = user
+    log.activity = Activity.objects.get(activity="archive")
+    log.description = "Se ha accedido al archivo: " + archive
+    log.pre_save()
+
+
 class Post(models.Model):
     STATUSES = (('IN', 'Inactive'), ('DR', 'Draft'), ('PB', 'Published'),)
 
@@ -34,7 +50,7 @@ class Post(models.Model):
         elif operation == "view":
             log.activity = Activity.objects.get(activity="post_visit")
             log.description = "Ha visitado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
-        log.save()
+        log.pre_save()
         
     def __unicode__(self):
         return self.title
@@ -78,7 +94,7 @@ class PostComment(models.Model):
         if operation == "create":
             log.activity = Activity.objects.get(activity="comment_post_create")
             log.description = "Ha creado el comentario <a href='" + self.post.get_absolute_url() + "#form_comments'>" + self.comment.content[:15] + "...</a>"
-        log.save()
+        log.pre_save()
         
     def __str__(self):
         return self.post.title + ": " + self.comment.content

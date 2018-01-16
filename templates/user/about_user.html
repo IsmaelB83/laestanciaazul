@@ -26,17 +26,17 @@ Blog - UserProfile
 				<h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
 				<h5 class="_mt-20">{{ profile.description }}</h5>
 				<div class="hr-center"></div>
+                {% comment %}
 				{% if profile.user.username == "trama1983" %}
 				<div class="_social_contact">
 					<div class="text-center">
-						{%comment%}
 						<a href="https://www.linkedin.com/in/ismael-bernal-10497a51/"><i class="fa fa-linkedin fa-2x" data-toggle="tooltip" data-placement="top" title="Linkedin"></i></a>
-						{%endcomment%}
 						<a href="https://twitter.com/Ismab83"><i class="fa fa-twitter fa-2x" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
 						<a href="https://github.com/IsmaelB83"><i class="fa fa-github fa-2x" data-toggle="tooltip" data-placement="top" title="GitHub"></i></a>
 					</div>
 				</div>
 				{% endif %}
+                {% endcomment %}
 			</div>
 		</div>
 		<!-- Columna derecha -->

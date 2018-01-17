@@ -38,7 +38,7 @@ def index_view(request):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
+    pictures_recent = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')[:20]
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'posts': posts_page,
@@ -158,7 +158,7 @@ def gallery_view(request):
     # Se recuperan todas las imagenes
     post_images_all = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')
     # Se genera el paginador para esos posts
-    paginator = Paginator(post_images_all, 12)
+    paginator = Paginator(post_images_all, 18)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:

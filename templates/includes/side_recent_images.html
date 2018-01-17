@@ -3,7 +3,7 @@
 <h2 class="_titleSection">IMAGENES RECIENTES</h2>
 <div class="_lastPictures">
     <div class="_lastPicturesRow">
-        {% for post_image in pictures_recent|slice:"0:4" %}
+        {% for post_image in pictures_recent|slice:"0:5" %}
         <div class="_lastPicturesImage">
             <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
@@ -12,7 +12,7 @@
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
-        {% for post_image in pictures_recent|slice:"4:8" %}
+        {% for post_image in pictures_recent|slice:"5:10" %}
         <div class="_lastPicturesImage">
             <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
@@ -21,7 +21,16 @@
         {% endfor %}
     </div>
     <div class="_lastPicturesRow">
-        {% for post_image in pictures_recent|slice:"8:12" %}
+        {% for post_image in pictures_recent|slice:"10:15" %}
+        <div class="_lastPicturesImage">
+            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="_lastPicturesRow">
+        {% for post_image in pictures_recent|slice:"15:20" %}
         <div class="_lastPicturesImage">
             <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">

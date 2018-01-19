@@ -1,15 +1,16 @@
 # coding=utf-8
-#  Python imports
+# Python imports
 # Django imports
 from django.apps import apps
 from django.db.models import Count, Sum
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, redirect
+from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 # Third party app imports
 # Local app imports
 import gallery
+from utilidades import PaginatorWithPageRange
 from .forms import PostForm, PostFormEdit
 from .models import Post, PostImage, PostCategory, PostComment, PostArchive, add_log_archive, add_log_search
 from discuss.models import Comment
@@ -22,7 +23,7 @@ from like.models import PostLike
 def index_view(request):
     # Se obtienen los primeros 15 posts, y se crea un paginador de 5 posts por pagina
     posts_all = Post.objects.filter(status='PB').order_by('-published_date')[:15]
-    paginator = Paginator(posts_all, 5)
+    paginator = PaginatorWithPageRange(posts_all, 5, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -65,7 +66,7 @@ def archive_view(request, year, month):
         messages.error(request, 'El año indicado es incorrecto')
         return redirect('blog:index')
     # Se genera el paginador para esos posts
-    paginator = Paginator(posts_filtered, 12)
+    paginator = PaginatorWithPageRange(posts_filtered, 12, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -122,7 +123,7 @@ def search_view(request, filter):
     else:
         posts_filtered = Post.objects.filter(status='PB', title__icontains=filter).order_by('-published_date')
     # Se genera el paginador para esos posts
-    paginator = Paginator(posts_filtered, 12)
+    paginator = PaginatorWithPageRange(posts_filtered, 12, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -158,7 +159,7 @@ def gallery_view(request):
     # Se recuperan todas las imagenes
     post_images_all = PostImage.objects.filter(post__status='PB').order_by('-image__timestamp')
     # Se genera el paginador para esos posts
-    paginator = Paginator(post_images_all, 18)
+    paginator = PaginatorWithPageRange(post_images_all, 18, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -195,7 +196,7 @@ def category_view(request, id):
         messages.warning(request, 'La categoría ' + category.name + '  no tiene posts')
         return redirect('blog:index')
     # Se crea un paginador de 5 posts por pagina
-    paginator = Paginator(posts_all, 3)
+    paginator = PaginatorWithPageRange(posts_all, 3, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -244,7 +245,19 @@ def post_view(request, id):
     # Añadir log de la visita
     if request.user.is_authenticated:
         post.add_log(request.user, "view")
-        
+
+    # Se crea un paginador con las imagenes del post (si son más de 6
+    post_images = PostImage.objects.filter(post=post)
+    paginator = PaginatorWithPageRange(post_images, 6, 5)
+    page_request_var = 'page'
+    page = request.GET.get('page')
+    try:
+        post_images = paginator.page(page)
+    except PageNotAnInteger:
+        post_images = paginator.page(1)
+    except EmptyPage:
+        post_images = paginator.page(paginator.num_pages)
+
     # POST en esta vista significa nuevos comentarios o likes
     if request.method == 'POST':
         # Es necesario estar logueado
@@ -302,6 +315,8 @@ def post_view(request, id):
         'comments_recent': comments_recent,
         'already_like': already_like,
         'post': post,
+        'post_images': post_images,
+        'page_request': page_request_var,
         'updated': updated,
     }
     return render(request, 'post.html', context)

@@ -518,15 +518,9 @@ button._noRadious {
     background-color: transparent;
     padding-top: 0px !important;
     padding-bottom: 0px !important;
-    padding-left: 6px !important;
+    padding-left: 0px !important;
     padding-right: 6px !important;
 }
-
-.pagination > li:first-child > a,
-.pagination > li:first-child > span {
-    padding-right: 6px !important;
-}
-
 
 button._pagination {
 	cursor: pointer;

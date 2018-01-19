@@ -59,24 +59,24 @@
                         <!-- imagenes del post -->
                         <div class="row">
                             <div class="col-xs-12">
-                                {% for post_image in post.postimage_set.all|slice:"0:6" %}
-                                <div class="col-xs-2 _mt-10 _pl-0 _pr-10">
-                                    <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
-                                        <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive">
-                                    </a>
-                                </div>
-                                {% endfor %}
-                                {% for post_image in post.postimage_set.all|slice:"6:12" %}
-                                <div class="col-xs-2 _mt-10 _pl-0 _pr-10">
-                                    <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
-                                        <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive">
-                                    </a>
-                                </div>
-                                {% endfor %}
+                                <hr>
+                                <h5><strong><i>Galeria de imagenes del post:</i></strong></h5>
                             </div>
+                            {% for post_image in post_images %}
+                            <div class="col-xs-4 col-sm-2 _mt-10 _pr-10">
+                                <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                                    <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive" style="height: 100px;">
+                                </a>
+                            </div>
+                            {% endfor %}
+                            {% if post.postimage_set.count > 6 %}
+                            <div class="col-xs-12 _mt-10">
+                                {% include "includes/pagination.html" with page=post_images request=page_request %}
+                            </div>
+                            {% endif %}
                         </div>
                         <!-- firma del post -->
-                        <div class="row _mt-20">
+                        <div class="row _mt-30">
                             <!-- edición -->
                             <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
                                 <p>

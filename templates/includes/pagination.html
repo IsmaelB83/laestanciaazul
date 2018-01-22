@@ -1,5 +1,6 @@
 {% load staticfiles %}
 
+{% if page.paginator.num_pages > 0 %}
 <small>Página {{ page.number }} de {{ page.paginator.num_pages }}</small>
 
 <nav class="_mt-5" aria-label="Page navigation">
@@ -16,7 +17,6 @@
             {% endif %}
         </li>
 
-        {% if page.paginator.range %}
         {% for i in page.paginator.range %}
         <li><a href="?{{ request }}={{ i }}">
             {% if page.number == i %}
@@ -26,17 +26,6 @@
             {% endif %}
         </a></li>
         {% endfor %}
-        {% else %}
-        {% for i in page.paginator.page_range %}
-        <li><a href="?{{ request }}={{ i }}">
-            {% if page.number == i %}
-            <button class="btn _btnColor1 _pagination active">{{ i }}</button>
-            {% else %}
-            <button class="btn _btnColor1 _pagination">{{ i }}</button>
-            {% endif %}
-        </a></li>
-        {% endfor %}
-        {% endif %}
 
         <li>
             {% if page.has_next %}
@@ -51,3 +40,4 @@
         </li>
     </ul>
 </nav>
+{% endif %}

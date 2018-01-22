@@ -31,7 +31,8 @@ def index_view(request):
     except PageNotAnInteger:
         posts_page = paginator.page(1)
     except EmptyPage:
-        posts_page = paginator.page(paginator.num_pages)
+        messages.warning(request, 'Página indicada fuera de rango')
+        return redirect('blog:index')
     # Los posts tipo carta son siempre 3. Ahora mismo se muestran los 3 más recientes
     posts_cards = Post.objects.filter(status='PB').order_by('-published_date')[:3]
     # Se devuelven los 5 postst más populares. Ahora mismo son los que más comentarios tienen
@@ -167,7 +168,8 @@ def gallery_view(request):
     except PageNotAnInteger:
         post_images_page = paginator.page(1)
     except EmptyPage:
-        post_images_page = paginator.page(paginator.num_pages)
+        messages.warning(request, 'Página indicada fuera de rango')
+        return redirect('blog:gallery')
     # Se genera el log
     if request.user.is_authenticated:
         gallery.models.add_log(request.user)

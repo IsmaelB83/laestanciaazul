@@ -698,17 +698,26 @@ button._pagination {
   	margin: 1.3% 0 1% 1.6%;
   	background: #FFF;
   	width: 18.7%;
+  	height: 70px;
 	position:relative; 
 }
+
+@media (max-width:768px) { ._lastPicturesImage { height: 130px; } }
+@media (max-width:425px) { ._lastPicturesImage { height: 73px; } }
+@media (max-width:375px) { ._lastPicturesImage { height: 64px; } }
+@media (max-width:320px) { ._lastPicturesImage { height: 50px; } }
+
+
 ._lastPicturesImage:first-child { 
 	margin-left: 0px; 
 } 
 
 ._lastPicturesImage img {
 	width:100%;
-	height: 75px;
+	height: 100%;
 	display:block;
 	outline:none;
+	overflow: hidden;
 }
 
 ._lastPicturesImage a{ outline:none; }

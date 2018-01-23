@@ -63,8 +63,8 @@
                                 <h5><strong><i>Galeria de imagenes del post:</i></strong></h5>
                             </div>
                             {% for post_image in post_images %}
-                            <div class="col-xs-4 col-sm-2 _mt-10 _pr-10">
-                                <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail{{post_image.image.id}}">
+                            <div class="col-xs-4 col-sm-2 _mt-10 _pr-10 imagen_post">
+                                <a href="#" data-toggle="modal" data-target="#post_modal">
                                     <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive" style="height: 100px;">
                                 </a>
                             </div>
@@ -128,6 +128,26 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- modal image -->
+<div class="modal fade" id="post_modal">
+    <div class="modal-dialog d-flex modal-lg">
+        <div class="modal-content">
+            <img id="img_post_modal" src="" alt="" width="100%" data-dismiss="modal" style="max-height: 600px;">
+        </div>
+    </div>
+    <!-- jquery -->
+    <script>
+    $(function(){
+        $('.imagen_post').on('click', function() {
+            $('#post_modal').modal;
+            var ruta_imagen = ($(this).find('img').attr('src'));
+            $('#img_post_modal').attr('src', ruta_imagen);
+        });
+    })
+
+    </script>
 </div>
 
 {% for post_image in post.postimage_set.all %}

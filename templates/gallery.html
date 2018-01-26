@@ -34,6 +34,8 @@ active
     <div class="modal fade" id="modal_gallery">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                <img id="img_modal_gallery" src="" class="img-rounded img-responsive" width="100%" data-dismiss="modal" style="max-height: 600px;">
+                <!--
                 <div class="modal-header" style="border-bottom: none;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
@@ -41,11 +43,12 @@ active
                     <img id="img_modal_gallery" src="" class="img-rounded img-responsive" width="100%" data-dismiss="modal" style="max-height: 600px;">
                 </div>
                 <div class="modal-footer _pt-0" style="text-align: left;">
-                    <!--<p><strong>Nombre:</strong> {{post_image.image.image.name}}</p>
+                    <p><strong>Nombre:</strong> {{post_image.image.image.name}}</p>
                     <p><strong>Dimensiones:</strong> {{post_image.image.image.width}} x {{post_image.image.image.height}}</p>
-                    <p><strong>Post relacionado:</strong> <a href="{{post_image.post.get_absolute_url}}">{{post_image.post.title}}</a></p>-->
+                    <p><strong>Post relacionado:</strong> <a href="{{post_image.post.get_absolute_url}}">{{post_image.post.title}}</a></p>
                     <strong><a id="href_modal_gallery" href="" download> Descargar imagen</a></strong>
                 </div>
+                -->
             </div>
         </div>
     </div>
@@ -55,11 +58,11 @@ active
         $('.gallery_image').on('click', function() {
             $('#modal_gallery').modal;
             var ruta_imagen = ($(this).find('img').attr('src'));
+            ruta_imagen = ruta_imagen.replace("small_", "");
             $('#img_modal_gallery').attr('src', ruta_imagen);
             $('#href_modal_gallery').attr('href', ruta_imagen);
         });
     })
-
     </script>
 
 </div>

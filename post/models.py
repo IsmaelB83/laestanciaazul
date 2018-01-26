@@ -73,6 +73,14 @@ class PostImage(models.Model):
         return self.post.title + ": " + self.post.image.caption
 
 
+class PostImageSmall(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    image = models.ForeignKey('gallery.Image', on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.post.title + ": " + self.post.image.caption
+
+
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('category.Category', on_delete=models.CASCADE)

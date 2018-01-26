@@ -57,24 +57,26 @@
                 <div class="row _mt-10">
                     <div class="_previewXL-Footer col-xs-12">
                         <!-- imagenes del post -->
+                        {% if post.postimagesmall_set.count > 0 %}
                         <div class="row">
                             <div class="col-xs-12">
                                 <hr>
                                 <h5><strong><i>Galeria de imagenes del post:</i></strong></h5>
                             </div>
-                            {% for post_image in post_images %}
+                            {% for post_image_sm in post_images_small %}
                             <div class="col-xs-4 col-sm-2 _mt-10 _pr-10 imagen_post">
                                 <a href="#" data-toggle="modal" data-target="#post_modal">
-                                    <img src="{{post_image.image.image.url}}" class="img-rounded img-responsive" style="height: 100px;">
+                                    <img src="{{post_image_sm.image.image.url}}" class="img-rounded img-responsive" style="height: 100px;">
                                 </a>
                             </div>
                             {% endfor %}
-                            {% if post.postimage_set.count > 6 %}
+                            {% if post.postimagesmall_set.count > 6 %}
                             <div class="col-xs-12 _mt-10">
                                 {% include "includes/pagination.html" with page=post_images request=page_request %}
                             </div>
                             {% endif %}
                         </div>
+                        {% endif %}
                         <!-- firma del post -->
                         <div class="row _mt-30">
                             <!-- edición -->
@@ -143,14 +145,12 @@
         $('.imagen_post').on('click', function() {
             $('#post_modal').modal;
             var ruta_imagen = ($(this).find('img').attr('src'));
+            ruta_imagen = ruta_imagen.replace("small_", "");
             $('#img_post_modal').attr('src', ruta_imagen);
         });
     })
     </script>
 </div>
 
-{% for post_image in post.postimage_set.all %}
-{% include "includes/modal_image.html" with post_image=post_image %}
-{% endfor %}
 
 {% endblock %}

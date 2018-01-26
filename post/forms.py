@@ -21,10 +21,11 @@ class PostForm(forms.ModelForm):
     status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect)
     image_file = forms.FileField()
     postimage = MultiFileField(min_num=1)
-
+    postimagesmall = MultiFileField(min_num=1, required=False)
+    
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage', 'postimagesmall')
 
 
 class PostFormEdit(forms.ModelForm):
@@ -35,7 +36,8 @@ class PostFormEdit(forms.ModelForm):
     )
     image_file = forms.FileField(required=False)
     postimage = MultiFileField(min_num=1, required=False)
+    postimagesmall = MultiFileField(min_num=1, required=False)
 
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage', 'postimagesmall')

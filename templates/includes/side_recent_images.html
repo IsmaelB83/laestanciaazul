@@ -5,7 +5,7 @@
     <div class="_lastPicturesRow">
         {% for post_image in pictures_recent|slice:"0:5" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
+            <a href="#{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -14,7 +14,7 @@
     <div class="_lastPicturesRow">
         {% for post_image in pictures_recent|slice:"5:10" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
+            <a href="#{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -23,7 +23,7 @@
     <div class="_lastPicturesRow">
         {% for post_image in pictures_recent|slice:"10:15" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
+            <a href="#{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -32,7 +32,7 @@
     <div class="_lastPicturesRow">
         {% for post_image in pictures_recent|slice:"15:20" %}
         <div class="_lastPicturesImage">
-            <a href="#image_detail{{post_image.image.id}}" data-toggle="modal" data-target="#image_detail">
+            <a href="#" data-toggle="modal" data-target="#image_detail">
                 <img src='{{ post_image.image.image.url }}' alt="" class="img-responsive img-rounded">
             </a>
         </div>
@@ -43,6 +43,8 @@
     <div class="modal fade" id="image_detail">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                <img id="img_modal" src="" class="img-rounded img-responsive" width="100%" data-dismiss="modal" style="max-height: 600px;">
+                <!--
                 <div class="modal-header" style="border-bottom: none;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
@@ -50,11 +52,12 @@
                     <img id="img_modal" src="" class="img-rounded img-responsive" width="100%" data-dismiss="modal" style="max-height: 600px;">
                 </div>
                 <div class="modal-footer _pt-0" style="text-align: left;">
-                    <!--<p><strong>Nombre:</strong> {{post_image.image.image.name}}</p>
+                    <p><strong>Nombre:</strong> {{post_image.image.image.name}}</p>
                     <p><strong>Dimensiones:</strong> {{post_image.image.image.width}} x {{post_image.image.image.height}}</p>
-                    <p><strong>Post relacionado:</strong> <a href="{{post_image.post.get_absolute_url}}">{{post_image.post.title}}</a></p>-->
+                    <p><strong>Post relacionado:</strong> <a href="{{post_image.post.get_absolute_url}}">{{post_image.post.title}}</a></p>
                     <strong><a id="href_modal" href="" download> Descargar imagen</a></strong>
                 </div>
+                -->
             </div>
         </div>
     </div>
@@ -65,6 +68,7 @@
         $('._lastPicturesRow ._lastPicturesImage').on('click', function() {
             $('#modal').modal;
             var ruta_imagen = ($(this).find('img').attr('src'));
+            ruta_imagen = ruta_imagen.replace("small_", "");
             $('#img_modal').attr('src', ruta_imagen);
             $('#href_modal').attr('href', ruta_imagen);
         });

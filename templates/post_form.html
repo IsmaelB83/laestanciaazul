@@ -81,7 +81,7 @@
                     <!-- Imagenes -->
                     <div class="row">
                         <!-- Imagen principal -->
-                        <div class="col-xs-12 col-sm-4 form-group _mt-20">
+                        <div class="col-xs-12 form-group _mt-20">
                             <label for="id_image_file">Imagen de cabecera</label>
                             <div class="file-loading">
                                 <input type="file" id="id_image_file" name="image_file" accept=".jpg,.jpeg,.png" class="btn _btnColor1">
@@ -119,48 +119,93 @@
                             </script>
                         </div>
                         <!-- Imagenes del post -->
-                        <div class="col-xs-12 col-sm-8 form-group _mt-20">
-                        <label for="id_postimage">Resto de imagenes del post</label>
-                        <div class="file-loading">
-                            <input type="file" id="id_postimage" name="postimage" accept=".jpg,.jpeg,.png" class="btn _btnColor1" multiple>
-                        </div>
-                        <script>
-                            {% if post.postimage_set.all %}
-                                var
-                                {% for aux in post.postimage_set.all %}
-                                    img{{aux.id}} = "{{aux.image.image.url}}"{%if forloop.last%};{%else%},{%endif%}
-                                {% endfor %}
-                            {% endif %}
-                            $(document).on('ready', function(){
-                                $("#id_postimage").fileinput({
-                                    initialPreview: [
-                                        {% for aux in post.postimage_set.all %}
-                                            img{{aux.id}},
-                                        {% endfor %}
-                                    ],
-                                    initialPreviewAsData: true,
-                                    initialPreviewConfig: [
-                                        {% if post.postimage_set.all %}
-                                        {% for aux in post.postimage_set.all %}
-                                            {% verbatim %}{{% endverbatim %}
-                                             caption: "{{aux.image.caption}}",
-                                             downloadUrl: "{{aux.image.image.url}}",
-                                             size: {{aux.image.image.size}},
-                                             width: {{aux.image.image.width}},
-                                             height: {{aux.image.image.height}},
-                                             key: {{ forloop.counter }}
-                                             {% verbatim %}}{% endverbatim %},
-                                        {% endfor %}
-                                        {% endif %}
-                                    ],
-                                    overwriteInitial: true,
-                                    initialCaption: "Imagenes del post...",
-                                    showUpload: false,
-                                    allowedFileTypes: ['image']
+                        <div class="col-xs-12 form-group _mt-20">
+                            <label for="id_postimage">Imagenes del post</label>
+                            <div class="file-loading">
+                                <input type="file" id="id_postimage" name="postimage" accept=".jpg,.jpeg,.png" class="btn _btnColor1" multiple>
+                            </div>
+                            <script>
+                                {% if post.postimage_set.all %}
+                                    var
+                                    {% for aux in post.postimage_set.all %}
+                                        img{{aux.id}} = "{{aux.image.image.url}}"{%if forloop.last%};{%else%},{%endif%}
+                                    {% endfor %}
+                                {% endif %}
+                                $(document).on('ready', function(){
+                                    $("#id_postimage").fileinput({
+                                        initialPreview: [
+                                            {% for aux in post.postimage_set.all %}
+                                                img{{aux.id}},
+                                            {% endfor %}
+                                        ],
+                                        initialPreviewAsData: true,
+                                        initialPreviewConfig: [
+                                            {% if post.postimage_set.all %}
+                                            {% for aux in post.postimage_set.all %}
+                                                {% verbatim %}{{% endverbatim %}
+                                                 caption: "{{aux.image.caption}}",
+                                                 downloadUrl: "{{aux.image.image.url}}",
+                                                 size: {{aux.image.image.size}},
+                                                 width: {{aux.image.image.width}},
+                                                 height: {{aux.image.image.height}},
+                                                 key: {{ forloop.counter }}
+                                                 {% verbatim %}}{% endverbatim %},
+                                            {% endfor %}
+                                            {% endif %}
+                                        ],
+                                        overwriteInitial: true,
+                                        initialCaption: "Imagenes del post...",
+                                        showUpload: false,
+                                        allowedFileTypes: ['image']
+                                    });
                                 });
-                            });
-                        </script>
-                    </div>
+
+                            </script>
+                        </div>
+                        <!-- Imagenes small del post -->
+                        <div class="col-xs-12 form-group _mt-20">
+                            <label for="id_postimagesmall">Thumbnails del post</label>
+                            <div class="file-loading">
+                                <input type="file" id="id_postimagesmall" name="postimagesmall" accept=".jpg,.jpeg,.png" class="btn _btnColor1" multiple>
+                            </div>
+                            <script>
+                                {% if post.postimagesmall_set.all %}
+                                    var
+                                    {% for aux in post.postimagesmall_set.all %}
+                                        img{{aux.id}} = "{{aux.image.image.url}}"{%if forloop.last%};{%else%},{%endif%}
+                                    {% endfor %}
+                                {% endif %}
+                                $(document).on('ready', function(){
+                                    $("#id_postimagesmall").fileinput({
+                                        initialPreview: [
+                                            {% for aux in post.postimagesmall_set.all %}
+                                                img{{aux.id}},
+                                            {% endfor %}
+                                        ],
+                                        initialPreviewAsData: true,
+                                        initialPreviewConfig: [
+                                            {% if post.postimagesmall_set.all %}
+                                                {% for aux in post.postimagesmall_set.all %}
+                                                    {% verbatim %}{{% endverbatim %}
+                                                     caption: "{{aux.image.caption}}",
+                                                     downloadUrl: "{{aux.image.image.url}}",
+                                                     size: {{aux.image.image.size}},
+                                                     width: {{aux.image.image.width}},
+                                                     height: {{aux.image.image.height}},
+                                                     key: {{ forloop.counter }}
+                                                     {% verbatim %}}{% endverbatim %},
+                                                {% endfor %}
+                                            {% endif %}
+                                        ],
+                                        overwriteInitial: true,
+                                        initialCaption: "Thumbnails del post...",
+                                        showUpload: false,
+                                        allowedFileTypes: ['image']
+                                    });
+                                });
+
+                            </script>
+                        </div>
                     </div>
                     <!-- Editor wysiwyg -->
                     <div class="form-group">

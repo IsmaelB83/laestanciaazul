@@ -1,5 +1,5 @@
 # coding=utf-8
-#  Python imports
+# Python imports
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
@@ -33,7 +33,7 @@ class Category(models.Model):
         if operation == "view":
             log.user = user
             log.activity = Activity.objects.get(activity="category_visit")
-            log.description = "Ha visitado la categoría de posts <a href='" + self.get_absolute_url() + "'>" + self.name + "</a>"
+            log.description = u"Ha visitado la categoría de posts <a href='" + self.get_absolute_url() + "'>" + self.name + "</a>"
         log.pre_save()
         
     class Meta:

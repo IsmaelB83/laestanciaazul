@@ -2,8 +2,6 @@
 # Python imports
 # Django imports
 from django.core.paginator import Paginator
-
-
 # Third party app imports
 # Local app imports
 

@@ -1,4 +1,5 @@
 # coding=utf-8
+# decoding=utf-8
 # Python imports
 # Django imports
 from django.apps import apps
@@ -7,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.template.defaultfilters import slugify
 # Third party app imports
 # Local app imports
 import gallery
@@ -173,7 +175,7 @@ def gallery_view(request):
     # Se genera el log
     if request.user.is_authenticated:
         gallery.models.add_log(request.user)
-    
+
     # Se genera el contexto y se renderiza
     context = {
         'post_images': post_images_page,
@@ -218,7 +220,7 @@ def category_view(request, id):
     # Se añade un log de la visita a esta categoría
     if request.user.is_authenticated:
         category.add_log(request.user, "view")
-        
+
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'category': category,
@@ -301,7 +303,7 @@ def post_view(request, id):
     posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.filter(post__status='PB').order_by('-comment__timestamp')[:5]
-    
+
     # El usuario logueado ha hecho ya Like en este post?
     already_like = "False"
     if request.user.is_authenticated:
@@ -342,9 +344,11 @@ def post_create_view(request):
         if form.is_valid():
             # Si se llega hasta aquí es que la información del form es correcta
             post = form.save(commit=False)
+            post.slug = slugify(post.title)
             # Se genera la imagen de cabecera y se asocia al post
             image = Image()
             image.caption = form.cleaned_data['image_file'].name
+            image.post_slug = post.slug
             image.image = form.cleaned_data['image_file']
             image.save()
             post.image = image
@@ -376,6 +380,7 @@ def post_create_view(request):
                 image = Image()
                 image.caption = file_image.name
                 image.image = file_image
+                image.post_slug = post.slug
                 image.save()
                 post_image = PostImage()
                 post_image.post = post
@@ -385,6 +390,7 @@ def post_create_view(request):
             for file_image_sm in form.cleaned_data['postimagesmall']:
                 image_sm = Image()
                 image_sm.caption = file_image_sm.name
+                image_sm.post_slug = post.slug
                 image_sm.image = file_image_sm
                 image_sm.save()
                 post_image_sm = PostImageSmall()
@@ -411,12 +417,12 @@ def post_edit_view(request, id):
     if not request.user.is_authenticated:
         messages.error(request, 'Es necesario estar autenticado para editar posts')
         return redirect('blog:index')
-    
+
     # Es obligatorio ser editor para tocar un post
     if not request.user.userprofile.author:
         messages.error(request, u'No está autorizado para editar posts')
         return redirect('blog:index')
-    
+
     # Se obtiene el post a editar y si no existe se redirige al index
     try:
         post = Post.objects.get(id=id)
@@ -436,12 +442,14 @@ def post_edit_view(request, id):
         if form.is_valid():
             status_old = post.status
             post = form.save(commit=False)
+            post.slug = slugify(post.title)
             # Sólo si se selecciona una nueva imagen de cabecera se borra la antigua y se asigna la nueva
             if form.cleaned_data['image_file']:
                 post.image.delete()
                 image = Image()
                 image.caption = form.cleaned_data['image_file'].name
                 image.image = form.cleaned_data['image_file']
+                image.post_slug = post.slug
                 image.save()
                 post.image = image
             # Se graban los cambios del post, para poder seguir con el resto de datos
@@ -476,6 +484,7 @@ def post_edit_view(request, id):
                     image = Image()
                     image.caption = file_image.name
                     image.image = file_image
+                    image.post_slug = post.slug
                     image.save()
                     post_image = PostImage()
                     post_image.post = post
@@ -489,6 +498,7 @@ def post_edit_view(request, id):
                     image_sm = Image()
                     image_sm.caption = file_image_sm.name
                     image_sm.image = file_image_sm
+                    image_sm.post_slug = post.slug
                     image_sm.save()
                     post_image_sm = PostImageSmall()
                     post_image_sm.post = post

@@ -37,21 +37,22 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     image = models.ForeignKey('gallery.Image', null=True, on_delete=models.SET_NULL)
+    slug = models.SlugField(max_length = 120)
 
     def add_log(self, user, operation):
         log = LogUser()
         log.user = user
         if operation == "create":
             log.activity = Activity.objects.get(activity="post_create")
-            log.description = "Ha creado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+            log.description = u"Ha creado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
         elif operation == "edit":
             log.activity = Activity.objects.get(activity="post_edit")
-            log.description = "Ha editado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+            log.description = u"Ha editado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
         elif operation == "view":
             log.activity = Activity.objects.get(activity="post_visit")
-            log.description = "Ha visitado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
+            log.description = u"Ha visitado el post <a href='" + self.get_absolute_url() + "'>" + self.title + "</a>"
         log.pre_save()
-        
+
     def __unicode__(self):
         return self.title
 
@@ -78,7 +79,8 @@ class PostImageSmall(models.Model):
     image = models.ForeignKey('gallery.Image', on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.post.title + ": " + self.post.image.caption
+        return ""
+        #return self.post.title + ": " + self.post.image.caption
 
 
 class PostCategory(models.Model):

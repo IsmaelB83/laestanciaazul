@@ -21,11 +21,11 @@ class PostLike(models.Model):
         log.activity = Activity.objects.get(activity="post_like")
         log.user = self.user
         if estado:
-            log.description = "Le gusta el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
+            log.description = u"Le gusta el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
         else:
-            log.description = "Ha dejado de gustarle el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
+            log.description = u"Ha dejado de gustarle el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
         log.pre_save()
-        
+
     def __str__(self):
         return self.post.title + " " + self.user.username
 

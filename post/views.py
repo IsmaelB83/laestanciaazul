@@ -31,7 +31,7 @@ def index_view(request):
     except PageNotAnInteger:
         posts_page = paginator.page(1)
     except EmptyPage:
-        messages.warning(request, 'Página indicada fuera de rango')
+        messages.warning(request, u'Página indicada fuera de rango')
         return redirect('blog:index')
     # Los posts tipo carta son siempre 3. Ahora mismo se muestran los 3 más recientes
     posts_cards = Post.objects.filter(status='PB').order_by('-published_date')[:3]
@@ -64,7 +64,7 @@ def archive_view(request, year, month):
             messages.error(request, 'El mes indicado es incorrecto')
             return redirect('blog:index')
     else:
-        messages.error(request, 'El año indicado es incorrecto')
+        messages.error(request, u'El año indicado es incorrecto')
         return redirect('blog:index')
     # Se genera el paginador para esos posts
     paginator = PaginatorWithPageRange(posts_filtered, 12, 5)
@@ -168,7 +168,7 @@ def gallery_view(request):
     except PageNotAnInteger:
         post_images_page = paginator.page(1)
     except EmptyPage:
-        messages.warning(request, 'Página indicada fuera de rango')
+        messages.warning(request, u'Página indicada fuera de rango')
         return redirect('blog:gallery')
     # Se genera el log
     if request.user.is_authenticated:
@@ -191,11 +191,11 @@ def category_view(request, id):
         else:
             posts_all = Post.objects.filter(status='PB').order_by('-published_date')
     except ObjectDoesNotExist:
-        messages.error(request, 'La categoría no existe')
+        messages.error(request, u'La categoría no existe')
         return redirect('blog:index')
     # Si la categoria está vacia se redirige al index
     if posts_all.count() == 0:
-        messages.warning(request, 'La categoría ' + category.name + '  no tiene posts')
+        messages.warning(request, u'La categoría ' + category.name + '  no tiene posts')
         return redirect('blog:index')
     # Se crea un paginador de 5 posts por pagina
     paginator = PaginatorWithPageRange(posts_all, 3, 5)
@@ -295,7 +295,7 @@ def post_view(request, id):
                 post_comment.comment = comment
                 post_comment.save()
                 post_comment.add_log("create")
-                messages.success(request, 'Comentario añadido')
+                messages.success(request, u'Comentario añadido')
 
     # Se recuperan los posts más populares
     posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
@@ -333,7 +333,7 @@ def post_create_view(request):
 
     # Es obligatorio ser editor para crear un post
     if not request.user.userprofile.author:
-        messages.error(request, 'No está autorizado para crear posts')
+        messages.error(request, u'No está autorizado para crear posts')
         return redirect('blog:index')
 
     # Se ha hecho SUBMIT en el FORM?
@@ -414,7 +414,7 @@ def post_edit_view(request, id):
     
     # Es obligatorio ser editor para tocar un post
     if not request.user.userprofile.author:
-        messages.error(request, 'No está autorizado para editar posts')
+        messages.error(request, u'No está autorizado para editar posts')
         return redirect('blog:index')
     
     # Se obtiene el post a editar y si no existe se redirige al index
@@ -426,7 +426,7 @@ def post_edit_view(request, id):
     
     # Sólo se pueden editar posts propios
     if request.user != post.author.user:
-        messages.error(request, 'Sólo pueden editarse los posts propios')
+        messages.error(request, u'Sólo pueden editarse los posts propios')
         return redirect('blog:index')
 
     # Si llega hasta aquí se puede continuar

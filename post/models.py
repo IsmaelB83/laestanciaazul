@@ -29,6 +29,7 @@ def add_log_archive(user, archive):
 class Post(models.Model):
     STATUSES = (('IN', 'Inactive'), ('DR', 'Draft'), ('PB', 'Published'),)
 
+    id = models.SlugField(primary_key = True, max_length = 120)
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
     content = models.TextField(null=False, blank=False, default='none')
     author = models.ForeignKey('user.UserProfile', null=True, on_delete=models.SET_NULL)
@@ -37,7 +38,6 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     image = models.ForeignKey('gallery.Image', null=True, on_delete=models.SET_NULL)
-    slug = models.SlugField(max_length = 120)
 
     def add_log(self, user, operation):
         log = LogUser()
@@ -105,7 +105,7 @@ class PostComment(models.Model):
             log.activity = Activity.objects.get(activity="comment_post_create")
             log.description = "Ha creado el comentario <a href='" + self.post.get_absolute_url() + "#form_comments'>" + self.comment.content[:15] + "...</a>"
         log.pre_save()
-        
+
     def __str__(self):
         return self.post.title + ": " + self.comment.content
 

@@ -344,11 +344,11 @@ def post_create_view(request):
         if form.is_valid():
             # Si se llega hasta aquí es que la información del form es correcta
             post = form.save(commit=False)
-            post.slug = slugify(post.title)
+            post.id = slugify(post.title)
             # Se genera la imagen de cabecera y se asocia al post
             image = Image()
             image.caption = form.cleaned_data['image_file'].name
-            image.post_slug = post.slug
+            image.post_slug = post.id
             image.image = form.cleaned_data['image_file']
             image.save()
             post.image = image
@@ -380,7 +380,7 @@ def post_create_view(request):
                 image = Image()
                 image.caption = file_image.name
                 image.image = file_image
-                image.post_slug = post.slug
+                image.post_slug = post.id
                 image.save()
                 post_image = PostImage()
                 post_image.post = post
@@ -390,7 +390,7 @@ def post_create_view(request):
             for file_image_sm in form.cleaned_data['postimagesmall']:
                 image_sm = Image()
                 image_sm.caption = file_image_sm.name
-                image_sm.post_slug = post.slug
+                image_sm.post_slug = post.id
                 image_sm.image = file_image_sm
                 image_sm.save()
                 post_image_sm = PostImageSmall()
@@ -449,7 +449,7 @@ def post_edit_view(request, id):
                 image = Image()
                 image.caption = form.cleaned_data['image_file'].name
                 image.image = form.cleaned_data['image_file']
-                image.post_slug = post.slug
+                image.post_slug = post.id
                 image.save()
                 post.image = image
             # Se graban los cambios del post, para poder seguir con el resto de datos
@@ -484,7 +484,7 @@ def post_edit_view(request, id):
                     image = Image()
                     image.caption = file_image.name
                     image.image = file_image
-                    image.post_slug = post.slug
+                    image.post_slug = post.id
                     image.save()
                     post_image = PostImage()
                     post_image.post = post
@@ -498,7 +498,7 @@ def post_edit_view(request, id):
                     image_sm = Image()
                     image_sm.caption = file_image_sm.name
                     image_sm.image = file_image_sm
-                    image_sm.post_slug = post.slug
+                    image_sm.post_slug = post.id
                     image_sm.save()
                     post_image_sm = PostImageSmall()
                     post_image_sm.post = post

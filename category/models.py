@@ -35,6 +35,6 @@ class Category(models.Model):
             log.activity = Activity.objects.get(activity="category_visit")
             log.description = u"Ha visitado la categoría de posts <a href='" + self.get_absolute_url() + "'>" + self.name + "</a>"
         log.pre_save()
-        
+
     class Meta:
         ordering = ['sort']

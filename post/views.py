@@ -481,7 +481,7 @@ def post_edit_view(request, id):
                     post_image.post = post
                     post_image.image = image
                     post_image.save()
-            # Sólo si se han asignado nuevas imagenes small al post se borran las antiguas y se asignan las nuevas
+            # Sólo si se han asignado nuevasss imagenes small al post se borran las antiguas y se asignan las nuevas
             if len(form.cleaned_data['postimagesmall']) > 0:
                 for image_sm in PostImageSmall.objects.filter(post=post):
                     image_sm.delete()

@@ -16,10 +16,11 @@
                data-placement="right" title="Loved"><i class="fa fa-heart"></i> {{post.postlike_set.all.count}} likes
             </a>
         </span>
+        <img class="img-responsive img-rounded _mt-20" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
     </div>
     <div class="_previewXL-Body">
         <!--<a href=""><img src='{{ post.image.image.url }}' class="img-rounded img-responsive" width="100%" style="max-height: 200px;"></a>-->
-        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:200 }}
+        <p>{{ post.content|safe|truncatewords_html:200 }}
             <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
         </p>
     </div>

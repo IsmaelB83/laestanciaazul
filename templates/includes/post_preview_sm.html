@@ -19,7 +19,7 @@
     </div>
     <div class="_previewXL-Body">
         <p>
-            {{ post.content|safe|striptags|linebreaksbr|truncatewords_html:50 }}
+            {{ post.content|safe|striptags|linebreaks|truncatewords_html:50 }}
             <br>
             <span><a href='{{ post.get_absolute_url }}'> leer mas...</a></span>
         </p>

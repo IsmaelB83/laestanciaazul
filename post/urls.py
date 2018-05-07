@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^archive/(?P<year>\d+)/(?P<month>\d+)/$', views.archive_view, name='archive'),
     url(r'^category/(?P<id>[\w]+)/$', views.category_view, name='category'),
     url(r'^search/(?P<filter>[\w\-]+)/$', views.search_view, name='search'),
-    url(r'^post/(?P<id>[\w\-]+)/$', views.post_view, name='post'),
     url(r'^post/create/$', views.post_create_view, name='post_create'),
+    url(r'^post/(?P<id>[\w\-]+)/$', views.post_view, name='post'),
     url(r'^post/edit/(?P<id>[\w\-]+)/$', views.post_edit_view, name='post_edit'),
 ]

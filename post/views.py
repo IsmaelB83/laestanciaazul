@@ -250,7 +250,7 @@ def post_view(request, id):
     if request.user.is_authenticated:
         post.add_log(request.user, "view")
 
-    # Se crea un paginador con las imagenes del post (si son más de 6
+    # Se crea un paginador con las imagenes del post (si son más de 6)
     post_images_small = PostImageSmall.objects.filter(post=post)
     paginator = PaginatorWithPageRange(post_images_small, 6, 5)
     page_request_var = 'page'

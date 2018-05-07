@@ -70,9 +70,9 @@
                                 </a>
                             </div>
                             {% endfor %}
-                            {% if post.postimagesmall_set.count > 6 %}
+                            {% if post.postimagesmall_set.count > 0 %}
                             <div class="col-xs-12 _mt-10">
-                                {% include "includes/pagination.html" with page=post_images request=page_request %}
+                                {% include "includes/pagination.html" with page=post_images_small request=page_request %}
                             </div>
                             {% endif %}
                         </div>

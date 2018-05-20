@@ -19,12 +19,12 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Blog title-->
     <title>La Estancia Azul</title>
-    <link rel="shortcut icon" href="http://www.laestanciaazul.com/media/post/none/icono.ico">
-    <link rel="apple-touch-icon image_src" href="http://www.laestanciaazul.com/media/post/none/web.jpg">
+    <link rel="shortcut icon" href="https://laestanciaazul.com/media/post/none/icono.ico">
+    <link rel="apple-touch-icon image_src" href="https://laestanciaazul.com/media/post/none/web.jpg">
     <meta property="og:type" content= "website" />
-    <meta property="og:url" content="http://www.laestanciaazul.com"/>
+    <meta property="og:url" content="https://laestanciaazul.com"/>
     <meta property="og:site_name" content="La Estancia Azul - Blog" />
-    <meta property="og:image" itemprop="image primaryImageOfPage" content="http://www.laestanciaazul.com/media/post/none/web.jpg" />
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="https://laestanciaazul.com/media/post/none/web.jpg" />
     <!-- Javascript files-->
     <script src='{% static "js/jquery-1.11.1.js" %}'></script>
     <script src='{% static "js/moment-2.9.0.js" %}'></script>
@@ -308,11 +308,14 @@
                     <div class="col-xs-12 _pb-20 _pl-0 _pr-0">
                         <h2 class="footer-title">Newsletter</h2>
                         <p>Subscribete a nuestra lista de noticias para recibir las publicaciones en tu mail (no disponible todavía)</p>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                            <input id="email" type="text" class="form-control" name="email" placeholder="Email">
-                        </div>
-                        <button type="button" class="btn _btnColor3 _mt-15 _noRadious">Subscribirse</button>
+                        <form method="post" action="" id="subscribe" enctype="multipart/form-data" novalidate>
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                                <input id="email" type="text" class="form-control" name="email" placeholder="Email">
+                            </div>
+                            <button type="submit" class="btn _btnColor3 _mt-15 _noRadious">Subscribirse</button>
+                        </form>
                     </div>
                 </div>
             </div>

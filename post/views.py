@@ -23,6 +23,11 @@ from like.models import PostLike
 
 
 def index_view(request):
+
+    # Suscrito a la lista de distribución
+    if request.method == 'POST':
+        messages.success(request, u'Se ha suscrito a la lista de distribución')
+
     # Se obtienen los primeros 15 posts, y se crea un paginador de 5 posts por pagina
     posts_all = Post.objects.filter(status='PB').order_by('-published_date')[:15]
     paginator = PaginatorWithPageRange(posts_all, 5, 5)

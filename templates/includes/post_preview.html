@@ -3,7 +3,7 @@
 <!-- Preview de un post -->
 <div class="_previewXL">
     <div class="_previewXL-Title">
-        <h3><a href='{{ post.get_absolute_url }}'>{{ post.title|title }}</a></h3>
+        <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
         <span>Por
             <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
                 {{ post.author.user.first_name }}

@@ -22,9 +22,12 @@ class LogUser(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     def pre_save(self):
-        latest_log = LogUser.objects.filter(user=self.user).latest('timestamp')
-        if latest_log.activity != self.activity or \
-                (latest_log.activity == self.activity and latest_log.description != self.description):
+        try:
+            latest_log = LogUser.objects.filter(user=self.user).latest('timestamp')
+            if latest_log.activity != self.activity or \
+                    (latest_log.activity == self.activity and latest_log.description != self.description):
+                self.save()
+        except LogUser.DoesNotExist:
             self.save()
     
     def __str__(self):

@@ -20,7 +20,7 @@
     </div>
     <div class="_previewXL-Body">
         <!--<a href=""><img src='{{ post.image.image.url }}' class="img-rounded img-responsive" width="100%" style="max-height: 200px;"></a>-->
-        <p>{{ post.content|safe|truncatewords_html:200 }}
+        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:50 }}
             <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
         </p>
     </div>

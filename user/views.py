@@ -91,7 +91,48 @@ def user_register_view(request):
 
 
 def about_user_view(request, id):
-	# Enviar mail
+	# Recuperar usuario
+	try:
+		user = User.objects.get(id=id)
+	except ObjectDoesNotExist:
+		messages.error(request, 'El usuario no existe')
+		return redirect('blog:index')
+	# Sólo pueden verse perfiles si estás logueado
+	if not request.user.is_authenticated and user.username != 'trama1983':
+		messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
+		return redirect('blog:index')
+	# Registro la visita del usuario
+	if request.user.is_authenticated and request.user.userprofile:
+		request.user.userprofile.add_log(user.userprofile, "view")
+	# Recuperar datos adicionales del usuario
+	posts_user = Post.objects.filter(author__user=user)
+	comments_user = Comment.objects.filter(user=user)
+	post_likes = PostLike.objects.filter(user=user)
+	follows = UserFollow.objects.filter(user=user)
+	followers = UserFollow.objects.filter(follows=user)
+	log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
+	paginator = Paginator(log_user_all, 25)
+	page_request_var = 'page'
+	page = request.GET.get('page')
+	try:
+		log_user_page = paginator.page(page)
+	except PageNotAnInteger:
+		log_user_page = paginator.page(1)
+	except EmptyPage:
+		log_user_page = paginator.page(paginator.num_pages)
+	# Contexto y render
+	context = {
+		'profile': user.userprofile,
+		'posts_user': posts_user,
+		'comments_user': comments_user,
+		'post_likes': post_likes,
+		'follows': follows,
+		'followers': followers,
+		'log_user': log_user_page,
+		'page_request': page_request_var,
+		'form': MailForm(),
+	}
+	# Enviar mail?
 	if request.method == 'POST':
 		# Registro el mail enviado
 		if request.user.is_authenticated and request.user.userprofile:
@@ -99,61 +140,23 @@ def about_user_view(request, id):
 		form = MailForm(request.POST)
 		if form.is_valid():
 			sender = form.cleaned_data['mail_from']
-			receivers = 'info@laestanciaazul.com'
-			message = "From: " + form.cleaned_data['mail_name'] + " <" + form.cleaned_data['mail_from'] + \
-			          "> To: laestanciaazul.com <" + receivers + \
-			          "> Subject: " + form.cleaned_data['mail_mess']
+			receivers = ''
+			message = "From: " + form.cleaned_data['mail_name'] + " <" + form.cleaned_data['mail_from'] + ">\n" + \
+			          "To: laestanciaazul.com <info@laestanciaazul.com>\n" + \
+			          "Subject: " + form.cleaned_data['mail_subj'] + "\n" + \
+					  "\n" + \
+				      form.cleaned_data['mail_mess']
 			try:
 				smtpObj = smtplib.SMTP('localhost')
 				smtpObj.sendmail(sender, receivers, message)
 				messages.success(request, 'E-mail enviado con éxito')
 			except Exception:
 				messages.error(request, 'Error al enviar el mail. Escribe a info@laestanciaazul.com.')
-		# Redirigir al index
-		return redirect('blog:index')
-    # Recuperar mi usuario
+			return redirect('blog:index')
+		else:
+			return render(request, 'user/about_user.html', context)
 	else:
-	    try:
-	        user = User.objects.get(id=id)
-	    except ObjectDoesNotExist:
-	        messages.error(request, 'El usuario no existe')
-	        return redirect('blog:index')
-	    # Sólo pueden verse perfiles si estás logueado
-	    if not request.user.is_authenticated and user.username != 'trama1983':
-	        messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
-	        return redirect('blog:index')
-	    # Registro la visita del usuario
-	    if request.user.is_authenticated and request.user.userprofile:
-	        request.user.userprofile.add_log(user.userprofile, "view")
-	    # Recuperar datos adicionales del usuario
-	    posts_user = Post.objects.filter(author__user=user)
-	    comments_user = Comment.objects.filter(user=user)
-	    post_likes = PostLike.objects.filter(user=user)
-	    follows = UserFollow.objects.filter(user=user)
-	    followers = UserFollow.objects.filter(follows=user)
-	    log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
-	    paginator = Paginator(log_user_all, 25)
-	    page_request_var = 'page'
-	    page = request.GET.get('page')
-	    try:
-	        log_user_page = paginator.page(page)
-	    except PageNotAnInteger:
-	        log_user_page = paginator.page(1)
-	    except EmptyPage:
-	        log_user_page = paginator.page(paginator.num_pages)
-	    # Contexto y render
-	    context = {
-	        'profile': user.userprofile,
-	        'posts_user': posts_user,
-	        'comments_user': comments_user,
-	        'post_likes': post_likes,
-	        'follows': follows,
-	        'followers': followers,
-	        'log_user': log_user_page,
-	        'page_request': page_request_var,
-		    'form': MailForm(),
-	    }
-	    return render(request, 'user/about_user.html', context)
+		return render(request, 'user/about_user.html', context)
 
 
 @login_required

@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 
 {% if not bound %}
-{% render_field field class="form-control" %}
+{% render_field field %}
 {% else %}
 {% if field.errors %}
 {% render_field field class="form-control is-invalid" %}

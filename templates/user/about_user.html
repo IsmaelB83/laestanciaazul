@@ -175,40 +175,26 @@ Blog - UserProfile
                                     </div>
                                     {% endif %}
                                     <!-- Renderizado del formulario -->
-                                    <div class="row">
-                                        <div class="form-group col-xs-12 col-sm-4">
-                                            <!--<label>Nombre <span class="label label-danger" style="margin-bottom:30px;">requerido</span></label>-->
-                                            {% include "utils/form_field_render.html" with field=form.first_name bound=form.is_bound %}
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-4">
-                                            {% include "utils/form_field_render.html" with field=form.last_name bound=form.is_bound %}
-                                        </div>
-                                    </div>
-
 									<div class="row">
 										<div class="col-md-6">
                                             <div class="form-group">
-                                                {% include "utils/form_field_render.html" with field=form.mail_name bound=form.is_bound %}
-                                            </div>
+	                                            {% include "utils/form_field_render.html" with field=form.mail_name bound=form.is_bound %}
+											</div>
                                             <div class="form-group">
                                                 {% include "utils/form_field_render.html" with field=form.mail_from bound=form.is_bound %}
                                             </div>
                                             <div class="form-group">
                                                 {% include "utils/form_field_render.html" with field=form.mail_subj bound=form.is_bound %}
                                             </div>
-											<!--<div class="form-group"><input id="mail_name" class="form-control input-lg _contact_input" placeholder="Nombre..."></div>
-											<div class="form-group"><input id="mail_from" class="form-control input-lg _contact_input" placeholder="E-mail..."></div>
-											<div class="form-group"><input id="mail_subj" class="form-control input-lg _contact_input" placeholder="Asunto..."></div>-->
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												{% include "utils/form_field_render.html" with field=form.mail_mess bound=form.is_bound %}
-                                                <!--<textarea id="mail_mess" class="form-control input-lg _contact_input" style="height:182px; resize:none;" placeholder="Mensaje..." required="true"></textarea>-->
 											</div>
 										</div>
 									</div>
 									<div class="form-group _mt-10">
-										<button type="submit"  id="send_mail" class="btn btn-lg _btnColor1 btn-block">ENVIAR</button>
+										<button type="submit" id="send_mail" class="btn btn-lg _btnColor1 btn-block">ENVIAR</button>
 									</div>
 								</form>
 							</div>

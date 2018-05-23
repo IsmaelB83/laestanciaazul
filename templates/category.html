@@ -16,7 +16,7 @@ active
             {% for post in posts %}
             {% include "includes/post_preview.html" with post=post %}
             {% endfor %}
-            {% include "includes/pagination.html" with paginator=posts request=page_request %}
+            {% include "includes/pagination.html" with page=posts request=page_request %}
         </div>
         <!-- Sidebar derecha-->
         <div class="col-xs-12 col-md-4 _pl-0 _pl-sm-20 pull-right">

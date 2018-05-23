@@ -43,7 +43,7 @@ def index_view(request):
     # Los posts tipo carta son siempre 3. Ahora mismo se muestran los 3 más recientes
     posts_cards = Post.objects.filter(status='PB').order_by('-published_date')[:3]
     # Se devuelven los 5 postst más populares. Ahora mismo son los que más comentarios tienen
-    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:4]
+    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count').order_by('-published_date')[:4]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
@@ -205,7 +205,7 @@ def category_view(request, id):
         messages.warning(request, u'La categoría ' + category.name + '  no tiene posts')
         return redirect('blog:index')
     # Se crea un paginador de 5 posts por pagina
-    paginator = PaginatorWithPageRange(posts_all, 3, 5)
+    paginator = PaginatorWithPageRange(posts_all, 5, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
@@ -215,7 +215,7 @@ def category_view(request, id):
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
     # Posts populares (sólo de posts de esta categoría)
-    posts_popular = posts_all.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
+    posts_popular = posts_all.annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count').order_by('-published_date')[:5]
     # Últimos comentarios (sólo de posts de esta categoría)
     comments_recent = PostComment.objects.filter(post__in=posts_all).order_by('-comment__timestamp')[:5]
     # Ultimas imagenes (TO-DO: deberían ser sólo la de esta categoría)

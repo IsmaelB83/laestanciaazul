@@ -79,7 +79,7 @@
                 {% if profile.author %}
                 <div class="form-group">
                     {{ form.introduction.label_tag }}
-                    {% render_field form.introduction placeholder="introduction about yourself..." class="form-control" style="height:150px; resize:none;" %}
+                    {% include "utils/form_field_render.html" with field=form.introduction bound=form.is_bound %}
                 </div>
                 {% endif %}
                 <div class="form-group pull-right _mt-0">

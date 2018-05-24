@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 # Third party app imports
 from social_django.models import UserSocialAuth
 # Local app imports
+from utilidades import PaginatorWithPageRange
 from discuss.models import Comment
 from history.models import LogUser
 from like.models import PostLike
@@ -111,7 +112,7 @@ def about_user_view(request, id):
 	follows = UserFollow.objects.filter(user=user)
 	followers = UserFollow.objects.filter(follows=user)
 	log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
-	paginator = Paginator(log_user_all, 25)
+	paginator = PaginatorWithPageRange(log_user_all, 25, 5)
 	page_request_var = 'page'
 	page = request.GET.get('page')
 	try:
@@ -140,15 +141,19 @@ def about_user_view(request, id):
 		form = MailForm(request.POST)
 		if form.is_valid():
 			sender = form.cleaned_data['mail_from']
-			receivers = ''
-			message = "From: " + form.cleaned_data['mail_name'] + " <" + form.cleaned_data['mail_from'] + ">\n" + \
-			          "To: laestanciaazul.com <info@laestanciaazul.com>\n" + \
-			          "Subject: " + form.cleaned_data['mail_subj'] + "\n" + \
+			receivers = ['laestanciaazul.com@gmail.com']
+			message = "From: " + form.cleaned_data['mail_name'] + " '<" + form.cleaned_data['mail_from'] + ">\n" + \
+					  "To: '<info@laestanciaazul.com>'\n" + \
+					  "Subject: " + form.cleaned_data['mail_subj'] + "\n" + \
 					  "\n" + \
-				      form.cleaned_data['mail_mess']
+					  "Mail Origen: " + form.cleaned_data['mail_from'] + "\n" + \
+					  "Nombre: " + form.cleaned_data['mail_name'] + "\n" + \
+					  "Contenido del mail: \n\n" + \
+			form.cleaned_data['mail_mess']
+			aux = message.encode('utf-8')
 			try:
 				smtpObj = smtplib.SMTP('localhost')
-				smtpObj.sendmail(sender, receivers, message)
+				smtpObj.sendmail(sender, receivers, aux.decode('utf-8'))
 				messages.success(request, 'E-mail enviado con éxito')
 			except Exception:
 				messages.error(request, 'Error al enviar el mail. Escribe a info@laestanciaazul.com.')

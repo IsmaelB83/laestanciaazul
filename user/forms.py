@@ -52,8 +52,8 @@ class MailForm(forms.Form):
 	mail_mess = forms.CharField(
 		label='Mensaje',
 		required=True,
-		max_length=200,
-		widget=forms.TextInput(attrs={'placeholder': 'Mensaje...',
+		max_length=500,
+		widget=forms.Textarea(attrs={'placeholder': 'Mensaje...',
 		                              'autocomplete': 'off',
 		                              'class': 'form-control input-lg _contact_input',
 		                              'style': 'height:182px; resize:none;'})
@@ -106,6 +106,14 @@ class ProfileForm(forms.ModelForm):
 			'class': 'form-control'}),
 		max_length=100,
 		required=True
+	)
+	introduction = forms.CharField(
+		widget=forms.Textarea(attrs={
+			'placeholder': 'introduction about yourself...',
+			'class': 'form-control',
+			'style': 'height:150px; resize:none;'}),
+		max_length=200,
+		required=False
 	)
 	image = forms.ImageField(
 		required=False

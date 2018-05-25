@@ -1,6 +1,5 @@
 # coding=utf-8
 # Python imports
-import smtplib
 # Django imports
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,6 +9,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 # Third party app imports
 from social_django.models import UserSocialAuth
 # Local app imports
@@ -140,20 +141,24 @@ def about_user_view(request, id):
 			request.user.userprofile.add_log(request.user.userprofile, "mail")
 		form = MailForm(request.POST)
 		if form.is_valid():
-			sender = form.cleaned_data['mail_from']
-			receivers = ['laestanciaazul.com@gmail.com']
-			message = "From: " + form.cleaned_data['mail_name'] + " '<" + form.cleaned_data['mail_from'] + ">\n" + \
-					  "To: '<info@laestanciaazul.com>'\n" + \
-					  "Subject: " + form.cleaned_data['mail_subj'] + "\n" + \
-					  "\n" + \
-					  "Mail Origen: " + form.cleaned_data['mail_from'] + "\n" + \
-					  "Nombre: " + form.cleaned_data['mail_name'] + "\n" + \
-					  "Contenido del mail: \n\n" + \
-			form.cleaned_data['mail_mess']
-			aux = message.encode('utf-8')
+			# aux = message.encode('utf-8')
+			subject = form.cleaned_data['mail_subj']
+			text_content = "Mail Origen: " + form.cleaned_data['mail_from'] + "\n" + \
+			 		  "Nombre: " + form.cleaned_data['mail_name'] + "\n" + \
+			 		  "Contenido del mail: \n\n" + \
+					  form.cleaned_data['mail_mess']
+			mensaje_aux = form.cleaned_data['mail_mess'].replace('\r', '<br>')
+			mensaje_aux = form.cleaned_data['mail_mess'].replace('\n', '<br>')
+			html_content = "<strong>Mail Origen: </strong>" + form.cleaned_data['mail_from'] + "<br>" + \
+			 		  "<strong>Nombre: </strong>" + form.cleaned_data['mail_name'] + "<br><br>" + \
+			 		  "<strong>Contenido del mail: </strong><br><hr>" + \
+				      mensaje_aux
+			from_email = form.cleaned_data['mail_from']
+			recipient_list = ['laestanciaazul.com@gmail.com']
+			email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+			email.attach_alternative(html_content, "text/html")
 			try:
-				smtpObj = smtplib.SMTP('localhost')
-				smtpObj.sendmail(sender, receivers, aux.decode('utf-8'))
+				email.send()
 				messages.success(request, 'E-mail enviado con éxito')
 			except Exception:
 				messages.error(request, 'Error al enviar el mail. Escribe a info@laestanciaazul.com.')

@@ -1,3 +1,14 @@
+.celda {
+        height: 150px;
+        width: 33%;
+        max-width: 150px;
+        font-size: 80px;
+        text-align: center;
+        color: white;
+        background-color: #212529;
+        padding: 0px;
+}
+
 /*>>==========================*
  *         genericas          *
  *============================*/
@@ -744,15 +755,17 @@ button._pagination {
     height: 150px;
 }
 
-._preview-title figure img {
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%);
+._preview-title figure {
+	width: 100%;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+._preview-title figure:hover img{
+	-webkit-transform: rotate(30deg) scale(1.4);
+	transform: rotate(30deg) scale(1.4);
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
-}
-._preview-title figure:hover img {
-	-webkit-filter: grayscale(0);
-	filter: grayscale(0);
 }
 
 ._preview-footer {
@@ -1219,4 +1232,3 @@ button._pagination {
 ._login ._loginForm .help-block {
     color: red;
 }
-

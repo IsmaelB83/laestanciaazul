@@ -577,6 +577,10 @@ button._pagination {
 	padding-top: 20px;
 }
 
+._previewXL span {
+    font-family: 'Monda', sans-serif !important;
+}
+
 ._previewXL:first-child {
 	padding-top: 0px;
 }
@@ -958,6 +962,7 @@ button._pagination {
 
 /*==> ENLACES */
 ._enlace_naranja {
+    margin-left: 10px;
 	color: #EB7F1A !important;
 }
 

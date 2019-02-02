@@ -8,21 +8,22 @@
             <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
                 {{ post.author.user.first_name }}
             </a>
-            <small> publicado el {{ post.published_date|date:"M d, Y" }}</small>
+            publicado el {{ post.published_date|date:"M d, Y" }}
             <a href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left"
                title="Comentarios"><i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios
             </a>
+            {% comment %}
             <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip"
                data-placement="right" title="Loved"><i class="fa fa-heart"></i> {{post.postlike_set.all.count}} likes
             </a>
+            {% endcomment %}
         </span>
         <a class="_pl-0" href='{{ post.get_absolute_url }}'>
             <img class="img-responsive img-rounded _mt-20" width="100%" style="max-height: 150px !important;" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
         </a>
     </div>
     <div class="_previewXL-Body">
-        <!--<a href=""><img src='{{ post.image.image.url }}' class="img-rounded img-responsive" width="100%" style="max-height: 200px;"></a>-->
-        <p>{{ post.content|safe|striptags|linebreaks|truncatewords_html:50 }}
+        <p>{{ post.content|safe|truncatewords_html:50 }}
             <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
         </p>
     </div>

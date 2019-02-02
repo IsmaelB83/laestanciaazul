@@ -12,9 +12,11 @@
             <a href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left"
                title="Comentarios"><i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios
             </a>
+            {% comment %}
             <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip"
                data-placement="right" title="Likes"><i class="fa fa-heart"></i> {{post.postlike_set.all.count}} likes
             </a>
+            {% endcomment %}
         </span>
     </div>
     <div class="_previewXL-Body">

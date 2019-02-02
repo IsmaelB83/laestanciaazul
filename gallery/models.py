@@ -25,6 +25,7 @@ class Image(models.Model):
     caption = models.CharField(null=False, blank=True, max_length=50, default="No caption")
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     post_slug = models.SlugField(max_length=120)
+    show_gallery = models.BooleanField(null=False, blank=False, default=False)
     image = models.ImageField(
         upload_to=upload_location_postimage,
         null=True,

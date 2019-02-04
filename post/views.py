@@ -146,7 +146,7 @@ def search_view(request, filter):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImageSmall.objects.filter(post__status='PB').order_by('-image__timestamp')[:12]
+    pictures_recent = PostImageSmall.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')[:12]
     # Añadir log
     if request.user.is_authenticated:
         add_log_search(request.user, filter)

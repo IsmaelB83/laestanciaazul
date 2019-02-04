@@ -69,3 +69,4 @@ media_cdn
 ##################
 web/settings.py
 .idea
+db.sqlite3

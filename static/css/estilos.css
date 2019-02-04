@@ -577,16 +577,18 @@ button._pagination {
 	padding-top: 20px;
 }
 
-._previewXL span {
-    font-family: 'Monda', sans-serif !important;
-}
-
 ._previewXL:first-child {
 	padding-top: 0px;
 }
 
+._previewXL-Title {
+    font-family: 'Monda', sans-serif !important;
+    color: #428bca;
+}
+
 ._previewXL-Title h3 {
-	margin-top: 0px;
+	margin-top: 0px !important;
+	margin-bottom: 5px !important;
 }
 
 ._previewXL-Title img {
@@ -636,6 +638,15 @@ button._pagination {
 
 ._previewXS:last-child{
 	border: none;
+}
+
+._previewXS-Title {
+    font-family: 'Monda', sans-serif !important;
+}
+
+._previewXS-Title h3 {
+	margin-top: 0px !important;
+	margin-bottom: 5px !important;
 }
 
 ._previewXS img {
@@ -962,7 +973,6 @@ button._pagination {
 
 /*==> ENLACES */
 ._enlace_naranja {
-    margin-left: 10px;
 	color: #EB7F1A !important;
 }
 

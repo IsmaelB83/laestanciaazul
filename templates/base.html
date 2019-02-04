@@ -79,7 +79,7 @@
                                 {% endfor %}
                             </ul>
                         </li>
-                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2018 13%}">Archivo</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2019 13%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
                         {% if user.is_authenticated and user.userprofile.author %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">

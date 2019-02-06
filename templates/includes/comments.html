@@ -4,7 +4,6 @@
 <div id="comments" class="col-xs-12 _mt-15 _previewXL-comments">
     <span class="_enlace_naranja">
         <i class="fa fa-comments"></i> {{ post.postcomment_set.all.count }} comentarios
-        <i class="fa fa-heart _ml-10"></i> {{ post.postlike_set.all.count }} likes
     </span>
     {% for post_comment in post.postcomment_set.all %}
     <div class="media col-xs-12 _pl-0 _pr-0 _mt-5">

@@ -19,7 +19,6 @@ from discuss.models import Comment
 from gallery.models import Image
 from user.models import UserProfile
 from category.models import Category
-from like.models import PostLike
 
 
 def index_view(request):
@@ -267,62 +266,33 @@ def post_view(request, id):
     except EmptyPage:
         post_images_small = paginator.page(paginator.num_pages)
 
-    # POST en esta vista significa nuevos comentarios o likes
-    if request.method == 'POST':
-        # Es necesario estar logueado
-        if request.user.is_authenticated:
-            # Si la petición es AJAX (TO-DO: mejorar esta lógica e incluirla también para comentarios)
-            if request.is_ajax():
-                # Para controlar que un mismo usuario/ip no de más de un like
-                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-                if x_forwarded_for:
-                    ip = x_forwarded_for.split(',')[0]
-                else:
-                    ip = request.META.get('REMOTE_ADDR')
-                if not PostLike.objects.filter(post=post, user=request.user, ip=ip).exists():
-                    like = PostLike()
-                    like.post = post
-                    like.user = request.user
-                    like.ip = ip
-                    like.add_log(True)
-                    like.save()
-                # Si llegamos aquí es que el usuario ya no quiere dar like. Lo eliminamos en ese caso
-                else:
-                    like = PostLike.objects.filter(post=post, user=request.user, ip=ip)[0]
-                    like.add_log(False)
-                    like.delete()
+    # POST en esta vista significa nuevos comentarios
+    if request.method == 'POST' and request.user.is_authenticated:
             # Se añade un nuevo comentario a la base de datos y se asocia al post
-            else:
-                comment = Comment()
-                comment.user = request.user
-                comment.content = request.POST['comment']
-                comment.save()
-                post_comment = PostComment()
-                post_comment.post = post
-                post_comment.comment = comment
-                post_comment.save()
-                post_comment.add_log("create")
-                messages.success(request, u'Comentario añadido')
+            comment = Comment()
+            comment.user = request.user
+            comment.content = request.POST['comment']
+            comment.save()
+            post_comment = PostComment()
+            post_comment.post = post
+            post_comment.comment = comment
+            post_comment.save()
+            post_comment.add_log("create")
+            messages.success(request, u'Comentario añadido')
 
     # Se recuperan los posts más populares
     posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.filter(post__status='PB').order_by('-comment__timestamp')[:5]
-
-    # El usuario logueado ha hecho ya Like en este post?
-    already_like = "False"
-    if request.user.is_authenticated:
-        already_like = PostLike.objects.filter(post=post, user=request.user).exists()
+    # Post editado
+    updated = False
     if post.updated.date() != post.timestamp.date():
         updated = True
-    else:
-        updated = False
 
     # Se genera el contexto y se renderiza
     context = {
         'posts_popular': posts_popular,
         'comments_recent': comments_recent,
-        'already_like': already_like,
         'post': post,
         'post_images_small': post_images_small,
         'page_request': page_request_var,

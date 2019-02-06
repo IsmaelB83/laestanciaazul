@@ -31,6 +31,7 @@ class Post(models.Model):
 
     id = models.SlugField(primary_key = True, max_length = 120)
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
+    summary = models.TextField(null=False, blank=False, default='none')
     content = models.TextField(null=False, blank=False, default='none')
     author = models.ForeignKey('user.UserProfile', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
@@ -79,8 +80,7 @@ class PostImageSmall(models.Model):
     image = models.ForeignKey('gallery.Image', on_delete=models.CASCADE)
     
     def __str__(self):
-        return ""
-        #return self.post.title + ": " + self.post.image.caption
+        return self.post.title + ": " + self.post.image.caption
 
 
 class PostCategory(models.Model):

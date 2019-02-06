@@ -16,40 +16,68 @@
             <article class="_previewXL">
                 <!-- entry header -->
                 <div class="row">
+                    <div class="_previewXL-Img" style="max-height: 150px;">
+                        <img class="img-responsive col-xs-12" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
+                    </div>
+                    <div class="_previewXL-Categories col-xs-12">
+                        {% for post_category in post.postcategory_set.all %}
+                        <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
+                            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.name}}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
                     <div class="_previewXL-Title col-xs-12">
-                        <h3>{{post.title}}</h3>
-                        <span style="font-size: 95%; color: black;">
-                        <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}">
-                            <span>{{post.author}}</span>
-                        </a> publicado el {{post.published_date}}
-                        <a href="#form_comments" class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Comments" style="margin-left: 10px !important;">
-                            <i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios
-                        </a>
-                        {% comment %}
-                        <a id="id_like" href="#" class="_enlace_naranja" data-toggle="tooltip" data-placement="right" title="Loved">
-                            <i class="fa fa-heart" style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}"></i>
-                            <span style="{%if already_like == True%}color: #15B23A; font-weight: bold;{%endif%}">
-                                {{post.postlike_set.all.count}} likes
-                            </span>
-                        </a>
-                        <script>
-                             $("#id_like").click(function(e) {
-                                e.preventDefault();
-                                var self = $(this);
-                                ajax_req = $.ajax({
-                                    url: self.attr("href"),
-                                    type: "POST",
-                                    data: {
-                                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                                    },
-                                    success: function(ctx) {console.log(ctx);}
-                                });
-                                $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
-                             });
-                        </script>
-                        {% endcomment %}
-                        </span>
-                        <img class="img-responsive img-rounded _mt-20" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
+                        <h3>{{ post.title }}</h3>
+                    </div>
+                    <div class="_previewXL-Footer _previewXL-FooterTitle col-xs-12">
+                        <nav>
+                            <ul style="margin-bottom: 0px;">
+                                <li>
+                                    <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
+                                        <img class="_previewXL-FooterAuthor img-circle img-responsive"
+                                             {%if post.author.user.userprofile.image %}
+                                             src='{{ post.author.user.userprofile.image.url }}'
+                                             {%else%}
+                                             src='{% static "img/dummy-user.png" %}'
+                                             {%endif%}>
+                                        <span>{{ post.author.user.first_name }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-clock-o"></i>
+                                    <span>{{ post.published_date|date:"M d, Y" }}</span>
+                                </li>
+                                <li>
+                                    <i class="fa fa-comment-o"></i>
+                                    <span>{{post.postcomment_set.all.count}}</span>
+                                </li>
+                                <li>
+                                    <i class="fa fa-eye"></i>
+                                    <span>{{post.postcomment_set.all.count}}</span>
+                                </li>
+                                <li>
+                                    <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Likes">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </a>
+                                    <script>
+                                         $("#id_like").click(function(e) {
+                                            e.preventDefault();
+                                            var self = $(this);
+                                            ajax_req = $.ajax({
+                                                url: self.attr("href"),
+                                                type: "POST",
+                                                data: {
+                                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                },
+                                                success: function(ctx) {console.log(ctx);}
+                                            });
+                                            $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
+                                         });
+                                    </script>
+                                    <span>{{post.postcomment_set.all.count}}</span>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
                 <!-- entry-content -->
@@ -65,7 +93,6 @@
                         {% if post.postimagesmall_set.count > 0 %}
                         <div class="row">
                             <div class="col-xs-12">
-                                <hr>
                                 <h5><strong><i>Galeria de imagenes del post:</i></strong></h5>
                             </div>
                             {% for post_image_sm in post_images_small %}
@@ -83,27 +110,10 @@
                         </div>
                         {% endif %}
                         <!-- firma del post -->
-                        <div class="row _mt-30">
+                        <div class="row">
                             <!-- edición -->
                             <div class="col-xs-12 {% if not updated %}hidden{% endif %}">
-                                <p>
-                                    <small>Última edición hace {{ post.updated|timesince }}</small>
-                                </p>
-                            </div>
-                            <!-- autor -->
-                            <div class="col-xs-12">
-                                <a class="_enlace_negro_n" href="{{post.author.get_absolute_url}}"><span>{{ post.author }}</span></a>
-                                <span><small> publicado el {{ post.timestamp }}</small></span>
-                            </div>                        <!-- autor -->
-                            <!-- categorias del post -->
-                            <div class="_div-categories col-xs-12">
-                                {% for post_category in post.postcategory_set.all %}
-                                <a class="_category" href="{{post_category.category.get_absolute_url}}">
-                                    <span class="label label-{{ post_category.category.css_class }}">
-                                        {{post_category.category.name}}
-                                    </span>
-                                </a>
-                                {% endfor %}
+                                <p><small>Última edición hace {{ post.updated|timesince }}</small></p>
                             </div>
                         </div>
                         <!-- comentarios -->

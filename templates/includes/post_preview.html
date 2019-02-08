@@ -2,7 +2,7 @@
 
 <!-- Preview de un post -->
 <div class="_previewXL">
-    <div class="_previewXL-Img">
+    <div class="_previewXL_PR_Img">
         <a class="_pl-0" href='{{ post.get_absolute_url }}'>
             <img class="img-responsive _previewXL-Img"  style="height: 175px !important;" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
         </a>
@@ -18,7 +18,13 @@
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
     </div>
     <div class="_previewXL-Body">
-        <p>{{ post.summary|safe }}</p>
+        <p>
+        {%if post.summary != 'none' %}
+            {{ post.summary|safe }}
+        {%else%}
+            {{ post.content|safe|truncatewords:50 }}
+        {%endif%}
+        </p>
     </div>
     <div class="_previewXL-Footer _previewXL-FooterTitle _mb-10">
         <nav>

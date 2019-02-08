@@ -594,8 +594,23 @@ button._pagination {
     clear: both;
 }
 
+._previewXL_PR_Img {
+    margin: 0px;
+    clear: both;
+    overflow: hidden;
+    max-height: 225px;
+}
+
 ._previewXL-Img img {
     max-height: 225px !important;
+}
+
+._previewXL_PR_Img img:hover {
+    transition: all .3s ease-in-out;
+}
+
+._previewXL_PR_Img img:hover {
+    transform: scale(1.1);
 }
 
 @media (max-width: 425px) {

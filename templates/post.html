@@ -68,8 +68,8 @@
                                             {{post.postlike_set.all.count}}
                                         </span>
                                     {%endif%}
-                                        <script>
-                                     $("#id_like").click(function(e) {
+                                    <script>
+                                    $("#id_like").click(function(e) {
                                         var post_id = '{{post.id}}'
                                         $.ajax({
                                             url: '/post/like/' + post_id,

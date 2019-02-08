@@ -53,28 +53,54 @@
                                 </li>
                                 <li>
                                     <i class="fa fa-eye"></i>
-                                    <span>{{post.postcomment_set.all.count}}</span>
+                                    <span>{{post.postview_set.all.count}}</span>
                                 </li>
                                 <li>
-                                    <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Likes">
-                                        <i class="fa fa-thumbs-o-up"></i>
-                                    </a>
-                                    <script>
-                                         $("#id_like").click(function(e) {
-                                            e.preventDefault();
-                                            var self = $(this);
-                                            ajax_req = $.ajax({
-                                                url: self.attr("href"),
-                                                type: "POST",
-                                                data: {
-                                                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                                                },
-                                                success: function(ctx) {console.log(ctx);}
-                                            });
-                                            $('#id_likes').val = {{ post.postlike_set.all.count }} + " likes";
-                                         });
+                                    <a id="id_like" href="#" class="_enlace_naranja" data-toggle="tooltip" data-placement="right" title="Like">
+                                    {%if already_like == True%}
+                                    <i id="i_likes" class="fa fa-thumbs-up _likesActive"></i>
+                                    <span id="span_likes" class="_likesActive">
+                                        {{post.postlike_set.all.count}}
+                                    </span>
+                                    {%else%}
+                                        <i id="i_likes" class="fa fa-thumbs-o-up"></i>
+                                        <span id="span_likes">
+                                            {{post.postlike_set.all.count}}
+                                        </span>
+                                    {%endif%}
+                                        <script>
+                                     $("#id_like").click(function(e) {
+                                        var post_id = '{{post.id}}'
+                                        $.ajax({
+                                            url: '/post/like/' + post_id,
+                                            data: {
+                                              'post': post_id
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                              console.log(data);
+                                              var span = document.querySelector("#span_likes");
+                                              span.innerHTML = data.likes;
+                                              var i = document.querySelector("#i_likes");
+                                              if (data.already_like === "true") {
+                                                span.classList.add("_likesActive");
+                                                i.classList.add("_likesActive");
+                                                i.classList.remove("fa-thumbs-o-up");
+                                                i.classList.remove("fa-thumbs-o-up");
+                                                i.classList.add("fa-thumbs-up");
+                                              } else {
+                                                span.className = "";
+                                                i.classList.remove("_likesActive");
+                                                i.classList.remove("_likesActive");
+                                                i.classList.remove("fa-thumbs-up");
+                                                i.classList.remove("fa-thumbs-up");
+                                                i.classList.add("fa-thumbs-o-up");
+                                              }
+                                            }
+                                        });
+                                     });
                                     </script>
-                                    <span>{{post.postcomment_set.all.count}}</span>
+                                    </a>
                                 </li>
                             </ul>
                         </nav>

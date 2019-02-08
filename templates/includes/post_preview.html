@@ -4,7 +4,7 @@
 <div class="_previewXL">
     <div class="_previewXL-Img">
         <a class="_pl-0" href='{{ post.get_absolute_url }}'>
-            <img class="img-responsive _previewXL-Img" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
+            <img class="img-responsive _previewXL-Img"  style="height: 175px !important;" width="100%" {%if post.image %}src="{{ post.image.image.url }}" {%endif%}>
         </a>
     </div>
     <div class="_previewXL-Categories">
@@ -18,9 +18,7 @@
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
     </div>
     <div class="_previewXL-Body">
-        <p>{{ post.summary|safe }}
-            <span><a class="_pl-0" href='{{ post.get_absolute_url }}'>leer mas...</a></span>
-        </p>
+        <p>{{ post.summary|safe }}</p>
     </div>
     <div class="_previewXL-Footer _previewXL-FooterTitle _mb-10">
         <nav>
@@ -48,11 +46,11 @@
                 </li>
                 <li>
                     <i class="fa fa-eye"></i>
-                    <span>{{post.postcomment_set.all.count}}</span>
+                    <span>{{post.postview_set.all.count}}</span>
                 </li>
                 <li>
                     <i class="fa fa-thumbs-o-up"></i>
-                    <span>{{post.postcomment_set.all.count}}</span>
+                    <span>{{post.postlike_set.all.count}}</span>
                 </li>
             </ul>
         </nav>

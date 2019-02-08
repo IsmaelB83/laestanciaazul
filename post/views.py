@@ -4,6 +4,7 @@
 # Django imports
 from django.apps import apps
 from django.db.models import Count, Sum
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,7 +15,7 @@ from django.template.defaultfilters import slugify
 import gallery
 from utilidades import PaginatorWithPageRange
 from .forms import PostForm, PostFormEdit
-from .models import Post, PostImage, PostCategory, PostComment, PostArchive, add_log_archive, add_log_search, PostImageSmall
+from .models import Post, PostImage, PostCategory, PostComment, PostArchive, add_log_archive, add_log_search, PostImageSmall, PostView, PostLike
 from discuss.models import Comment
 from gallery.models import Image
 from user.models import UserProfile
@@ -250,6 +251,17 @@ def post_view(request, id):
         messages.error(request, 'El post indicado no existe')
         return redirect('blog:index')
 
+    # Añadir visita al post
+    view = PostView()
+    view.post = post
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    view.ip = ip
+    view.save()
+
     # Añadir log de la visita
     if request.user.is_authenticated:
         post.add_log(request.user, "view")
@@ -266,19 +278,27 @@ def post_view(request, id):
     except EmptyPage:
         post_images_small = paginator.page(paginator.num_pages)
 
-    # POST en esta vista significa nuevos comentarios
+    # POST en esta vista significa nuevos comentarios o likes
     if request.method == 'POST' and request.user.is_authenticated:
-            # Se añade un nuevo comentario a la base de datos y se asocia al post
-            comment = Comment()
-            comment.user = request.user
-            comment.content = request.POST['comment']
-            comment.save()
-            post_comment = PostComment()
-            post_comment.post = post
-            post_comment.comment = comment
-            post_comment.save()
-            post_comment.add_log("create")
-            messages.success(request, u'Comentario añadido')
+        comment = Comment()
+        comment.user = request.user
+        comment.content = request.POST['comment']
+        comment.save()
+        post_comment = PostComment()
+        post_comment.post = post
+        post_comment.comment = comment
+        post_comment.save()
+        post_comment.add_log("create")
+        messages.success(request, 'Comentario añadido')
+
+    # El usuario logueado ha hecho ya Like en este post?
+    already_like = "False"
+    if request.user.is_authenticated:
+        already_like = PostLike.objects.filter(post=post, user=request.user).exists()
+    if post.updated.date() != post.timestamp.date():
+        updated = True
+    else:
+        updated = False
 
     # Se recuperan los posts más populares
     posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count')[:5]
@@ -293,12 +313,50 @@ def post_view(request, id):
     context = {
         'posts_popular': posts_popular,
         'comments_recent': comments_recent,
+        'already_like': already_like,
         'post': post,
         'post_images_small': post_images_small,
         'page_request': page_request_var,
         'updated': updated,
     }
     return render(request, 'post.html', context)
+
+
+def post_like_view(request, id):
+    if request.user.is_authenticated:
+        # Se obtiene el post a visualizar y si no existe se redirige al index
+        try:
+            post = Post.objects.get(id=id)
+            if post.status != 'PB':
+                if (post.status != 'PB' and not request.user.is_authenticated) or \
+                        (post.status != 'PB' and post.author != request.user.userprofile):
+                    messages.error(request, 'El post indicado no existe')
+                    return redirect('blog:index')
+        except ObjectDoesNotExist:
+            messages.error(request, 'El post indicado no existe')
+            return redirect('blog:index')
+        # Se busca un like previo, y si no hay, se hace el like
+        if not PostLike.objects.filter(post=post, user=request.user).exists():
+            like = PostLike()
+            like.post = post
+            like.user = request.user
+            like.add_log(True)
+            like.save()
+            data = {
+                'already_like': 'true',
+                'likes': PostLike.objects.filter(post=post).count()
+            }
+            return JsonResponse(data)
+        # Si llegamos aquí es que el usuario ya no quiere dar like. Lo eliminamos en ese caso
+        else:
+            like = PostLike.objects.filter(post=post, user=request.user)[0]
+            like.add_log(False)
+            like.delete()
+            data = {
+                'already_like': 'false',
+                'likes': PostLike.objects.filter(post=post).count()
+            }
+            return JsonResponse(data)
 
 
 def post_create_view(request):

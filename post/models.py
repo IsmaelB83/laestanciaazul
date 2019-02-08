@@ -4,7 +4,7 @@ from datetime import datetime
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 # Third party app imports
 # Local app imports
 from history.models import LogUser, Activity
@@ -29,9 +29,9 @@ def add_log_archive(user, archive):
 class Post(models.Model):
     STATUSES = (('IN', 'Inactive'), ('DR', 'Draft'), ('PB', 'Published'),)
 
-    id = models.SlugField(primary_key = True, max_length = 120)
+    id = models.SlugField(primary_key=True, max_length=120)
     title = models.CharField(null=False, blank=False, max_length=120, default='none')
-    summary = models.TextField(null=False, blank=False, default='none')
+    summary = models.TextField(null=False, blank=False, default='none', max_length=300)
     content = models.TextField(null=False, blank=False, default='none')
     author = models.ForeignKey('user.UserProfile', null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=2, choices=STATUSES, default='DR')
@@ -118,3 +118,33 @@ class PostArchive(models.Model):
     class Meta:
         unique_together = (('year', 'month'),)
         ordering = ['-year']
+
+
+class PostView(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=False, auto_now_add=True)
+    ip = models.GenericIPAddressField(null=False, blank=False)
+
+    class Meta:
+        unique_together = (('post', 'date', 'ip'),)
+        ordering = ['-date']
+
+
+class PostLike(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def add_log(self, estado):
+        log = LogUser()
+        log.activity = Activity.objects.get(activity="post_like")
+        log.user = self.user
+        if estado:
+            log.description = "Le gusta el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
+        else:
+            log.description = "Ha dejado de gustarle el post <a href='" + self.post.get_absolute_url() + "'>" + self.post.title + "</a>"
+        log.pre_save()
+
+    class Meta:
+        unique_together = (('post', 'user'),)
+        ordering = ['-date']

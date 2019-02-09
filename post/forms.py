@@ -25,7 +25,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'summary', 'content', 'postimage', 'postimagesmall')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage', 'postimagesmall')
 
 
 class PostFormEdit(forms.ModelForm):
@@ -40,4 +40,4 @@ class PostFormEdit(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'summary', 'content', 'postimage', 'postimagesmall')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage', 'postimagesmall')

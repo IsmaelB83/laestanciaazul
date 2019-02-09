@@ -75,7 +75,7 @@ class PostArchiveAdmin(admin.ModelAdmin):
 
 
 class PostViewAdmin(admin.ModelAdmin):
-    list_display = ["id", "post", "date", "ip"]
+    list_display = ["id", "post", "ip"]
     list_display_links = ["id"]
     list_editable = ["post", "ip"]
     list_filter = ["post", "date"]

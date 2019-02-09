@@ -70,3 +70,5 @@ media_cdn
 web/settings.py
 .idea
 db.sqlite3
+oauth_key.txt
+secret_key.txt

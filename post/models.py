@@ -1,6 +1,5 @@
 # coding=utf-8
 # Python imports
-from datetime import datetime
 # Django imports
 from django.db import models
 from django.core.urlresolvers import reverse
@@ -14,7 +13,7 @@ def add_log_search(user, search):
     log = LogUser()
     log.user = user
     log.activity = Activity.objects.get(activity="search")
-    log.description = "Se ha realizado la siguiente búsqueda: " + search
+    log.description = "Se ha realizado la siguiente busqueda: " + search
     log.pre_save()
 
 

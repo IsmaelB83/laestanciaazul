@@ -645,13 +645,14 @@ button._pagination {
     padding-bottom: 5px;
 }
 
+/*
 ._previewXL-Body img {
 	margin-top: 15px;
 	margin-right: 15px;
 	margin-bottom: 0px;
 	float: left;
 	position: relative;
-}
+}*/
 
 ._previewXL-comments a img:hover{
     opacity:0.6; !important
@@ -1388,3 +1389,26 @@ button._pagination {
   color: #1b809e;
 }
 
+/* ESTILOS PARA LOS POSTS QUE SE ESCRIBEN DESDE CKEDITOR */
+._post-content-img {
+    text-align: center;
+    display: block;
+    height: auto;
+    width: auto;
+    overflow-y: hidden;
+    overflow-x: auto;
+    word-wrap: normal;
+    white-space: nowrap;
+}
+
+._post-content-img img {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+._post-content-img img:first-child {
+    margin-left: 0px;
+}

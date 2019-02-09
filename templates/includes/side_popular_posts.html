@@ -11,6 +11,7 @@
             <img src='{% static "img/dummy-post.jpg" %}' alt="thumbnail" class="img-rounded" height="55px">
             {% endif %}
         </a>
+        <a href='{{ post.get_absolute_url }}' class='_enlace_naranja'><p>{{ post.title|title }}...</a>
         <p>
             <span>Por
                 <strong><a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
@@ -18,8 +19,6 @@
                 </strong>
                 <small> hace {{ post.published_date|timesince }} </small>
             </span>
-        </p>
-        <a href='{{ post.get_absolute_url }}' class='_enlace_naranja'><p>{{ post.title|title }}...</a>
         </p>
     </div>
     {% endfor %}

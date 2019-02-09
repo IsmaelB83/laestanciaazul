@@ -9,7 +9,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 # Third party app imports
 from social_django.models import UserSocialAuth
@@ -17,7 +16,6 @@ from social_django.models import UserSocialAuth
 from utilidades import PaginatorWithPageRange
 from discuss.models import Comment
 from history.models import LogUser
-from like.models import PostLike
 from post.models import Post
 from .models import UserProfile, UserFollow
 from .forms import ProfileForm, MailForm
@@ -109,7 +107,7 @@ def about_user_view(request, id):
 	# Recuperar datos adicionales del usuario
 	posts_user = Post.objects.filter(author__user=user)
 	comments_user = Comment.objects.filter(user=user)
-	post_likes = PostLike.objects.filter(user=user)
+	#post_likes = PostLike.objects.filter(user=user)
 	follows = UserFollow.objects.filter(user=user)
 	followers = UserFollow.objects.filter(follows=user)
 	log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
@@ -127,7 +125,7 @@ def about_user_view(request, id):
 		'profile': user.userprofile,
 		'posts_user': posts_user,
 		'comments_user': comments_user,
-		'post_likes': post_likes,
+		#'post_likes': post_likes,
 		'follows': follows,
 		'followers': followers,
 		'log_user': log_user_page,

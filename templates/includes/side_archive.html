@@ -15,19 +15,25 @@
             {% if year == item1.0 %} active in {%endif%}">
             <div class="panel-body">
                 {% for item2 in item1.1 %}
-                {% if item2 != 0 %}
-                <a href="{% url 'blog:archive' item1.0 forloop.counter|month_n_inverse %}">
-                    {%if year == item1.0 and month == forloop.counter|month_n_inverse %}
-                    <h6 class="_ftColor3" style="font-weight: bold;">
-                    {%else%}
-                    <h6>
-                    {%endif%}
-                        {% if forloop.counter == 1 %}todo {%else%}{{forloop.counter|month_inverse}}{%endif%}
-                    <span class="badge badge-default badge-pill _ft-10 pull-right">{{ item2 }}</span>
-                    </h6>
-                    {% if forloop.counter == 1 %}<hr class="_mt-0 _mb-0">{%endif%}
-                </a>
-                {% endif %}
+                    {% if item2 != 0 %}
+                    <a href="{% url 'blog:archive' item1.0 forloop.counter|month_n_inverse %}">
+                        {%if year == item1.0 and month == forloop.counter|month_n_inverse %}
+                        <h6 class="_ftColor3" style="font-weight: bold;">
+                        {%else%}
+                        <h6>
+                        {%endif%}
+                        {% if forloop.counter == 1 %}
+                            todo
+                        {% else %}
+                            {{ forloop.counter|month_inverse }}
+                        {%endif%}
+                        <span class="badge badge-default badge-pill _ft-10 pull-right">{{ item2 }}</span>
+                        </h6>
+                        {% if forloop.counter == 1 %}
+                            <hr class="_mt-0 _mb-0">
+                        {%endif%}
+                    </a>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

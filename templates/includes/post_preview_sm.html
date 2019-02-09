@@ -1,40 +1,59 @@
 {% load staticfiles %}
 
-<!-- Preview de un post más pequeña-->
-<div class="_previewXL">
+<!-- Preview de un post más pequeño -->
+<div class="_previewXL" style="padding-bottom: 0px !important;">
+    <div class="_previewXL-Categories">
+        {% for post_category in post.postcategory_set.all %}
+        <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
+            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.name}}</span>
+        </a>
+        {% endfor %}
+    </div>
     <div class="_previewXL-Title">
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a></h3>
-        <span style="font-size: 95%; color: black;">
-            Por
-            <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
-                {{ post.author.user.first_name }}
-            </a>
-            publicado en {{ post.published_date|date:"M d, Y" }}
-            <a href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left"
-               title="Comentarios" style="margin-left: 10px !important;">
-                <i class="fa fa-comments"></i> {{post.postcomment_set.all.count}} comentarios
-            </a>
-            {% comment %}
-            <a id="id_like" href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip"
-               data-placement="right" title="Likes"><i class="fa fa-heart"></i> {{post.postlike_set.all.count}} likes
-            </a>
-            {% endcomment %}
-        </span>
     </div>
     <div class="_previewXL-Body">
         <p>
-            {{ post.content|safe|striptags|linebreaks|truncatewords_html:50 }}
-            <br>
-            <span><a href='{{ post.get_absolute_url }}'> leer mas...</a></span>
+        {%if post.summary != 'none' %}
+            {{ post.summary|safe|truncatewords:30 }}
+        {%else%}
+            {{ post.content|safe|truncatewords:30 }}
+        {%endif%}
         </p>
     </div>
-    <div class="_previewXL-Footer">
-        {% for post_category in post.postcategory_set.all %}
-        {% if post_category.post == post %}
-        <a style="text-decoration: none;" href="{{ post_category.category.get_absolute_url }}">
-            <span class="label label-{{ post_category.category.css_class }}">{{ post_category.category.name }}</span>
-        </a>
-        {% endif %}
-        {% endfor %}
+    <div class="_previewXL-Footer _previewXL-FooterTitle _mb-10">
+        <nav>
+             <ul style="margin-bottom: 0px;">
+                <li>
+                    <a class="_enlace_negro_n" href="{{ post.author.user.userprofile.get_absolute_url }}">
+                        <img class="img-circle img-responsive _previewXL-FooterAuthor"
+                             {%if post.author.user.userprofile.image %}
+                             src='{{ post.author.user.userprofile.image.url }}'
+                             {%else%}
+                             src='{% static "img/dummy-user.png" %}'
+                             {%endif%}>
+                        <span>{{ post.author.user.first_name }}</span>
+                    </a>
+                </li>
+                <li>
+                    <i class="fa fa-clock-o"></i>
+                    <span>{{ post.published_date|date:"M d, Y" }}</span>
+                </li>
+                <li>
+                    <a href='{{ post.get_absolute_url }}#form_comments' class="_enlace_naranja" data-toggle="tooltip" data-placement="left" title="Comentarios">
+                        <i class="fa fa-comment-o"></i>
+                        <span>{{post.postcomment_set.all.count}}</span>
+                    </a>
+                </li>
+                <li>
+                    <i class="fa fa-eye"></i>
+                    <span>{{post.postview_set.all.count}}</span>
+                </li>
+                <li>
+                    <i class="fa fa-thumbs-o-up"></i>
+                    <span>{{post.postlike_set.all.count}}</span>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>

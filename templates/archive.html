@@ -15,7 +15,7 @@ active
         <!-- Listado de POSTs de la selección izquierda -->
         <div class="col-xs-12 col-md-8 _mt-20">
             <h2 class="_titleSection">ARCHIVO</h2>
-            <h4>{{posts|length}} posts publicados en {%if month != 13%}{{month|month_name}} de {%endif%}{{year}}</h4>
+            <h4 style="margin-bottom: 0px !important;">{{posts|length}} posts publicados en {%if month != 13%}{{month|month_name}} de {%endif%}{{year}}</h4>
             {% for post in posts %}
             {% include "includes/post_preview_sm.html" with post=post post_categories=post_categories%}
             {% endfor %}

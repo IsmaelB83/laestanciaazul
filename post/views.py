@@ -42,8 +42,8 @@ def index_view(request):
         return redirect('blog:index')
     # Los posts tipo carta son siempre 3. Ahora mismo se muestran los 3 más recientes
     posts_cards = Post.objects.filter(status='PB').order_by('-published_date')[:3]
-    # Se devuelven los 5 postst más populares. Ahora mismo son los que más comentarios tienen
-    posts_popular = Post.objects.filter(status='PB').annotate(comment_count=Count('postcomment__comment')).order_by('-comment_count').order_by('-published_date')[:4]
+    # Se devuelven los 5 postst más populares. Los que mas visualizaciones tienen
+    posts_popular = Post.objects.filter(status='PB').annotate(views_count=Count('postview__post')).order_by('-views_count')[:4]
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas

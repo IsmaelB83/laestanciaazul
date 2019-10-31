@@ -125,7 +125,6 @@ class PostView(models.Model):
     ip = models.GenericIPAddressField(null=False, blank=False)
 
     class Meta:
-        unique_together = (('post', 'date', 'ip'),)
         ordering = ['-date']
 
 

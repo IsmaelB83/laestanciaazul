@@ -1,7 +1,7 @@
 # Django Blog 
 Django app for a personal blog. You can find this app working on (https://www.laestanciaazul.com)
 
-### Contents
+## CONTENTS
 - [Introduction](#INTRODUCTION)
 - [Installation and Execution](#INSTALLATION-AND-EXECUTION)
   - [Download](#Download)
@@ -11,7 +11,7 @@ Django app for a personal blog. You can find this app working on (https://www.la
 - [Screenshoots](#SCREENSHOTS)
 
 
-### INTRODUCTION
+## INTRODUCTION
 
 I started this app in 2017 as a side project in order to start learning the Django framework. The goal I had with this project was at the same time to develop a tool where I could write (kind of a diary) all
 the stuff I learn on a daily basis. I try to keep writting at least two posts every month in the blog. You can follow me in the "blue nowhere" :)
@@ -22,16 +22,16 @@ me to decide studying Computer Science in University.
 The book tells the story about a serial killer (Phate) in Silicon Valley, that uses his hacking abilities to enter in their victims lives in order to kill them. The police of California, in a desperate attempt to capture
 the killer contact anothe hacker, the good guy of the story, named Gillete. Who takes it personal to capture Phate. You can read more: https://www.jefferydeaver.com/novel/the-blue-nowhere/
 
-### INSTALLATION AND EXECUTION
+## INSTALLATION AND EXECUTION
 
-## Download
+### Download
 
 First clone this repository
 ```
 \downloads\git clone https://github.com/IsmaelB83/laestanciaazul
 ```
 
-## Preparation of server
+### Preparation of server
 
 This django app has been tested in several linux servers, and works by default (see settings.py) with a Postgree database. Therefore the first thing we need to do is prepare our system to have both python, postgree, etc installed and ready.
 
@@ -51,7 +51,7 @@ trama@laestanciaazul:~/web$ source myprojectenv/bin/activate
 
 Install requirements in the virtuaenv. This will install all the modules indicated in requirements.txt
 ```console
-trama@laestanciaazul:~/web$ pip install -r requirements.txt
+(webenv) trama@laestanciaazul:~/web$ pip install -r requirements.txt
 ```
 
 Configure postgree and create the database:
@@ -66,7 +66,14 @@ postgres=# GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
 postgres=#\q
 ```
 
-## Start server
+Prepare database with the structure required by the application:
+```console
+(webenv) trama@laestanciaazul:~/web$ ./manage.py migrate
+(webenv) trama@laestanciaazul:~/web$ ./manage.py makemigrations
+(webenv) trama@laestanciaazul:~/web$ ./manage.py createsuperuser
+```
+
+### Start server
 
 First we need to activate the virtuaenv (in case we are using one):
 ```console
@@ -86,7 +93,7 @@ Starting development server at http://0.0.0.0:8080/
 Quit the server with CONTROL-C.
 ```
 
-## Configuration
+### Configuration
 
 As you can see in settings.py. This app is dependent on a file called "passwords.json". This file should contain some important information that is required both for starting the app (secret and database password), as well as to be able to use oauth
 in order to login in the app trough the apis of twitter, github, facebook or google. The file needs to be located in the base path of the application.
@@ -116,29 +123,29 @@ The structure of this json file should be as seen below:
 ```
 
 
-### SCREENSHOTS
+## SCREENSHOTS
 
-# Home
+### Home
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/home.jpg).
 
-# Post
+### Post
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/post.jpg).
 
-# Post editor
+### Post editor
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/post_editor.jpg).
 
-# Login
+### Login
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/login.jpg).
 
-# Archive
+### Archive
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/archive.jpg).
 
-# Contact
+### Contact
 
 ![alt text](https://raw.githubusercontent.com/IsmaelB83/laestanciaazul/master/static/img/readme/contact.jpg).
 

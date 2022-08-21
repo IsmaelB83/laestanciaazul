@@ -73,6 +73,13 @@ Prepare database with the structure required by the application:
 (webenv) trama@laestanciaazul:~/web$ ./manage.py createsuperuser
 ```
 
+### Copy Statics
+
+Before starting the server we need to collect statics
+```console
+(webenv) trama@laestanciaazul:~/web$ ./manage.py collectstatic
+```
+
 ### Start server
 
 First we need to activate the virtuaenv (in case we are using one):

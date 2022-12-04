@@ -24,7 +24,7 @@ PASSWORDS = json.load(JSON_DATA)
 SECRET_KEY = PASSWORDS["secret"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['laestanciaazul.com', 'www.laestanciaazul.com', 'localhost', '127.0.0.1', '46.101.5.178']
+ALLOWED_HOSTS = ['bernaldev.com', 'localhost']
 DEBUG = True
 
 # Application definition
@@ -136,13 +136,14 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 # this is the local folder for statics
+print(BASE_DIR)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+    os.path.join(BASE_DIR, '..', 'statics'),
 ]
 
 # this simulates the server where statics are stored
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn/")
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn/")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = 'false'
 
@@ -160,12 +161,6 @@ SOCIAL_AUTH_GITHUB_SECRET = PASSWORDS["github"]["secret"]
 # https://apps.twitter.com
 SOCIAL_AUTH_TWITTER_KEY = PASSWORDS["twitter"]["key"]
 SOCIAL_AUTH_TWITTER_SECRET = PASSWORDS["twitter"]["secret"]
-# https://developers.facebok.com/apps
-SOCIAL_AUTH_FACEBOOK_KEY = PASSWORDS["facebook"]["key"]
-SOCIAL_AUTH_FACEBOOK_SECRET = PASSWORDS["facebook"]["secret"]
-# https://console.developers.google.com
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = PASSWORDS["google"]["key"]
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = PASSWORDS["google"]["secret"]
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'

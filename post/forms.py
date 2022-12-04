@@ -9,8 +9,12 @@ from multiupload.fields import MultiFileField
 from .models import Post, PostComment
 
 
-CATEGORY_CHOICES = [[c.id, c.name] for c in apps.get_model('category', 'Category').objects.all()]
-
+CATEGORY_CHOICES = []
+try:
+    CATEGORY_CHOICES = [[c.id, c.name] for c in apps.get_model('category', 'Category').objects.all()]
+except ValueError:
+    print("Errors creating categories. Keep with empty array")
+    print (ValueError)
 
 class PostForm(forms.ModelForm):
     postcategory = forms.MultipleChoiceField(

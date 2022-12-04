@@ -68,6 +68,9 @@ target/
 #media
 static_cdn
 media_cdn
+statics
+static
+media
 
 # Specific files #
 ##################

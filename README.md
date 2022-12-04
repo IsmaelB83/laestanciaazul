@@ -37,26 +37,26 @@ This django app has been tested in several linux servers, and works by default (
 
 Installing software in our linux
 ```console
-trama@laestanciaazul:~/web$ sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
 ```
 
 Preparing the virtualenv and activating (optional but recommended)
 ```console
-trama@laestanciaazul:~/web$ sudo -H pip3 install --upgrade pip
-trama@laestanciaazul:~/web$ sudo -H pip3 install virtualenv
-trama@laestanciaazul:~/web$ virtualenv webenv
-trama@laestanciaazul:~/web$ source myprojectenv/bin/activate
-(webenv) trama@laestanciaazul:~/web$ (ready)
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv
+virtualenv webenv
+source myprojectenv/bin/activate
+(webenv) (ready)
 ```
 
 Install requirements in the virtuaenv. This will install all the modules indicated in requirements.txt
 ```console
-(webenv) trama@laestanciaazul:~/web$ pip install -r requirements.txt
+(webenv) pip install -r requirements.txt
 ```
 
 Configure postgree and create the database:
 ```console
-trama@laestanciaazul:~/web$ sudo -u postgres psql
+sudo -u postgres psql
 postgres=# CREATE DATABASE myproject;
 postgres=# CREATE USER myprojectuser WITH PASSWORD 'password';
 postgres=# ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
@@ -66,31 +66,38 @@ postgres=# GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
 postgres=#\q
 ```
 
+Before doing the first migration process you need to comment first one lie in file /post/forms.py, due to that sentence is trying to get categories from the database where they don't exist already. Therefore the migfrate process will fail. After the database is created you
+can restore the instruction back to it's original value:
+```
+# CATEGORY_CHOICES = [[c.id, c.name] for c in apps.get_model('category', 'Category').objects.all()]
+CATEGORY_CHOICES = ['PROGRAMING']
+```
+
 Prepare database with the structure required by the application:
 ```console
-(webenv) trama@laestanciaazul:~/web$ ./manage.py migrate
-(webenv) trama@laestanciaazul:~/web$ ./manage.py makemigrations
-(webenv) trama@laestanciaazul:~/web$ ./manage.py createsuperuser
+(webenv) ./manage.py migrate
+(webenv) ./manage.py makemigrations
+(webenv) ./manage.py createsuperuser
 ```
 
 ### Copy Statics
 
 Before starting the server we need to collect statics
 ```console
-(webenv) trama@laestanciaazul:~/web$ ./manage.py collectstatic
+(webenv) ./manage.py collectstatic
 ```
 
 ### Start server
 
 First we need to activate the virtuaenv (in case we are using one):
 ```console
-trama@laestanciaazul:~/web$ source webenv/bin/activate      
+source webenv/bin/activate      
 ```
 
 Once the virtualenv is activate (notice the "webenv" before the prompt), we can start the server trough manage.py. By using 0.0.0.0:8080 we can specify the port where the server is going to listen, and morever it will be accessible from the
 outside (by using the dns or IP of our server). In order to configure this for production you need to use apache, nginx, etc. For which there are several user guides on the internet.
 ```console
-(webenv) trama@laestanciaazul:~/web$ ./manage.py runserver 0.0.0.0:8080
+(webenv) ./manage.py runserver 0.0.0.0:8080
 Performing system checks...
 
 System check identified no issues (0 silenced).

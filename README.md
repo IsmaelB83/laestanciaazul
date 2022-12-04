@@ -45,7 +45,7 @@ Preparing the virtualenv and activating (optional but recommended)
 sudo -H pip3 install --upgrade pip
 sudo -H pip3 install virtualenv
 virtualenv webenv
-source myprojectenv/bin/activate
+source webenv/bin/activate
 (webenv) (ready)
 ```
 
@@ -109,30 +109,13 @@ Quit the server with CONTROL-C.
 
 ### Configuration
 
-As you can see in settings.py. This app is dependent on a file called "passwords.json". This file should contain some important information that is required both for starting the app (secret and database password), as well as to be able to use oauth
-in order to login in the app trough the apis of twitter, github, facebook or google. The file needs to be located in the base path of the application.
+As you can see in settings.py. This app is dependent on a file called "passwords.json". This file should contain some important information that is required both for starting the app (secret and database password).
 
 The structure of this json file should be as seen below:
 ```js
 {
     "secret": "mydjangosecretkey",
     "database_password": "mydatabasepassword",
-    "github": {
-        "key": "githubkeyforoauth",
-        "secret": "githubsecretforoauth"
-    },
-    "twitter": {
-        "key": "twitterkeyforoauth",
-        "secret": "twittesecretforoauth"
-    },
-    "facebook": {
-        "key": "facebookkeyforoauth",
-        "secret": "facebooksecretforoauth"
-    },
-    "google": {
-        "key": "googlekeyforoauth",
-        "secret": "googlesecretforoauth"
-    }
 }
 ```
 

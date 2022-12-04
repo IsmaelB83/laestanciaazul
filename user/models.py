@@ -5,11 +5,10 @@ from django.core.files import File
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 # Third party app imports
 # Local app imports
-from history.models import LogUser, Activity
 
 
 def upload_location_author(instance, filename):
@@ -43,23 +42,10 @@ class UserProfile(models.Model):
             # reopen = open('/tmp/user_social.gif', 'rb')
             # django_file = File(reopen)
             # instance.userprofile.image.save('user_social.gif', django_file, save=True)
-            reopen = open('/home/trama/static_cdn/img/user_social.gif', 'rb')
+            reopen = open('./user_social.png', 'rb')
             django_file = File(reopen)
             instance.userprofile.image.save('user_social.gif', django_file, save=True)
         instance.userprofile.save()
-
-    def add_log(self, visited_user, operation):
-        if self.user != visited_user.user:
-            log = LogUser()
-            if operation == "edit":
-                log.user = self.user
-                log.activity = Activity.objects.get(activity="user_edit")
-                log.description = "Ha editado el usuario <a href='" + self.get_absolute_url() + "'>" + self.user.first_name + " " + self.user.last_name + "</a>"
-            if operation == "view":
-                log.user = self.user
-                log.activity = Activity.objects.get(activity="user_visit")
-                log.description = "Ha visitado el perfil del usuario <a href='" + visited_user.get_absolute_url() + "'>" + visited_user.user.first_name + " " + visited_user.user.last_name + "</a>"
-            log.pre_save()
         
     def __unicode__(self):
         return self.user.first_name + " " + self.user.last_name

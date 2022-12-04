@@ -15,7 +15,7 @@ from django.template.defaultfilters import slugify
 import gallery
 from utilidades import PaginatorWithPageRange
 from .forms import PostForm, PostFormEdit
-from .models import Post, PostImage, PostCategory, PostComment, PostArchive, add_log_archive, add_log_search, PostImageSmall, PostView, PostLike
+from .models import Post, PostImage, PostCategory, PostComment, PostArchive, PostImage, PostView, PostLike
 from discuss.models import Comment
 from gallery.models import Image
 from user.models import UserProfile
@@ -47,7 +47,7 @@ def index_view(request):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImageSmall.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')[:20]
+    pictures_recent = PostImage.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')[:20]
     # Se genera el contexto con toda la información y se renderiza
     context = {
         'posts': posts_page,
@@ -104,9 +104,6 @@ def archive_view(request, year, month):
             j -= 1
         months_list.append(aux_list)
     archivo = zip(years_list, months_list)
-    # Añadir log
-    if request.user.is_authenticated:
-        add_log_archive(request.user, year + "/" + month)
 
     # Se genera el contexto y se renderiza
     context = {
@@ -146,10 +143,7 @@ def search_view(request, filter):
     # Se devuelven los 5 últimos comentarios de la web
     comments_recent = PostComment.objects.order_by('-comment__timestamp')[:5]
     # Se devuelven las 12 últimas imagenes cargadas
-    pictures_recent = PostImageSmall.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')[:12]
-    # Añadir log
-    if request.user.is_authenticated:
-        add_log_search(request.user, filter)
+    pictures_recent = PostImage.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')[:12]
 
     # Se genera el contexto y se renderiza
     context = {
@@ -165,7 +159,7 @@ def search_view(request, filter):
 
 def gallery_view(request):
     # Se recuperan todas las imagenes
-    post_images_all = PostImageSmall.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')
+    post_images_all = PostImage.objects.filter(post__status='PB', image__show_gallery='True').order_by('-image__timestamp')
     # Se genera el paginador para esos posts
     paginator = PaginatorWithPageRange(post_images_all, 18, 5)
     page_request_var = 'page'
@@ -177,9 +171,6 @@ def gallery_view(request):
     except EmptyPage:
         messages.warning(request, u'Página indicada fuera de rango')
         return redirect('blog:gallery')
-    # Se genera el log
-    if request.user.is_authenticated:
-        gallery.models.add_log(request.user)
 
     # Se genera el contexto y se renderiza
     context = {
@@ -220,11 +211,8 @@ def category_view(request, id):
     comments_recent = PostComment.objects.filter(post__in=posts_all).order_by('-comment__timestamp')[:5]
     # Ultimas imagenes (TO-DO: deberían ser sólo la de esta categoría)
     pictures_recent = []
-    for post_picture in PostImageSmall.objects.filter(post__in=posts_all).order_by('-image__timestamp')[:12]:
+    for post_picture in PostImage.objects.filter(post__in=posts_all).order_by('-image__timestamp')[:12]:
         pictures_recent.append(post_picture)
-    # Se añade un log de la visita a esta categoría
-    if request.user.is_authenticated:
-        category.add_log(request.user, "view")
 
     # Se genera el contexto con toda la información y se renderiza
     context = {
@@ -262,22 +250,18 @@ def post_view(request, id):
         view.post = post
         view.ip = ip
         view.save()
-
-    # Añadir log de la visita
-    if request.user.is_authenticated:
-        post.add_log(request.user, "view")
-
+        
     # Se crea un paginador con las imagenes del post (si son más de 6)
-    post_images_small = PostImageSmall.objects.filter(post=post)
-    paginator = PaginatorWithPageRange(post_images_small, 6, 5)
+    post_images = PostImage.objects.filter(post=post)
+    paginator = PaginatorWithPageRange(post_images, 6, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
     try:
-        post_images_small = paginator.page(page)
+        post_images = paginator.page(page)
     except PageNotAnInteger:
-        post_images_small = paginator.page(1)
+        post_images = paginator.page(1)
     except EmptyPage:
-        post_images_small = paginator.page(paginator.num_pages)
+        post_images = paginator.page(paginator.num_pages)
 
     # POST en esta vista significa nuevos comentarios o likes
     if request.method == 'POST' and request.user.is_authenticated:
@@ -289,7 +273,6 @@ def post_view(request, id):
         post_comment.post = post
         post_comment.comment = comment
         post_comment.save()
-        post_comment.add_log("create")
         messages.success(request, 'Comentario añadido')
 
     # El usuario logueado ha hecho ya Like en este post?
@@ -316,7 +299,7 @@ def post_view(request, id):
         'comments_recent': comments_recent,
         'already_like': already_like,
         'post': post,
-        'post_images_small': post_images_small,
+        'post_images': post_images,
         'page_request': page_request_var,
         'updated': updated,
     }
@@ -341,7 +324,6 @@ def post_like_view(request, id):
             like = PostLike()
             like.post = post
             like.user = request.user
-            like.add_log(True)
             like.save()
             data = {
                 'already_like': 'true',
@@ -351,7 +333,6 @@ def post_like_view(request, id):
         # Si llegamos aquí es que el usuario ya no quiere dar like. Lo eliminamos en ese caso
         else:
             like = PostLike.objects.filter(post=post, user=request.user)[0]
-            like.add_log(False)
             like.delete()
             data = {
                 'already_like': 'false',
@@ -390,7 +371,6 @@ def post_create_view(request):
             post.author = UserProfile.objects.get(user=request.user)
             # Se graba el post ya que es necesario para seguir trabajando con los objetos relacionados
             post.save()
-            post.add_log(request.user, "create")
             # Se actualiza la tabla de archivo de posts sólo si es un post publicado
             if post.status == 'PB':
                 try:
@@ -420,17 +400,6 @@ def post_create_view(request):
                 post_image.post = post
                 post_image.image = image
                 post_image.save()
-            # Se graban las imagenes small que se han asignado al post
-            for file_image_sm in form.cleaned_data['postimagesmall']:
-                image_sm = Image()
-                image_sm.caption = file_image_sm.name
-                image_sm.post_slug = post.id
-                image_sm.image = file_image_sm
-                image_sm.save()
-                post_image_sm = PostImageSmall()
-                post_image_sm.post = post
-                post_image_sm.image = image_sm
-                post_image_sm.save()
             # Mensaje de OK y se redirige al index
             messages.success(request, 'Post creado correctamente')
             return redirect('blog:index')
@@ -488,7 +457,6 @@ def post_edit_view(request, id):
                 post.image = image
             # Se graban los cambios del post, para poder seguir con el resto de datos
             post.save()
-            post.add_log(request.user, "edit")
             # Si ha pasado a status publicado en este momento se actualizan los contadores del archivo
             if status_old != 'PB' and post.status == 'PB':
                 try:
@@ -524,20 +492,6 @@ def post_edit_view(request, id):
                     post_image.post = post
                     post_image.image = image
                     post_image.save()
-            # Sólo si se han asignado nuevasss imagenes small al post se borran las antiguas y se asignan las nuevas
-            if len(form.cleaned_data['postimagesmall']) > 0:
-                for image_sm in PostImageSmall.objects.filter(post=post):
-                    image_sm.delete()
-                for file_image_sm in form.cleaned_data['postimagesmall']:
-                    image_sm = Image()
-                    image_sm.caption = file_image_sm.name
-                    image_sm.image = file_image_sm
-                    image_sm.post_slug = post.id
-                    image_sm.save()
-                    post_image_sm = PostImageSmall()
-                    post_image_sm.post = post
-                    post_image_sm.image = image_sm
-                    post_image_sm.save()
             # Datos grabados y se redirige al index
             messages.success(request, 'Post editado correctamente')
             return redirect('blog:index')

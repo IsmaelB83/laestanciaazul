@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'^', include("post.urls", namespace='blog')),
     url(r'^user/', include("user.urls", namespace='user')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]
 
 handler404 = views.error_404

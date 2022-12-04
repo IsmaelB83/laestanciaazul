@@ -4,7 +4,7 @@
 from django.contrib import admin
 # Third party app imports
 # Local app imports
-from .models import Post, PostCategory, PostImage, PostImageSmall, PostComment, PostArchive, PostView, PostLike
+from .models import Post, PostCategory, PostImage, PostComment, PostArchive, PostView, PostLike
 
 
 # More info here: https://docs.djangoproject.com/en/1.11/intro/tutorial07/
@@ -39,17 +39,6 @@ class PostImageModelAdmin(admin.ModelAdmin):
 
     class Meta:
         model = PostImage
-
-
-class PostImageSmallModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "post", "image"]
-    list_display_links = ["id"]
-    list_editable = ["post", "image"]
-    list_filter = ["post"]
-    search_fields = ["post"]
-    
-    class Meta:
-        model = PostImageSmall
 
 
 class PostCommentAdmin(admin.ModelAdmin):
@@ -99,7 +88,6 @@ class PostLikeAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostModelAdmin)
 admin.site.register(PostCategory, PostCategoryModelAdmin)
 admin.site.register(PostImage, PostImageModelAdmin)
-admin.site.register(PostImageSmall, PostImageSmallModelAdmin)
 admin.site.register(PostComment, PostCommentAdmin)
 admin.site.register(PostArchive, PostArchiveAdmin)
 admin.site.register(PostView, PostViewAdmin)

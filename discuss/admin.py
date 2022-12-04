@@ -8,9 +8,9 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "content", "num_likes", "parent_comment", "timestamp"]
+    list_display = ["id", "user", "content", "num_likes", "timestamp"]
     list_display_links = ["id"]
-    list_editable = ["content", "num_likes", "parent_comment"]
+    list_editable = ["content", "num_likes"]
     list_filter = ["user"]
     search_fields = ["user"]
 

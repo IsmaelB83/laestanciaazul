@@ -15,7 +15,6 @@ from social_django.models import UserSocialAuth
 # Local app imports
 from utilidades import PaginatorWithPageRange
 from discuss.models import Comment
-from history.models import LogUser
 from post.models import Post
 from .models import UserProfile, UserFollow
 from .forms import ProfileForm, MailForm
@@ -29,17 +28,6 @@ def user_register_view(request):
     except UserProfile.DoesNotExist:
         profile = UserProfile()
         profile.user = request.user
-    # Recupero todos los perfiles disponibles
-    try:
-        github_login = profile.user.social_auth.get(provider='github')
-    except UserSocialAuth.DoesNotExist:
-        github_login = None
-    try:
-        twitter_login = profile.user.social_auth.get(provider='twitter')
-    except UserSocialAuth.DoesNotExist:
-        twitter_login = None
-    # Sólo puede desconectar red social si ha introducido password o si tengo varios conec
-    can_disconnect = (profile.user.social_auth.count() > 1 or profile.user.has_usable_password())
     # Evento POST
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
@@ -56,7 +44,6 @@ def user_register_view(request):
             profile.author = old_author
             profile.user.save()
             profile.save()
-            profile.add_log(profile, "edit")
             messages.success(request, 'Tus datos de usuario han sido actualizados')
             return redirect('blog:index')
     else:
@@ -70,10 +57,7 @@ def user_register_view(request):
     # Generamos el contexto
     context = {
         'form': form,
-        'profile': profile,
-        'github_login': github_login,
-        'twitter_login': twitter_login,
-        'can_disconnect': can_disconnect
+        'profile': profile
     }
 
     # Renderizamos el template del edición del perfil
@@ -91,25 +75,12 @@ def about_user_view(request, id):
 	if not request.user.is_authenticated and user.username != 'trama1983':
 		messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
 		return redirect('blog:index')
-	# Registro la visita del usuario
-	if request.user.is_authenticated and request.user.userprofile:
-		request.user.userprofile.add_log(user.userprofile, "view")
 	# Recuperar datos adicionales del usuario
 	posts_user = Post.objects.filter(author__user=user)
 	comments_user = Comment.objects.filter(user=user)
 	#post_likes = PostLike.objects.filter(user=user)
 	follows = UserFollow.objects.filter(user=user)
 	followers = UserFollow.objects.filter(follows=user)
-	log_user_all = LogUser.objects.filter(user=user).order_by('-timestamp')
-	paginator = PaginatorWithPageRange(log_user_all, 25, 5)
-	page_request_var = 'page'
-	page = request.GET.get('page')
-	try:
-		log_user_page = paginator.page(page)
-	except PageNotAnInteger:
-		log_user_page = paginator.page(1)
-	except EmptyPage:
-		log_user_page = paginator.page(paginator.num_pages)
 	# Contexto y render
 	context = {
 		'profile': user.userprofile,
@@ -118,15 +89,11 @@ def about_user_view(request, id):
 		#'post_likes': post_likes,
 		'follows': follows,
 		'followers': followers,
-		'log_user': log_user_page,
-		'page_request': page_request_var,
 		'form': MailForm(),
 	}
 	# Enviar mail?
 	if request.method == 'POST':
 		# Registro el mail enviado
-		if request.user.is_authenticated and request.user.userprofile:
-			request.user.userprofile.add_log(request.user.userprofile, "mail")
 		form = MailForm(request.POST)
 		if form.is_valid():
 			# aux = message.encode('utf-8')

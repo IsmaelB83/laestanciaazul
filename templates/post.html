@@ -116,21 +116,21 @@
                 <div class="row _mt-10">
                     <div class="_previewXL-Footer col-xs-12">
                         <!-- imagenes del post -->
-                        {% if post.postimagesmall_set.count > 0 %}
+                        {% if post.postimage_set.count > 0 %}
                         <div class="row">
                             <div class="col-xs-12">
                                 <h5><strong><i>Galeria de imagenes del post:</i></strong></h5>
                             </div>
-                            {% for post_image_sm in post_images_small %}
+                            {% for post_image_sm in post_images %}
                             <div class="col-xs-4 col-sm-2 _mt-10 _pr-10 imagen_post">
                                 <a href="#" data-toggle="modal" data-target="#post_modal">
                                     <img src="{{post_image_sm.image.image.url}}" class="img-rounded img-responsive" style="height: 100px;">
                                 </a>
                             </div>
                             {% endfor %}
-                            {% if post.postimagesmall_set.count > 0 %}
+                            {% if post.postimage_set.count > 0 %}
                             <div class="col-xs-12 _mt-10">
-                                {% include "includes/pagination.html" with page=post_images_small request=page_request %}
+                                {% include "includes/pagination.html" with page=post_images request=page_request %}
                             </div>
                             {% endif %}
                         </div>

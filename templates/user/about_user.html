@@ -30,17 +30,6 @@ active
 				<h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
 				<h5 class="_mt-20">{{ profile.description }}</h5>
 				<div class="hr-center"></div>
-                {% comment %}
-				{% if profile.user.username == "trama1983" %}
-				<div class="_social_contact">
-					<div class="text-center">
-						<a href="https://www.linkedin.com/in/ismael-bernal-10497a51/"><i class="fa fa-linkedin fa-2x" data-toggle="tooltip" data-placement="top" title="Linkedin"></i></a>
-						<a href="https://twitter.com/Ismab83"><i class="fa fa-twitter fa-2x" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
-						<a href="https://github.com/IsmaelB83"><i class="fa fa-github fa-2x" data-toggle="tooltip" data-placement="top" title="GitHub"></i></a>
-					</div>
-				</div>
-				{% endif %}
-                {% endcomment %}
 			</div>
 		</div>
 		<!-- Columna derecha -->
@@ -130,25 +119,6 @@ active
 										<button type="button" disabled class="btn btn-default">{{profile.user.last_login|date:"M d, Y"}}</button>
 									</div>
 								</li>
-								<li class="_mt-30">
-									<h2>Actividad reciente</h2>
-									<div class="hr-left"></div>
-								</li>
-								{% for log in log_user %}
-								<li class="_mt-10">
-                                    <div class="pull-left">
-                                        <span class="_ml-10"><i class="{{log.activity.icon}}"></i></span>
-                                        <span class="_ml-10">{{log.description|safe}}</span>
-                                    </div>
-                                    <div class="pull-right">
-                                        <span class="_ml-10"><i class="fa fa-calendar"></i> {{log.timestamp|date:"D d M Y"}}</span>
-                                    </div>
-								</li>
-								<br>
-								{% endfor %}
-                                <li class="_mt-20">
-                                    {% include "includes/pagination.html" with page=log_user request=page_request %}
-                                </li>
 							</ul>
 						</li>
 						{% endif %}

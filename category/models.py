@@ -2,11 +2,9 @@
 # Python imports
 # Django imports
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # Third party app imports
 # Local app imports
-from history.models import LogUser, Activity
-
 
 class Category(models.Model):
     id = models.CharField(primary_key=True, max_length=5)
@@ -27,14 +25,6 @@ class Category(models.Model):
 
     def __iter__(self):
         return [self.id, self.sort, self.name, self.css_class, self.timestamp, self.updated]
-
-    def add_log(self, user, operation):
-        log = LogUser()
-        if operation == "view":
-            log.user = user
-            log.activity = Activity.objects.get(activity="category_visit")
-            log.description = u"Ha visitado la categoría de posts <a href='" + self.get_absolute_url() + "'>" + self.name + "</a>"
-        log.pre_save()
 
     class Meta:
         ordering = ['sort']

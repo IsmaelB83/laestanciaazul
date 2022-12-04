@@ -24,7 +24,7 @@ PASSWORDS = json.load(JSON_DATA)
 SECRET_KEY = PASSWORDS["secret"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['bernaldev.com', 'localhost']
+ALLOWED_HOSTS = ['bernaldev.com', '127.0.0.1']
 DEBUG = True
 
 # Application definition
@@ -37,14 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_wysiwyg',
-    'social_django',
     'ckeditor',
     'category',
     'gallery',
     'user',
     'discuss',
     'post',
-    'history',
     'widget_tweaks',
 ]
 
@@ -55,8 +53,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'web.urls'
@@ -81,12 +78,6 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.open_id.OpenIdAuth',
-    'social_core.backends.google.GoogleOpenId',
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -108,18 +99,10 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {   'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {   'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',   },
+    {   'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  },
+    {   'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 # Internationalization
@@ -138,12 +121,12 @@ MEDIA_URL = '/media/'
 # this is the local folder for statics
 print(BASE_DIR)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '..', 'statics'),
+    os.path.join(BASE_DIR, '..', 'local_static'),
 ]
 
 # this simulates the server where statics are stored
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'cdn_static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'cdn_media/')
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = 'false'
 
@@ -154,15 +137,3 @@ DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
-
-# https://github.com/settings/developers
-SOCIAL_AUTH_GITHUB_KEY = PASSWORDS["github"]["key"]
-SOCIAL_AUTH_GITHUB_SECRET = PASSWORDS["github"]["secret"]
-# https://apps.twitter.com
-SOCIAL_AUTH_TWITTER_KEY = PASSWORDS["twitter"]["key"]
-SOCIAL_AUTH_TWITTER_SECRET = PASSWORDS["twitter"]["secret"]
-
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/user/register'
-SOCIAL_AUTH_RAISE_EXCEPTIONS = False

@@ -158,8 +158,8 @@
   font-size: .875rem;
   line-height: 1;
   color: #fff;
-  background-color: rgba($form-feedback-invalid-color,.8);
-  border-radius: .2rem;
+/*  background-color: rgba($form-feedback-invalid-color,.8);
+  border-radius: .2rem;*/
 }
 
 /*>>==========================*
@@ -655,7 +655,7 @@ button._pagination {
 }*/
 
 ._previewXL-comments a img:hover{
-    opacity:0.6; !important
+    opacity:0.6 !important;
 }
 
 ._previewXL-Categories {
@@ -757,7 +757,7 @@ button._pagination {
 	float: left;
 }
 
-._previewXS img:hover{ opacity:0.6; !important}
+._previewXS img:hover{ opacity:0.6 !important; }
 
 ._previewXS a { outline:none; }
 
@@ -1159,7 +1159,7 @@ button._pagination {
 }
 
 #contact_right ._btn_contact {
-    pointer: none;
+    cursor: none;
 	background-color: #16A085;
 	color: #fff;
 	border: 1px solid #16A085;
@@ -1390,27 +1390,8 @@ button._pagination {
 }
 
 /* ESTILOS PARA LOS POSTS QUE SE ESCRIBEN DESDE CKEDITOR */
-._post-content-img {
-    text-align: center;
-    display: block;
-    height: auto;
-    width: auto;
-    overflow-y: hidden;
-    overflow-x: auto;
-    word-wrap: normal;
-    white-space: nowrap;
-}
-
-._post-content-img img {
-    display: inline;
-    margin: 0px;
-    padding: 0px;
-    vertical-align: middle;
-    margin-left: 10px;
-}
-
-._post-content-img img:first-child {
-    margin-left: 0px;
+._previewXL .img-responsive {
+    height: auto !important;
 }
 
 pre {

@@ -69,8 +69,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
                 'category.context_processors.categories_pre_proc',
             ],
         },
@@ -137,3 +135,5 @@ DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

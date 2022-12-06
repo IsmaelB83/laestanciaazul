@@ -2,7 +2,7 @@
 # Python imports
 # Django imports
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf.urls import handler404, handler500
@@ -12,10 +12,10 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include("post.urls", namespace='blog')),
-    url(r'^user/', include("user.urls", namespace='user')),
-    url(r'^accounts/', include('django.contrib.auth.urls')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^', include(('post.urls', 'blog'), namespace='blog')),
+    re_path(r'^user/', include(('user.urls', 'user'), namespace='user')),
+    re_path(r'^accounts/', include('django.contrib.auth.urls')),
 ]
 
 handler404 = views.error_404

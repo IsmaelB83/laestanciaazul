@@ -3,17 +3,13 @@
 # Django imports
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
-# Third party app imports
-from social_django.models import UserSocialAuth
 # Local app imports
-from utilidades import PaginatorWithPageRange
 from discuss.models import Comment
 from post.models import Post
 from .models import UserProfile, UserFollow

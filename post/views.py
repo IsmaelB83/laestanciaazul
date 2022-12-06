@@ -12,7 +12,6 @@ from django.contrib import messages
 from django.template.defaultfilters import slugify
 # Third party app imports
 # Local app imports
-import gallery
 from utilidades import PaginatorWithPageRange
 from .forms import PostForm, PostFormEdit
 from .models import Post, PostImage, PostCategory, PostComment, PostArchive, PostImage, PostView, PostLike

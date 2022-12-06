@@ -35,16 +35,6 @@ class UserProfile(models.Model):
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        if instance.social_auth and not instance.userprofile.image:
-            # r = requests.get(staticfiles_storage.url('img/user_social.gif'))
-            # with open('/tmp/user_social.gif', 'wb') as f:
-            #     f.write(r.content)
-            # reopen = open('/tmp/user_social.gif', 'rb')
-            # django_file = File(reopen)
-            # instance.userprofile.image.save('user_social.gif', django_file, save=True)
-            reopen = open('./user_social.png', 'rb')
-            django_file = File(reopen)
-            instance.userprofile.image.save('user_social.gif', django_file, save=True)
         instance.userprofile.save()
         
     def __unicode__(self):

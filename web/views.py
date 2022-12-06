@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 # Local app imports
 
 
-def error_404(request):
+def error_404(request, exception):
     return render(request, 'not_found.html', {})
 
 

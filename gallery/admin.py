@@ -9,10 +9,10 @@ from .models import Image
 
 # Register your models here.
 class ImageModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "caption", "image", "timestamp", "post_slug"]
+    list_display = ["id", "caption", "image", "post_slug"]
     list_display_links = ["id"]
     list_editable = ["caption", "image", "post_slug"]
-    list_filter = ["caption"]
+    list_filter = ["post_slug"]
     search_fields = ["caption"]
 
     class Meta:

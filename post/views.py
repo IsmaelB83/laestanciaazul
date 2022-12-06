@@ -24,12 +24,8 @@ from category.models import Category
 
 def index_view(request):
 
-    # Suscrito a la lista de distribución
-    if request.method == 'POST':
-        messages.success(request, u'Se ha suscrito a la lista de distribución')
-
-    # Se obtienen los primeros 15 posts, y se crea un paginador de 5 posts por pagina
-    posts_all = Post.objects.filter(status='PB').order_by('-published_date')[:15]
+    # Se obtienen los primeros 99 posts, y se crea un paginador de 5 posts por pagina
+    posts_all = Post.objects.filter(status='PB').order_by('-published_date')[:1000]
     paginator = PaginatorWithPageRange(posts_all, 5, 5)
     page_request_var = 'page'
     page = request.GET.get('page')
@@ -62,7 +58,7 @@ def index_view(request):
 
 def archive_view(request, year, month):
     # Se generan todos los posts para el filtrado especificado
-    if 1999 < int(year) < 2035:
+    if 2000 < int(year) < 2040:
         if 0 < int(month) < 13:
             posts_filtered = Post.objects.filter(status='PB', published_date__year=int(year), published_date__month=int(month))
         elif int(month) == 13:
@@ -390,19 +386,22 @@ def post_create_view(request):
                 post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                 post_category.save()
             # Se graban las imagenes que se han asignado al post
-            for file_image in form.cleaned_data['postimage']:
-                image = Image()
-                image.caption = file_image.name
-                image.image = file_image
-                image.post_slug = post.id
-                image.save()
-                post_image = PostImage()
-                post_image.post = post
-                post_image.image = image
-                post_image.save()
+            if len(form.cleaned_data['postimage']) > 0:
+                for file_image in form.cleaned_data['postimage']:
+                    image = Image()
+                    image.caption = file_image.name
+                    image.image = file_image
+                    image.post_slug = post.id
+                    image.save()
+                    post_image = PostImage()
+                    post_image.post = post
+                    post_image.image = image
+                    post_image.save()
             # Mensaje de OK y se redirige al index
             messages.success(request, 'Post creado correctamente')
             return redirect('blog:index')
+        else:
+            messages.error(request, 'Error creando el post')
     else:
         # No es un SUBMIT, en ese caso se genera un form vacio
         form = PostForm()
@@ -410,6 +409,7 @@ def post_create_view(request):
     # Se genera el contexto y se renderiza
     context = {
         'title': 'Create post',
+        'errors': form.errors,
         'form': form,
     }
     return render(request, 'post_form.html', context)
@@ -495,12 +495,47 @@ def post_edit_view(request, id):
             # Datos grabados y se redirige al index
             messages.success(request, 'Post editado correctamente')
             return redirect('blog:index')
+        else:
+            messages.error(request, 'Error editando el post')
+
 
     # Se genera el contexto y se renderiza
     context = {
         'title': 'Edit post',
         'post': post,
+        'errors': form.errors,
         'form': form,
     }
     return render(request, 'post_form.html', context)
 
+def post_delete_view(request, id):
+    # Es obligatorio estar loguerdo
+    if not request.user.is_authenticated:
+        messages.error(request, 'Es necesario estar autenticado para eliminar posts')
+        return redirect('blog:index')
+
+    # Es obligatorio ser editor para tocar un post
+    if not request.user.userprofile.author:
+        messages.error(request, u'No está autorizado para eliminar el post indicado')
+        return redirect('blog:index')
+
+    # Se obtiene el post a eliminar y si no existe se redirige al index
+    try:
+        post = Post.objects.get(id=id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'El post indicado no existe')
+        return redirect('blog:index')
+    
+    # Sólo se pueden eliminar posts propios
+    if request.user != post.author.user:
+        messages.error(request, u'Sólo pueden eliminarse los posts propios')
+        return redirect('blog:index')
+
+    # Si llega hasta aquí se puede continuar
+    try:
+        post.delete()
+        messages.success(request, 'Post eliminado con exito')
+    except Exception:
+        messages.error(request, 'Error eliminando post')
+
+    return redirect('blog:index')

@@ -24,7 +24,7 @@ class PostForm(forms.ModelForm):
     )
     status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect)
     image_file = forms.FileField()
-    postimage = MultiFileField(min_num=1)
+    postimage = MultiFileField(required=False)
     
     class Meta:
         model = Post
@@ -38,7 +38,7 @@ class PostFormEdit(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple
     )
     image_file = forms.FileField(required=False)
-    postimage = MultiFileField(min_num=1, required=False)
+    postimage = MultiFileField(required=False)
 
     class Meta:
         model = Post

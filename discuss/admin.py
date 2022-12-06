@@ -8,11 +8,11 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "content", "num_likes", "timestamp"]
-    list_display_links = ["id"]
-    list_editable = ["content", "num_likes"]
-    list_filter = ["user"]
-    search_fields = ["user"]
+    list_display = ['id', 'user', 'content', 'timestamp']
+    list_display_links = ['id']
+    list_editable = ['content']
+    list_filter = ['user']
+    search_fields = ['content']
 
     class Meta:
         model = Comment

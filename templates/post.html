@@ -5,6 +5,7 @@
 {% block edit_post %}
 {% if post.author == user.userprofile %}
 <li><a class="_btnColor4" href='{% url "blog:post_edit" id=post.id %}'>Edit Post</a></li>
+<li><a class="_btnColor4" href='{% url "blog:post_delete" id=post.id %}'>Delete Post</a></li>
 {% endif %}
 {% endblock %}
 

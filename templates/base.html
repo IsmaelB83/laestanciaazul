@@ -23,12 +23,27 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/estilos.css" %}'/>
     <!-- Blog title-->
     <title>La Estancia Azul</title>
-    <link rel="shortcut icon" href="https://www.laestanciaazul.com/media/post/none/icono.ico">
-    <link rel="apple-touch-icon image_src" href="https://www.laestanciaazul.com/media/post/none/web.jpg">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <meta property="og:type" content= "website" />
-    <meta property="og:url" content="https://www.laestanciaazul.com"/>
+    <meta property="og:url" content="https://bernaldev.com"/>
     <meta property="og:site_name" content="La Estancia Azul - Blog" />
-    <meta property="og:image" itemprop="image primaryImageOfPage" content="https://www.laestanciaazul.com/media/post/none/web.jpg" />
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="/static/favicon/apple-icon-180x180.png" />
     <!-- Javascript files-->
     <script src='{% static "js/jquery-1.11.1.js" %}'></script>
     <script src='{% static "js/moment-2.9.0.js" %}'></script>
@@ -70,7 +85,7 @@
                     <!-- Menú izquierda: navegación por la web-->
                     <ul class="nav navbar-nav navbar-left">
                         <li class="{% block activo_home %} {% endblock %}"><a class="_ftColor1" href="{% url 'blog:index' %}">Principal</a></li>
-                        <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'user:profile' id=5%}">Contacto</a></li>
+                        <li class="{% block activo_about %} {% endblock %}"><a href="{% url 'user:profile' id=1%}">Contacto</a></li>
                         <li class="{% block activo_category %} {% endblock %} dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">Categorias <span class="caret"></span></a>
                             <ul class="dropdown-menu _bgColor1" role="menu">
@@ -79,7 +94,7 @@
                                 {% endfor %}
                             </ul>
                         </li>
-                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2019 13%}">Archivo</a></li>
+                        <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2022 13%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
                         {% if user.is_authenticated and user.userprofile.author %}
                         <li class="{% block activo_author %} {% endblock %} dropdown">
@@ -211,6 +226,7 @@
     {% endblock %}
 
     {% include "includes/messages.html" %}
+
     {% block main_content %}
     {% endblock %}
 </main>
@@ -233,7 +249,7 @@
                         <h6>Desarrollado por:
                             <p class="_ml-10 _mt-5">
                                 <i class="fa fa-envelope"></i>
-                                <a class="_a-verde" href="mailto:info@laestanciaazul.com">Ismael - info@laestanciaazul.com</a>
+                                <a class="_a-verde" href="mailto:info@bernaldev.com">Ismael - info@bernaldev.com</a>
                             </p>
                         </h6>
                     </div>
@@ -242,19 +258,19 @@
                         <ul class="list-inline _mt-5">
                             <li class="list-inline-item">
                                 <a class="btn btn-social-icon btn-lg btn-twitter"
-                                   href="http://twitter.com/share?text=La+estancia+azul&url=https://www.laestanciaazul.com&hashtags=tecnología, programación, sap, django, python, hobby">
+                                   href="http://twitter.com/share?text=La+estancia+azul&url=https://bernaldev.com&hashtags=programación, formacion, django, python, hobby">
                                     <span class="fa fa-twitter"></span>
                                 </a>
                             </li>
                             <li class="list-inline-item">
                                 <a class="btn btn-social-icon btn-lg btn-facebook"
-                                   href="http://www.facebook.com/sharer.php?u=https://www.laestanciaazul.com">
+                                   href="http://www.facebook.com/sharer.php?u=https://bernaldev.com">
                                     <span class="fa fa-facebook"></span>
                                 </a>
                             </li>
                             <li class="list-inline-item">
                                 <a class="btn btn-social-icon btn-lg btn-google"
-                                   href="https://plus.google.com/share?url=https://www.laestanciaazul.com">
+                                   href="https://plus.google.com/share?url=https://bernaldev.com">
                                     <span class="fa fa-google"></span>
                                 </a>
                             </li>
@@ -284,7 +300,11 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-xs-12 _pl-0 _pr-0">
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-4 _pl-sm-20">
+                <div class="footer-about">
+                    <div class="col-xs-12 _pb-20 _pl-0 _pr-0">
                         <div class="navigation">
                             <h2 class="footer-title">Navegación</h2>
                             <ul class="list-unstyled">
@@ -295,22 +315,6 @@
                                 <li><a href="{% url 'blog:gallery' %}">Galeria</a></li>
                             </ul>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-lg-4 _pl-sm-20">
-                <div class="footer-about">
-                    <div class="col-xs-12 _pb-20 _pl-0 _pr-0">
-                        <h2 class="footer-title">Newsletter</h2>
-                        <p>Subscribete a nuestra lista de noticias para recibir las publicaciones en tu mail (no disponible todavía)</p>
-                        <form method="post" action="" id="subscribe" enctype="multipart/form-data" novalidate>
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                                <input id="email" disabled="true" type="text" class="form-control" name="email" placeholder="Email">
-                            </div>
-                            <button type="submit" class="btn _btnColor3 _mt-15 _noRadious">Subscribirse</button>
-                        </form>
                     </div>
                 </div>
             </div>

@@ -9,10 +9,9 @@ from .models import Category
 
 # Register your models here.
 class CategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "sort", "name", "css_class", "updated", "timestamp"]
+    list_display = ["id", "sort", "name", "css_class", "timestamp"]
     list_display_links = ["id"]
     list_editable = ["sort", "name", "css_class"]
-    list_filter = ["updated", "timestamp"]
     search_fields = ["name"]
 
     class Meta:
@@ -20,4 +19,3 @@ class CategoryModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryModelAdmin)
-

@@ -4,7 +4,7 @@
 from django import forms
 from django.apps import apps
 # Third party app imports
-#from multiupload.fields import MultiFileField
+from multiupload.fields import MultiFileField
 # Local app imports
 from .models import Post
 
@@ -24,11 +24,11 @@ class PostForm(forms.ModelForm):
     )
     status = forms.ChoiceField(choices=Post.STATUSES, required=True, widget=forms.RadioSelect)
     image_file = forms.FileField()
-    #postimage = MultiFileField(required=False)
+    postimage = MultiFileField(required=False)
     
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content') #'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')
 
 
 class PostFormEdit(forms.ModelForm):
@@ -38,8 +38,8 @@ class PostFormEdit(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple
     )
     image_file = forms.FileField(required=False)
-    #postimage = MultiFileField(required=False)
+    postimage = MultiFileField(required=False)
 
     class Meta:
         model = Post
-        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content') #'postimage')
+        fields = ('title', 'postcategory', 'status', 'published_date', 'image_file', 'content', 'postimage')

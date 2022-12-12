@@ -68,9 +68,9 @@ def about_user_view(request, id):
 		messages.error(request, 'El usuario no existe')
 		return redirect('blog:index')
 	# Sólo pueden verse perfiles si estás logueado
-	if not request.user.is_authenticated and user.username != 'trama1983':
-		messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
-		return redirect('blog:index')
+	# if not request.user.is_authenticated and user.username != 'trama1983':
+	# 	messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
+	# 	return redirect('blog:index')
 	# Recuperar datos adicionales del usuario
 	posts_user = Post.objects.filter(author__user=user)
 	comments_user = Comment.objects.filter(user=user)
@@ -105,14 +105,14 @@ def about_user_view(request, id):
 			 		  "<strong>Contenido del mail: </strong><br><hr>" + \
 				      mensaje_aux
 			from_email = form.cleaned_data['mail_from']
-			recipient_list = ['laestanciaazul.com@gmail.com']
+			recipient_list = ['info@bernaldev.com']
 			email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
 			email.attach_alternative(html_content, "text/html")
 			try:
 				email.send()
 				messages.success(request, 'E-mail enviado con éxito')
 			except Exception:
-				messages.error(request, 'Error al enviar el mail. Escribe a info@laestanciaazul.com.')
+				messages.error(request, 'Error al enviar el mail. Escribe a info@bernaldev.com.')
 			return redirect('blog:index')
 		else:
 			return render(request, 'user/about_user.html', context)

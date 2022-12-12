@@ -27,7 +27,7 @@ active
 					 {%endif%}>
 			</div>
 			<div class="text-center">
-				<h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+				<h1>{{ profile.user.first_name }}</h1>
 				<h5 class="_mt-20">{{ profile.description }}</h5>
 				<div class="hr-center"></div>
 			</div>
@@ -36,10 +36,10 @@ active
         <div id="contact_right" class="col-xd-12 col-sm-8 col-md-9 _pl-sm-30 _mt-20 pull-right">
 			<div class="row">
 				<div class="col-xs-12">
-                    <h1 class="_mt-0"><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></h1>
+                    <h1 class="_mt-0"><strong>{{ profile.user.first_name }}</strong></h1>
                     <h4>{{ profile.description }}</h4>
                     <div class="hr-left"></div>
-                    {% if profile.author and profile.user.username == "trama1983" %}
+                    {% if profile.author and profile.user.username == "ismael" %}
                     <div class="col-xs-12 _pl-0 _pr-0">
                         <blockquote>
                             <p>Vive como si fueras a morir mañana. Aprende como si fueras a vivir siempre.</p>

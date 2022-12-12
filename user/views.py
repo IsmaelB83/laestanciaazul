@@ -68,9 +68,9 @@ def about_user_view(request, id):
 		messages.error(request, 'El usuario no existe')
 		return redirect('blog:index')
 	# Sólo pueden verse perfiles si estás logueado
-	# if not request.user.is_authenticated and user.username != 'trama1983':
-	# 	messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
-	# 	return redirect('blog:index')
+	if not request.user.is_authenticated and user.username != 'ismael':
+		messages.info(request, 'Es necesario estar logueado para ver perfiles de usuario')
+		return redirect('blog:index')
 	# Recuperar datos adicionales del usuario
 	posts_user = Post.objects.filter(author__user=user)
 	comments_user = Comment.objects.filter(user=user)

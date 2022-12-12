@@ -385,17 +385,17 @@ def post_create_view(request):
                 post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                 post_category.save()
             # Se graban las imagenes que se han asignado al post
-            if len(form.cleaned_data['postimage']) > 0:
-                for file_image in form.cleaned_data['postimage']:
-                    image = Image()
-                    image.caption = file_image.name
-                    image.image = file_image
-                    image.post_slug = post.id
-                    image.save()
-                    post_image = PostImage()
-                    post_image.post = post
-                    post_image.image = image
-                    post_image.save()
+            # if len(form.cleaned_data['postimage']) > 0:
+            #     for file_image in form.cleaned_data['postimage']:
+            #         image = Image()
+            #         image.caption = file_image.name
+            #         image.image = file_image
+            #         image.post_slug = post.id
+            #         image.save()
+            #         post_image = PostImage()
+            #         post_image.post = post
+            #         post_image.image = image
+            #         post_image.save()
             # Mensaje de OK y se redirige al index
             messages.success(request, 'Post creado correctamente')
             return redirect('blog:index')
@@ -478,19 +478,19 @@ def post_edit_view(request, id):
                 post_category.category = apps.get_model('category', 'Category').objects.get(id=category)
                 post_category.save()
             # Sólo si se han asignado nuevas imagenes al post se borran las antiguas y se asignan las nuevas
-            if len(form.cleaned_data['postimage']) > 0:
-                for image in PostImage.objects.filter(post=post):
-                    image.delete()
-                for file_image in form.cleaned_data['postimage']:
-                    image = Image()
-                    image.caption = file_image.name
-                    image.image = file_image
-                    image.post_slug = post.id
-                    image.save()
-                    post_image = PostImage()
-                    post_image.post = post
-                    post_image.image = image
-                    post_image.save()
+            # if len(form.cleaned_data['postimage']) > 0:
+            #     for image in PostImage.objects.filter(post=post):
+            #         image.delete()
+            #     for file_image in form.cleaned_data['postimage']:
+            #         image = Image()
+            #         image.caption = file_image.name
+            #         image.image = file_image
+            #         image.post_slug = post.id
+            #         image.save()
+            #         post_image = PostImage()
+            #         post_image.post = post
+            #         post_image.image = image
+            #         post_image.save()
             # Datos grabados y se redirige al index
             messages.success(request, 'Post editado correctamente')
             return redirect('blog:index')

@@ -119,7 +119,7 @@ MEDIA_URL = '/media/'
 # this is the local folder for statics
 print(BASE_DIR)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '..', 'local_static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # this simulates the server where statics are stored

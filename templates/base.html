@@ -96,16 +96,6 @@
                         </li>
                         <li class="{% block activo_archive %} {% endblock %}"><a href="{% url 'blog:archive' 2022 13%}">Archivo</a></li>
                         <li class="{% block activo_gallery %} {% endblock %}"><a href="{% url 'blog:gallery' %}">Galeria</a></li>
-                        {% if user.is_authenticated and user.userprofile.author %}
-                        <li class="{% block activo_author %} {% endblock %} dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">Autor <span class="caret"></span></a>
-                            <ul class="dropdown-menu _bgColor1" role="menu">
-                                <li><a class="_btnColor4" href='{% url "blog:post_create" %}'>Crear post</a></li>
-                                <li><a class="_btnColor4" href='{% url "blog:search" "_not_published_" %}'>Drafts</a></li>
-                                {% block edit_post %} {% endblock %}
-                            </ul>
-                        </li>
-                        {% endif %}
                     </ul>
                     <!-- Menú derecha: búsqueda y inicio/cierre sesión-->
                     <ul class="nav navbar-nav navbar-right">
@@ -167,21 +157,38 @@
                                         </div>
                                         <div class="col-xs-12 _pd-0">
                                             {% if user.is_authenticated %}
-                                            {% if user.is_staff %}
-                                            <a class="btn btn btn-warning btn-block btn-sm" href="{% url 'admin:index' %}">
-                                                <span class="glyphicon glyphicon glyphicon-cog"></span> Admin Django
-                                            </a>
-                                            {% endif %}
-                                            <a class="btn btn btn-info btn-block btn-sm" href="{% url 'user:register' %}">
-                                                <span class="glyphicon glyphicon-edit"></span> Editar perfil
-                                            </a>
-                                            <button class="btn btn btn-primary btn-block btn-sm" href="#disconnectModal" data-toggle="modal" data-target="#disconnectModal">
-                                                <span class="glyphicon glyphicon-log-out"></span> Logout
-                                            </button>
+                                                {% if post == false %}
+                                                    {% if user.is_staff %}
+                                                        <a class="btn btn btn-warning btn-block btn-sm" href="{% url 'admin:index' %}">
+                                                            <span class="glyphicon glyphicon glyphicon-cog"></span> Admin Django
+                                                        </a>
+                                                    {% endif %}
+                                                    <a class="btn btn btn-info btn-block btn-sm" href="{% url 'user:register' %}">
+                                                        <span class="glyphicon glyphicon-edit"></span> Editar perfil
+                                                    </a>
+                                                    <button class="btn btn btn-primary btn-block btn-sm" href="#disconnectModal" data-toggle="modal" data-target="#disconnectModal">
+                                                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                                                    </button>   
+                                                    {% if user.userprofile.author %}    
+                                                        <a class="btn btn-success btn-block btn-sm" href='{% url "blog:post_create" %}'>
+                                                            <span class="glyphicon glyphicon-pencil"></span> Crear post
+                                                        </a>
+                                                        <a class="btn btn-danger btn-block btn-sm" href='{% url "blog:search" "_not_published_" %}'>
+                                                            <span class="glyphicon glyphicon-inbox"></span> Posts borrador
+                                                        </a>
+                                                    {% endif %}
+                                                {% elif post.author == user.userprofile %}
+                                                    <a class="btn btn-success btn-block btn-sm" href='{% url "blog:post_edit" id=post.id %}'>
+                                                        <span class="glyphicon glyphicon-inbox"></span> Edit Post
+                                                    </a>
+                                                    <a class="btn btn-danger btn-block btn-sm" href="#deletePost" data-toggle="modal" data-target="#deletePost" data-value="1">
+                                                        <span class="glyphicon glyphicon-inbox"></span> Delete Post
+                                                    </a>
+                                                {% endif %}
                                             {% else %}
-                                            <a class="btn btn-success btn-block btn-sm" href="{% url 'login' %}">
-                                                <span class="glyphicon glyphicon-log-in"></span> Login
-                                            </a>
+                                                <a class="btn btn-success btn-block btn-sm" href="{% url 'login' %}">
+                                                    <span class="glyphicon glyphicon-log-in"></span> Login
+                                                </a>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -196,6 +203,26 @@
                         </li>
                         {% endif %}
                     </ul>
+                    {% if post.author == user.userprofile %}
+                    <!-- Ventana modal borrar post -->
+                    <div class="modal fade" id="deletePost">
+                        <div class="modal-dialog ">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h2>Borrar post</h2>
+                                    <p>¿Está seguro de que desea borrar el post?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href='{% url "blog:post_delete" id=post.id %}'>
+                                        <button class="btn btn-danger" type="submit">Borrar</button>
+                                    </a>
+                                    <a href="#" data-dismiss="modal" class="btn btn-primary">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                     <!-- Ventana modal cerrar sesion -->
                     <div class="modal fade" id="disconnectModal">
                         <div class="modal-dialog ">
@@ -313,6 +340,8 @@
                                 <li><a href="{% url 'blog:category' id='all' %}">Categorías</a></li>
                                 <li><a href="{% url 'blog:archive' 2018 13 %}">Archivo</a></li>
                                 <li><a href="{% url 'blog:gallery' %}">Galeria</a></li>
+                                <li><a href="{% url 'blog:privacidad' %}">Política Privacidad</a></li>
+                                <li><a href="{% url 'blog:cookies' %}">Política Cookies</a></li>
                             </ul>
                         </div>
                     </div>
@@ -322,8 +351,29 @@
     </div>
 </footer>
 
+  
+<div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog-cookies" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+            <div class="notice d-flex justify-content-between align-items-center">
+                <div class="cookie-text"><p>Esta web utiliza cookies para personalizar el contenido, análisis de tráfico y poder proporcionar la mejor experiencia.</p></div>
+                <div class="buttons d-flex flex-column flex-lg-row">
+                    <a href="#" class="btn btn-success btn-sm" data-dismiss="modal">Acepto</a>
+                    <a href="{% url 'blog:cookies' %}" class="btn btn-secondary btn-sm">Leer más</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- My scripts -->
 <script>
+jQuery(document).ready(function() {  
+    $('#cookieModal').modal('show');
+});
+
 jQuery(window).resize(function() {
     var divWidth = $('#powered').width();
     $('#powered').css('height', divWidth/6);

@@ -20,7 +20,7 @@ from gallery.models import Image
 from user.models import UserProfile
 from category.models import Category
 
-
+    
 def index_view(request):
 
     # Se obtienen los primeros 99 posts, y se crea un paginador de 5 posts por pagina
@@ -53,6 +53,13 @@ def index_view(request):
         'page_request': page_request_var,
     }
     return render(request, 'index.html', context)
+
+def privacidad_view(request):
+    return render(request, 'privacidad.html')
+
+
+def cookies_view(request):
+    return render(request, 'cookies.html')
 
 
 def archive_view(request, year, month):

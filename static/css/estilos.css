@@ -1405,3 +1405,22 @@ pre {
     padding: 20px;
     border-left: 10px solid #ccc;
 }
+
+/* COOKIES */
+.modal-dialog-cookies {
+    margin-top: 0rem;
+    max-width: 100%;
+}
+
+.modal-dialog-cookies .modal-content {
+    border-radius: 0rem;
+    padding: 0.5rem;
+}
+
+.modal-dialog-cookies .cookie-text {
+    margin: 5rem;
+}
+
+.modal-dialog-cookies .buttons .btn {
+        margin: 0.2rem;
+}

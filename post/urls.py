@@ -9,6 +9,8 @@ from . import views
 
 urlpatterns = [
     re_path(r'^$', views.index_view, name='index'),
+    re_path(r'^cookies/$', views.cookies_view, name='cookies'),
+    re_path(r'^privacidad/$', views.privacidad_view, name='privacidad'),
     re_path(r'^gallery/$', views.gallery_view, name='gallery'),
     re_path(r'^archive/(?P<year>\d+)/(?P<month>\d+)/$', views.archive_view, name='archive'),
     re_path(r'^category/(?P<id>[\w]+)/$', views.category_view, name='category'),

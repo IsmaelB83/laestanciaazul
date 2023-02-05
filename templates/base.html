@@ -357,10 +357,10 @@
         <div class="modal-content">
             <div class="modal-body">
             <div class="notice d-flex justify-content-between align-items-center">
-                <div class="cookie-text"><p>Esta web utiliza cookies para personalizar el contenido, análisis de tráfico y poder proporcionar la mejor experiencia.</p></div>
+                <div class="cookie-text"><p>Esta web utiliza cookies para gestionar los datos de sesión de los usuarios autenticados. Pero no utiliza cookies para analizar el tráfico, ni proporcioanr contenidos personalizados al usuario visitante.</p></div>
                 <div class="buttons d-flex flex-column flex-lg-row">
-                    <a href="#" class="btn btn-success btn-sm" data-dismiss="modal">Acepto</a>
-                    <a href="{% url 'blog:cookies' %}" class="btn btn-secondary btn-sm">Leer más</a>
+                    <button class="btn btn-success btn-sm" data-dismiss="modal" onclick=cookiesAccepted()>Acepto</button>
+                    <button class="btn btn-secondary btn-sm" onclick=navegarCookies()>Leer más</button>
                 </div>
             </div>
             </div>
@@ -370,8 +370,19 @@
 
 <!-- My scripts -->
 <script>
-jQuery(document).ready(function() {  
-    $('#cookieModal').modal('show');
+navegarCookies = () => {
+    if (window.location.href !== "{% url 'blog:cookies' %}") {
+        window.location.href = "{% url 'blog:cookies' %}";
+    }
+}
+
+cookiesAccepted = () => window.localStorage.setItem('bernaldev-cookie-consent', true)
+
+jQuery(document).ready(function() {
+    const cookie_consent = window.localStorage.getItem('bernaldev-cookie-consent');
+    if (!cookie_consent) {
+        $('#cookieModal').modal('show');
+    }
 });
 
 jQuery(window).resize(function() {

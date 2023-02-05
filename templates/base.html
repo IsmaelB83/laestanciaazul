@@ -203,7 +203,7 @@
                         </li>
                         {% endif %}
                     </ul>
-                    {% if post.author == user.userprofile %}
+                    {% if user.is_authenticated and post.author == user.userprofile %}
                     <!-- Ventana modal borrar post -->
                     <div class="modal fade" id="deletePost">
                         <div class="modal-dialog ">
